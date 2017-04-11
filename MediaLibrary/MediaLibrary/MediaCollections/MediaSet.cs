@@ -3,8 +3,11 @@ using MediaLibrary.Interfaces;
 using System;
 using System.Collections.Generic;
 
-namespace MediaLibrary.Classes
+namespace MediaLibrary.MediaCollections
 {
+    //
+    //This class discribes common collection of IMediaItem
+    //
     public abstract class MediaSet
     {
         public string Name { get; set; }
