@@ -7,7 +7,7 @@ namespace MediaLibrary.Creator
     {
         public IMediaItem CreateItem(string nameOrPath)
         {
-            return new VideoUrl();
+            return new VideoUrl(nameOrPath);
         }
     }
 }
