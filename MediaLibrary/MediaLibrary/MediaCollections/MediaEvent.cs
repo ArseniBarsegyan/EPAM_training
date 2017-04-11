@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace MediaLibrary.MediaCollections
 {
     //
-    //this class can only contain video, videoUrl, photo, photoUrl elements
+    //this class can only contain video, videoUrl, image, imageUrl elements
     //
     public class MediaEvent : MediaSet
     {
@@ -15,9 +15,10 @@ namespace MediaLibrary.MediaCollections
             Items = new List<IMediaItem>();
         }
 
-        public MediaEvent(string name, List<IImageItem> images, List<IVideoItem> videos)
+        public MediaEvent(string name, IList<IImageItem> images, IList<IVideoItem> videos)
         {
             Name = name;
+            Items = new List<IMediaItem>();
             Items.AddRange(images);
             Items.AddRange(videos);
         }
