@@ -13,13 +13,11 @@ namespace Task01_AirCompany.Classes
             CarryingCapacity = carryingCapacity;
         }
 
-
         public string Name { get; private set; }
         public int Speed { get; private set; }
         public int FuelConsumption { get; private set; }
         public int FuelCapacity { get; private set; }
         public int CarryingCapacity { get; private set; }
-
 
         public int GetCarryingWeight()
         {

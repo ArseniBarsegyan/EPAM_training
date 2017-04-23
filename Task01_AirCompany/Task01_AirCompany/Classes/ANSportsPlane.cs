@@ -19,8 +19,7 @@ namespace Task01_AirCompany.Classes
         public int Speed { get; private set; }
         public int FuelConsumption { get; private set; }
         public int FuelCapacity { get; private set; }
-        public int CrewNumber { get; private set; }
-        
+        public int CrewNumber { get; private set; }        
 
         public string Airdrop()
         {

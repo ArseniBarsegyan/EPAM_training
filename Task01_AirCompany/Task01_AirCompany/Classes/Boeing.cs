@@ -21,7 +21,6 @@ namespace Task01_AirCompany.Classes
         public int FuelCapacity { get; private set; }
         public int PassengersNumber { get; private set; }
 
-
         public int GetCarryingWeight()
         {
             return PassengersNumber * OnePassengerWeight;

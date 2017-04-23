@@ -12,10 +12,8 @@ namespace Task01_AirCompany.Classes
             Planes = planes;
         }
 
-
         public string Name { get; private set; }
         public ICollection<IPlane> Planes { get; private set; }
-
 
         public void AddPlane(IPlane plane)
         {
