@@ -1,6 +1,6 @@
 ﻿namespace Task01_AirCompany.Interfaces
 {
-    public interface IPassengerAircraft : IAircraft
+    public interface IPassengerPlane : IPlane
     {
         int PassengersNumber { get; }
     }

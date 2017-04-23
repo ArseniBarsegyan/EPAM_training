@@ -1,6 +1,6 @@
 ﻿namespace Task01_AirCompany.Interfaces
 {
-    public interface IAircraft
+    public interface IPlane
     {
         string Name { get; }
         int Speed { get; }
