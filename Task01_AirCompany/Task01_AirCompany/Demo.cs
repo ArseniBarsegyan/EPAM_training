@@ -17,6 +17,12 @@ namespace Task01_AirCompany
                 new ANSportsPlane("AN01", 300, 300, 600, 2)
             };
 
+            //Get info about every plane in list
+            foreach (IPlane p in planes)
+            {
+                p.GetInfo();
+            }
+
             //Creating new company
             AirCompany airCompany = new AirCompany("Airlines", planes);
 
