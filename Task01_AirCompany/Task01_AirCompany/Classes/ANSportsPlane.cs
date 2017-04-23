@@ -3,7 +3,7 @@ using Task01_AirCompany.Interfaces;
 
 namespace Task01_AirCompany.Classes
 {
-    public class AnPlane : ISportsPlane
+    public class ANSportsPlane : ISportsPlane
     {
         private const int OnePassengerWeight = 90;
 
@@ -13,7 +13,7 @@ namespace Task01_AirCompany.Classes
         public int FuelCapacity { get; private set; }
         public int CrewNumber { get; private set; }
 
-        public AnPlane(string name, int speed, int fuelConsumption, int fuelCapacity, int crewNumber)
+        public ANSportsPlane(string name, int speed, int fuelConsumption, int fuelCapacity, int crewNumber)
         {
             Name = name;
             Speed = speed;
@@ -24,22 +24,23 @@ namespace Task01_AirCompany.Classes
 
         public void Airdrop()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Airdroping crew");
         }
 
         public int GetCarryingWeight()
         {
-            throw new NotImplementedException();
+            return CrewNumber * OnePassengerWeight;
         }
 
         public decimal GetFlyDistance()
         {
-            throw new NotImplementedException();
+            return (Speed * FuelCapacity / FuelConsumption) * 1000 / GetCarryingWeight();
         }
 
         public void GetInfo()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Sports plane: {0}, flying speed: {1}, Crew number:{2}",
+                Name, Speed, CrewNumber);
         }
     }
 }
