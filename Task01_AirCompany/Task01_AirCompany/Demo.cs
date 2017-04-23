@@ -5,7 +5,7 @@ using Task01_AirCompany.Interfaces;
 
 namespace Task01_AirCompany
 {
-    public class Program
+    public class Demo
     {
         public static void Main(string[] args)
         {
