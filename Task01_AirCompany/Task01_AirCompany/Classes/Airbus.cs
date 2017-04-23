@@ -1,5 +1,4 @@
-﻿using System;
-using Task01_AirCompany.Interfaces;
+﻿using Task01_AirCompany.Interfaces;
 
 namespace Task01_AirCompany.Classes
 {
@@ -30,10 +29,10 @@ namespace Task01_AirCompany.Classes
             return (Speed * FuelCapacity / FuelConsumption) * 1000 / GetCarryingWeight();
         }
 
-        public void GetInfo()
+        public string GetInfo()
         {
-            Console.WriteLine("Cargo plane: {0}, flying speed: {1}, Carrying capacity:{2}",
-                Name, Speed, CarryingCapacity);
+            return string.Format("Cargo plane: {0}, speed:{1}, carrying weight:{2}, fuel consumption: {3}",
+                Name, Speed, GetCarryingWeight(), FuelConsumption);
         }
     }
 }

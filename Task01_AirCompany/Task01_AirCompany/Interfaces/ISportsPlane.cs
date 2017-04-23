@@ -3,6 +3,6 @@
     public interface ISportsPlane : IPlane
     {
         int CrewNumber { get; }
-        void Airdrop();
+        string Airdrop();
     }
 }

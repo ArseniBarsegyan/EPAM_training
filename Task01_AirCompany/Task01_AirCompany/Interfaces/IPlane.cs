@@ -9,6 +9,6 @@
 
         decimal GetFlyDistance();
         int GetCarryingWeight();
-        void GetInfo();
+        string GetInfo();
     }
 }

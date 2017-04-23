@@ -1,5 +1,4 @@
-﻿using System;
-using Task01_AirCompany.Interfaces;
+﻿using Task01_AirCompany.Interfaces;
 
 namespace Task01_AirCompany.Classes
 {
@@ -22,9 +21,9 @@ namespace Task01_AirCompany.Classes
             CrewNumber = crewNumber;
         }
 
-        public void Airdrop()
+        public string Airdrop()
         {
-            Console.WriteLine("Airdroping crew");
+            return "airdrop";
         }
 
         public int GetCarryingWeight()
@@ -37,10 +36,10 @@ namespace Task01_AirCompany.Classes
             return (Speed * FuelCapacity / FuelConsumption) * 1000 / GetCarryingWeight();
         }
 
-        public void GetInfo()
+        public string GetInfo()
         {
-            Console.WriteLine("Sports plane: {0}, flying speed: {1}, Crew number:{2}",
-                Name, Speed, CrewNumber);
+            return string.Format("Sports plane: {0}, speed:{1}, crew number:{2}, fuel consumption: {3}",
+                Name, Speed, CrewNumber, FuelConsumption);
         }
     }
 }
