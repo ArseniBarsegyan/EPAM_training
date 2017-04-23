@@ -3,13 +3,7 @@
 namespace Task01_AirCompany.Classes
 {
     public class Airbus : ICargoPlane
-    {   
-        public string Name { get; private set; }
-        public int Speed { get; private set; }
-        public int FuelConsumption { get; private set; }
-        public int FuelCapacity { get; private set; }
-        public int CarryingCapacity { get; private set; }
-
+    {
         public Airbus(string name, int speed, int fuelConsumption, int fuelCapacity, int carryingCapacity)
         {
             Name = name;
@@ -18,6 +12,14 @@ namespace Task01_AirCompany.Classes
             FuelCapacity = fuelCapacity;
             CarryingCapacity = carryingCapacity;
         }
+
+
+        public string Name { get; private set; }
+        public int Speed { get; private set; }
+        public int FuelConsumption { get; private set; }
+        public int FuelCapacity { get; private set; }
+        public int CarryingCapacity { get; private set; }
+
 
         public int GetCarryingWeight()
         {

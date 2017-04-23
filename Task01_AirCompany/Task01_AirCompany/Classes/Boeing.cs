@@ -5,13 +5,7 @@ namespace Task01_AirCompany.Classes
     public class Boeing : IPassengerPlane
     {
         private const int OnePassengerWeight = 80;
-
-        public string Name { get; private set; }
-        public int Speed { get; private set; }
-        public int FuelConsumption { get; private set; }
-        public int FuelCapacity { get; private set; }
-        public int PassengersNumber { get; private set; }
-
+                
         public Boeing(string name, int speed, int fuelConsumption, int fuelCapacity, int passengersNumber)
         {
             Name = name;
@@ -20,6 +14,13 @@ namespace Task01_AirCompany.Classes
             FuelCapacity = fuelCapacity;
             PassengersNumber = passengersNumber;
         }
+
+        public string Name { get; private set; }
+        public int Speed { get; private set; }
+        public int FuelConsumption { get; private set; }
+        public int FuelCapacity { get; private set; }
+        public int PassengersNumber { get; private set; }
+
 
         public int GetCarryingWeight()
         {

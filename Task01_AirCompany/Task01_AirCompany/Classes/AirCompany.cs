@@ -6,14 +6,16 @@ namespace Task01_AirCompany.Classes
 {
     public class AirCompany : IAirCompany
     {
-        public string Name { get; private set; }
-        public ICollection<IPlane> Planes { get; private set; }
-
         public AirCompany(string name, ICollection<IPlane> planes)
         {
             Name = name;
             Planes = planes;
         }
+
+
+        public string Name { get; private set; }
+        public ICollection<IPlane> Planes { get; private set; }
+
 
         public void AddPlane(IPlane plane)
         {

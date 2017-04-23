@@ -4,13 +4,7 @@ namespace Task01_AirCompany.Classes
 {
     public class ANSportsPlane : ISportsPlane
     {
-        private const int OnePassengerWeight = 90;
-
-        public string Name { get; private set; }
-        public int Speed { get; private set; }
-        public int FuelConsumption { get; private set; }
-        public int FuelCapacity { get; private set; }
-        public int CrewNumber { get; private set; }
+        private const int OnePassengerWeight = 90;        
 
         public ANSportsPlane(string name, int speed, int fuelConsumption, int fuelCapacity, int crewNumber)
         {
@@ -20,6 +14,13 @@ namespace Task01_AirCompany.Classes
             FuelCapacity = fuelCapacity;
             CrewNumber = crewNumber;
         }
+
+        public string Name { get; private set; }
+        public int Speed { get; private set; }
+        public int FuelConsumption { get; private set; }
+        public int FuelCapacity { get; private set; }
+        public int CrewNumber { get; private set; }
+        
 
         public string Airdrop()
         {
