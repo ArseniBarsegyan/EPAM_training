@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Task01_AirCompany.Interfaces;
 
 namespace Task01_AirCompany.Classes
@@ -26,17 +22,18 @@ namespace Task01_AirCompany.Classes
 
         public int GetCarryingWeight()
         {
-            throw new NotImplementedException();
+            return CarryingCapacity;
         }
 
         public decimal GetFlyDistance()
         {
-            throw new NotImplementedException();
+            return (Speed * FuelCapacity / FuelConsumption) * 1000 / GetCarryingWeight();
         }
 
         public void GetInfo()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Cargo airplane: {0}, flying speed: {1}, Carrying capacity:{2}",
+                Name, Speed, CarryingCapacity);
         }
     }
 }
