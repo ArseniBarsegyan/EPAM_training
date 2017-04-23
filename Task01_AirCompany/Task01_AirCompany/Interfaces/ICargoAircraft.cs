@@ -1,6 +1,6 @@
 ﻿namespace Task01_AirCompany.Interfaces
 {
-    public interface ICargoAircraft
+    public interface ICargoAircraft : IAircraft
     {
         int CarryingCapacity { get; }
     }
