@@ -13,6 +13,6 @@ namespace Task01_AirCompany.Interfaces
         int GetTotalCapacity();
         int GetTotalCarryingWeight();
         void SortPlanesByFlyDistance();
-        void GetPlaneByFuelConsumption(int startValue, int endValue);
+        void FindPlaneByFuelConsumption(int startValue, int endValue);
     }
 }
