@@ -20,27 +20,36 @@ namespace Task01_AirCompany
             //Get info about every plane in list
             foreach (IPlane p in planes)
             {
-                p.GetInfo();
+                Console.WriteLine(p.GetInfo());
             }
 
             //Creating new company
             AirCompany airCompany = new AirCompany("Airlines", planes);
 
             //Show all planes sorted by fly distance
+            Console.WriteLine("--------------------");
             Console.WriteLine("Sorted planes");
-            airCompany.SortPlanesByFlyDistance();
+            List<IPlane> sortedPlanes = airCompany.SortPlanesByFlyDistance();
+            foreach (IPlane p in sortedPlanes)
+            {
+                Console.WriteLine("Plane: {0}, distance:{1}", p.Name, p.GetFlyDistance());
+            }
             Console.WriteLine("--------------------");
 
             //Show total capacity of the company and total carrying weight
             Console.WriteLine("Info about company");
-            Console.WriteLine("{0} total capacity: {1}",airCompany.Name, airCompany.GetTotalCapacity());
-            Console.WriteLine("{0} total carrying weight of all planes: {1}", 
-                airCompany.Name, airCompany.GetTotalCarryingWeight());
+            Console.WriteLine("{0} total capacity: {1}, total carrying weight: {2}",
+                airCompany.Name, airCompany.GetTotalCapacity(), airCompany.GetTotalCarryingWeight());
             Console.WriteLine("--------------------");
 
             //Find all planes with fuel consumption between 0 and 1000 l/h
-            Console.WriteLine("Founded planes by fuel consumption");
-            airCompany.FindPlaneByFuelConsumption(0, 1000);
+            Console.WriteLine("Founded planes by fuel consumption between 0 and 1000");
+            List<IPlane> planes2 = airCompany.FindPlaneByFuelConsumption(0, 1000);
+            foreach (IPlane p in planes2)
+            {
+                Console.WriteLine(p.GetInfo());
+            }
+            Console.ReadLine();
         }
     }
 }
