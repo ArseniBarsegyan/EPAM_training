@@ -32,7 +32,7 @@ namespace Task01_AirCompany.Classes
 
         public void GetInfo()
         {
-            Console.WriteLine("Cargo airplane: {0}, flying speed: {1}, Carrying capacity:{2}",
+            Console.WriteLine("Cargo plane: {0}, flying speed: {1}, Carrying capacity:{2}",
                 Name, Speed, CarryingCapacity);
         }
     }

@@ -5,6 +5,8 @@ namespace Task01_AirCompany.Classes
 {
     public class Boeing : IPassengerPlane
     {
+        private const int OnePassengerWeight = 80;
+
         public string Name { get; private set; }
         public int Speed { get; private set; }
         public int FuelConsumption { get; private set; }
@@ -22,17 +24,18 @@ namespace Task01_AirCompany.Classes
 
         public int GetCarryingWeight()
         {
-            throw new NotImplementedException();
+            return PassengersNumber * OnePassengerWeight;
         }
 
         public decimal GetFlyDistance()
         {
-            throw new NotImplementedException();
+            return (Speed * FuelCapacity / FuelConsumption) * 1000 / GetCarryingWeight();
         }
 
         public void GetInfo()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Passenger plane: {0}, flying speed: {1}, Passengers number:{2}",
+                Name, Speed, PassengersNumber);
         }
     }
 }
