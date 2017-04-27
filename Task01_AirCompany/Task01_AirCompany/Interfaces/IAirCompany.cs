@@ -12,7 +12,7 @@ namespace Task01_AirCompany.Interfaces
 
         int GetTotalCapacity();
         int GetTotalCarryingWeight();
-        List<IPlane> SortPlanesByFlyDistance();
-        List<IPlane> FindPlaneByFuelConsumption(int startValue, int endValue);
+        IEnumerable<IPlane> SortPlanesByFlyDistance();
+        IEnumerable<IPlane> FindPlaneByFuelConsumption(int startValue, int endValue);
     }
 }

@@ -25,10 +25,9 @@ namespace Task01_AirCompany.Classes
             Planes.Remove(plane);
         }
 
-        public List<IPlane> FindPlaneByFuelConsumption(int startValue, int endValue)
+        public IEnumerable<IPlane> FindPlaneByFuelConsumption(int startValue, int endValue)
         {
-            List<IPlane> planes = Planes.Where(p => (p.FuelConsumption > startValue && p.FuelConsumption < endValue)).ToList();
-            return planes;
+            return Planes.Where(p => (p.FuelConsumption > startValue && p.FuelConsumption < endValue));
         }
 
         public int GetTotalCapacity()
@@ -41,10 +40,9 @@ namespace Task01_AirCompany.Classes
             return Planes.Sum(p => p.GetCarryingWeight());
         }        
 
-        public List<IPlane> SortPlanesByFlyDistance()
+        public IEnumerable<IPlane> SortPlanesByFlyDistance()
         {
-            List<IPlane> sortedPlanes = Planes.OrderByDescending(p => p.GetFlyDistance()).ToList();
-            return sortedPlanes;
+            return Planes.OrderByDescending(p => p.GetFlyDistance());
         }
     }
 }

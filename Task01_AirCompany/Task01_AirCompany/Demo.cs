@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Task01_AirCompany.Classes;
 using Task01_AirCompany.Interfaces;
 
@@ -29,7 +30,7 @@ namespace Task01_AirCompany
             //Show all planes sorted by fly distance
             Console.WriteLine("--------------------");
             Console.WriteLine("Sorted planes");
-            List<IPlane> sortedPlanes = airCompany.SortPlanesByFlyDistance();
+            List<IPlane> sortedPlanes = airCompany.SortPlanesByFlyDistance().ToList();
             foreach (IPlane p in sortedPlanes)
             {
                 Console.WriteLine("Plane: {0}, distance:{1}", p.Name, p.GetFlyDistance());
@@ -44,7 +45,7 @@ namespace Task01_AirCompany
 
             //Find all planes with fuel consumption between 0 and 1000 l/h
             Console.WriteLine("Founded planes by fuel consumption between 0 and 1000");
-            List<IPlane> planes2 = airCompany.FindPlaneByFuelConsumption(0, 1000);
+            List<IPlane> planes2 = airCompany.FindPlaneByFuelConsumption(0, 1000).ToList();
             foreach (IPlane p in planes2)
             {
                 Console.WriteLine(p.GetInfo());
