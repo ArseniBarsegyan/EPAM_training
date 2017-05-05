@@ -70,5 +70,10 @@ namespace Parser
             _streamReader.Close();
         }
 
+        //Creates text file document model with filled pages
+        public Document CreateDocumentModel()
+        {
+            return new Document(_fileName, _pages);
+        }
     }
 }
