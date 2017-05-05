@@ -13,5 +13,17 @@ namespace Parser
         {
             _pages = document.Pages;
         }
+
+        //Join all lines on page with 'space' symbol
+        //in one string. Ignores case of letters
+        private string JoinLines(Page page)
+        {
+            string pageText = "";
+            foreach (string line in page.Lines)
+            {
+                pageText += line.ToLower() + " ";
+            }
+            return pageText;
+        }
     }
 }
