@@ -25,5 +25,30 @@ namespace Parser
             }
             return pageText;
         }
+
+        //Check if list of words already contains word. If true
+        //increases word.RepeatCount. Also check if word already
+        //contain current page number
+        private bool IsWordsContainsWord(Word word)
+        {
+            foreach (Word w in _words)
+            {
+                if (w.Value.Equals(word.Value))
+                {
+                    w.RepeatCount++;
+
+                    //Check if 'w' already contains page number
+                    foreach (int number in word.PagesNumbers)
+                    {
+                        if (!w.PagesNumbers.Contains(number))
+                        {
+                            w.PagesNumbers.Add(number);
+                        }
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
