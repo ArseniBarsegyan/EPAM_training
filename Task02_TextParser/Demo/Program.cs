@@ -16,6 +16,7 @@ namespace Demo
 
             TextParser parser = new TextParser(document);
             parser.FillInWordsList();
+            Concordance concordance = parser.CreateConcordance();
         }
     }
 }

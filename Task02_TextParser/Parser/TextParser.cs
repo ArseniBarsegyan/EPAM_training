@@ -79,5 +79,10 @@ namespace Parser
             }
             return false;
         }
+
+        public Concordance CreateConcordance()
+        {
+            return new Concordance(_words);
+        }
     }
 }
