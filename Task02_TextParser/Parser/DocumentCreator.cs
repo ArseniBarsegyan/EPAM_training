@@ -12,7 +12,6 @@ namespace Parser
     {
         private StreamReader _streamReader;
         private List<Page> _pages;
-        private Document _document;
         private Page _page;
         private string _fileName;
         private int _numberOfLinesPerPage;
