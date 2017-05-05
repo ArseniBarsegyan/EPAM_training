@@ -11,7 +11,7 @@ namespace Demo
     {
         static void Main(string[] args)
         {
-            DocumentCreator creator = new DocumentCreator("D:\\TestDocumentForTask2.doc", 5);
+            DocumentCreator creator = new DocumentCreator("D:\\TestDocumentForTask2.txt", 5);
             Document document = creator.CreateDocumentModel();
 
             TextParser parser = new TextParser(document);
