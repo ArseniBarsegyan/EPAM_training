@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Parser
 {
@@ -12,6 +13,34 @@ namespace Parser
         public TextParser(Document document)
         {
             _pages = document.Pages;
+        }
+
+        //Filling words list
+        public void FillInWordsList()
+        {
+            Regex regex = new Regex(@"[A-Za-z]+");
+            string pageText;
+            MatchCollection matches;
+            Word word;
+            _words = new List<Word>();
+
+            foreach (Page page in _pages)
+            {
+                //Creating collection of all words on page
+                pageText = JoinLines(page);
+                matches = regex.Matches(pageText);
+
+                foreach (Match m in matches)
+                {
+                    //Creating Word object from every word on page
+                    word = new Word(m.Value, 1, page.CurrentPageNumber);
+
+                    if (!IsWordsContainsWord(word))
+                    {
+                        _words.Add(word);
+                    }
+                }
+            }
         }
 
         //Join all lines on page with 'space' symbol
