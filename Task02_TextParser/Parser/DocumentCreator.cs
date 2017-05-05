@@ -20,8 +20,20 @@ namespace Parser
 
         public DocumentCreator(string fileName, int numberOfLinesPerPage)
         {
-            
+            _fileName = fileName;
+            _numberOfLinesPerPage = numberOfLinesPerPage;
+            try
+            {
+                _streamReader = new StreamReader(_fileName);
+                ReadFileContent();
+            }
+            catch(FileNotFoundException e)
+            {
+                _exceptionMessage = e.Message;
+            }
         }
+
+        public string ExceptionMessage { get { return _exceptionMessage; } }
 
         //Reading file data and filling pages
         //Every page can contain only limited number of lines
