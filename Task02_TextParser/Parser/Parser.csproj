@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Concordance.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="DocumentCreator.cs" />
     <Compile Include="Page.cs" />

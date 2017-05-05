@@ -1,9 +1,5 @@
 ﻿using Parser;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Demo
 {
@@ -17,6 +13,8 @@ namespace Demo
             TextParser parser = new TextParser(document);
             parser.FillInWordsList();
             Concordance concordance = parser.CreateConcordance();
+            string sortedWords = concordance.GroupByAlphaBet();
+            Console.WriteLine(sortedWords);
         }
     }
 }
