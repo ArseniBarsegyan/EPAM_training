@@ -15,29 +15,31 @@ namespace Parser
             _words = words;
         }
 
-        //Group words by alphabet
-        public string GroupByAlphaBet()
+        //Group words list by alphabet
+        private List<string> GroupByAlphaBet()
         {
-            string resultString = "";
-            var wordsGroup = _words.GroupBy(p => p.Value.Substring(0, 1)).OrderBy(p => p.Key);
+            List<string> resultList = new List<string>();
+
+            var wordsGroup = _words.OrderBy(p => p.Value)
+                .GroupBy(p => p.Value.Substring(0, 1))
+                .OrderBy(p => p.Key);
 
             foreach (var group in wordsGroup)
             {
-                resultString += group.Key + "\n";
+                resultList.Add(group.Key.ToUpper());
 
                 foreach (var g in group)
                 {
-                    resultString += String.Format("{0} {1}:", g.Value, g.RepeatCount);
+                    string temp = String.Format("{0} {1}:", g.Value, g.RepeatCount);
 
                     foreach (int page in g.PagesNumbers)
                     {
-                        resultString += " " + page;
+                        temp += " " + page;
                     }
-                    resultString += "\n";
+                    resultList.Add(temp);
                 }
             }
-
-            return resultString;
+            return resultList;
         }
     }
 }
