@@ -7,14 +7,12 @@ namespace Demo
     {
         static void Main(string[] args)
         {
-            DocumentCreator creator = new DocumentCreator("D:\\TestDocumentForTask2.txt", 5);
-            Document document = creator.CreateDocumentModel();
+            CreateTextConcordance();
+        }
 
-            TextParser parser = new TextParser(document);
-            parser.FillInWordsList();
-            Concordance concordance = parser.CreateConcordance();
-            string sortedWords = concordance.GroupByAlphaBet();
-            Console.WriteLine(sortedWords);
+        static void CreateTextConcordance()
+        {
+
         }
     }
 }

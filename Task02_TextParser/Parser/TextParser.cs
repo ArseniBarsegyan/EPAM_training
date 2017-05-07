@@ -80,6 +80,7 @@ namespace Parser
             return false;
         }
 
+        //Creating concordance of the document
         public Concordance CreateConcordance()
         {
             FillInWordsList();
