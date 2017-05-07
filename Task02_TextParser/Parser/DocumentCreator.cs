@@ -54,7 +54,11 @@ namespace Parser
             _streamReader.Close();
         }
 
-        //Creates text file document model with filled pages
+        /// <summary>
+        /// Creating document model if file exists.
+        /// </summary>
+        /// <returns>Document</returns>
+        /// <exception cref="FileNotFoundException" />
         public Document CreateDocumentModel()
         {
             if (File.Exists(_fileName))
