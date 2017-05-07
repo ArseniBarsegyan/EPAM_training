@@ -16,7 +16,7 @@ namespace Parser
         }
 
         //Filling words list
-        public void FillInWordsList()
+        private void FillInWordsList()
         {
             Regex regex = new Regex(@"[A-Za-z]+");
             string pageText;
@@ -82,6 +82,7 @@ namespace Parser
 
         public Concordance CreateConcordance()
         {
+            FillInWordsList();
             return new Concordance(_words);
         }
     }
