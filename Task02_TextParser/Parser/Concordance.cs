@@ -8,7 +8,6 @@ namespace Parser
     public class Concordance
     {
         private List<Word> _words;
-        private FileStream _fileStream;
 
         public Concordance(List<Word> words)
         {
@@ -40,6 +39,12 @@ namespace Parser
                 }
             }
             return resultList;
+        }
+
+        //Write file with results
+        public void WriteFile(string path)
+        {
+            File.WriteAllLines(path, GroupByAlphaBet().ToArray());
         }
     }
 }
