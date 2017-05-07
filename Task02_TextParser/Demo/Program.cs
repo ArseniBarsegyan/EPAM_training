@@ -1,6 +1,7 @@
 ﻿using Parser;
 using System;
 using System.Configuration;
+using System.IO;
 
 namespace Demo
 {
@@ -13,6 +14,19 @@ namespace Demo
 
         static void CreateTextConcordance()
         {
+            DocumentCreator creator = new DocumentCreator(ConfigurationManager.AppSettings["inputFileName"],
+                Convert.ToInt32(ConfigurationManager.AppSettings["numberOfLinesPerPage"]));
+            try
+            {
+                Document document = creator.CreateDocumentModel();
+                Concordance concordance = new TextParser(document).CreateConcordance();
+                concordance.WriteFile(ConfigurationManager.AppSettings["outputFileName"]);
+                Console.WriteLine("Concordance have been created successfully");
+            }
+            catch (FileNotFoundException)
+            {
+                Console.WriteLine("Document doesn't exists. Please check your app settings");
+            }
 
         }
     }
