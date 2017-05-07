@@ -11,29 +11,18 @@ namespace Parser
         private Page _page;
         private string _fileName;
         private int _numberOfLinesPerPage;
-        private string _exceptionMessage;
 
         public DocumentCreator(string fileName, int numberOfLinesPerPage)
         {
             _fileName = fileName;
             _numberOfLinesPerPage = numberOfLinesPerPage;
-            try
-            {
-                _streamReader = new StreamReader(_fileName);
-                ReadFileContent();
-            }
-            catch(FileNotFoundException e)
-            {
-                _exceptionMessage = e.Message;
-            }
         }
-
-        public string ExceptionMessage { get { return _exceptionMessage; } }
 
         //Reading file data and filling pages
         //Every page can contain only limited number of lines
         private void ReadFileContent()
         {
+            _streamReader = new StreamReader(_fileName);
             _pages = new List<Page>();
 
             string line;
@@ -68,7 +57,15 @@ namespace Parser
         //Creates text file document model with filled pages
         public Document CreateDocumentModel()
         {
-            return new Document(_fileName, _pages);
+            if (File.Exists(_fileName))
+            {
+                ReadFileContent();
+                return new Document(_fileName, _pages);
+            }
+            else
+            {
+                throw new FileNotFoundException();
+            }
         }
     }
 }
