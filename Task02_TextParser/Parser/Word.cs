@@ -13,8 +13,8 @@ namespace Parser
             PagesNumbers.Add(numberOfPage);
         }
 
-        public string Value { get; set; }
+        public string Value { get; private set; }
         public int RepeatCount { get; set; }
-        public List<int> PagesNumbers { get; set; }
+        public List<int> PagesNumbers { get; private set; }
     }
 }
