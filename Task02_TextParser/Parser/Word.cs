@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Parser
 {
-    public class Word
+    public class Word : ISentenceItem
     {
         public Word(ICollection<Symbol> symbols)
         {
@@ -21,5 +21,7 @@ namespace Parser
         {
             Symbols.Add(new Symbol(c));
         }
+
+        public string Value { get { return ToString(); } }
     }
 }
