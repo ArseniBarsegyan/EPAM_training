@@ -1,7 +1,7 @@
-﻿using Parser;
-using System;
+﻿using System;
 using System.Configuration;
 using System.IO;
+using Parser;
 
 namespace Demo
 {
@@ -27,7 +27,6 @@ namespace Demo
             {
                 Console.WriteLine("Document doesn't exists. Please check your app settings");
             }
-
         }
     }
 }
