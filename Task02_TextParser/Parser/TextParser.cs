@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Pipes;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Parser
 {
@@ -47,6 +43,28 @@ namespace Parser
                         sentences.Add(new Sentence(sentenceItems));
                         sentenceItems = new List<ISentenceItem>();
                     }
+                }
+            }
+
+            if (symbols.Count != 0)
+            {
+                sentenceItems.Add(new Word(symbols));
+            }
+            symbols = new List<Symbol>();
+            sentenceItems.Add(new SentenceSeparator(text[text.Length - 1].ToString()));
+            sentences.Add(new Sentence(sentenceItems));
+            
+            RemoveAllFirstWhiteSpacesInSentences(sentences);
+            return sentences;
+        }
+
+        private static void RemoveAllFirstWhiteSpacesInSentences(ICollection<Sentence> sentences)
+        {
+            foreach (var item in sentences)
+            {
+                if (item.SentenceItems.ElementAt(0) is WordSeparator)
+                {
+                    item.SentenceItems.Remove(item.SentenceItems.ElementAt(0));
                 }
             }
         }
