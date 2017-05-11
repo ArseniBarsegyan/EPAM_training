@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Parser
 {
@@ -23,5 +24,10 @@ namespace Parser
         }
 
         public string Value { get { return ToString(); } }
+
+        public bool IsWordStartWithConsonantLetter()
+        {
+            return new Regex(@"\b[b-d,f-h,j-n,p-t,v,w,x,z]\S+\b").IsMatch(Value);
+        }
     }
 }

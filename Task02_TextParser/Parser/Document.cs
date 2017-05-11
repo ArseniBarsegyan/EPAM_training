@@ -25,5 +25,9 @@ namespace Parser
             return uniqueWords;
         }
 
+        public IEnumerable<Word> RemoveAllWordsStartWithConsonant()
+        {
+            
+        }
     }
 }
