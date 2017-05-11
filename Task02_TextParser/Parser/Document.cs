@@ -17,5 +17,13 @@ namespace Parser
             return Sentences.OrderBy(s => s.GetWordCount());
         }
 
+        public List<Word> GetUniqueWordsInInterrogativeSentences(int length)
+        {
+            List<Word> uniqueWords = new List<Word>();
+            Sentences.Where(s => s.IsInterrogativeSentence()).ToList()
+                .ForEach(x => { uniqueWords.AddRange(x.GetAllUniqueWords(length)); });
+            return uniqueWords;
+        }
+
     }
 }
