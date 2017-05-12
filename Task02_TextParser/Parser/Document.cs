@@ -61,9 +61,9 @@ namespace Parser
                     if (!(item is Word)) continue;
                     if (item.Value.Length != length) continue;
                     sentence.SentenceItems.Remove(item);
-                    for (int j = 0; j < subStringSenteceItems.Count; j++)
+                    foreach (var subItem in subStringSenteceItems)
                     {
-                        sentence.SentenceItems.Insert(i, subStringSenteceItems.ElementAt(j));
+                        sentence.SentenceItems.Insert(i, subItem);
                     }
                 }
             }
