@@ -36,10 +36,16 @@ namespace Parser
                 .Select(s => (Word) s.First());
         }
 
-        public List<ISentenceItem> GetAllSentenceItemsStartWithNoConsonant()
+        public List<ISentenceItem> GetAllSentenceItemsWithoutConsonant(int length)
         {
             Regex consonantWord = new Regex(@"\b[b-d,f-h,j-n,p-t,v,w,x,z]\S+\b");
-            return SentenceItems.Where(x => !consonantWord.IsMatch(x.Value)).ToList();
+            List<Word> wordsToRemove = SentenceItems
+                .OfType<Word>()
+                .Where(x => consonantWord.IsMatch(x.Value) && x.Value.Length == length)
+                .ToList();
+
+            wordsToRemove.ForEach(x => { SentenceItems.Remove(x); });
+            return SentenceItems.ToList();
         }
     }
 }

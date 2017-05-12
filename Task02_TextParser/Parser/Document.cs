@@ -25,10 +25,10 @@ namespace Parser
             return uniqueWords;
         }
 
-        public ICollection<Sentence> RemoveAllWordsStartWithConsonant()
+        public ICollection<Sentence> RemoveAllWordsStartWithConsonant(int length)
         {
             Sentences.ToList()
-                .ForEach(s => s.SentenceItems = s.GetAllSentenceItemsStartWithNoConsonant());
+                .ForEach(s => s.SentenceItems = s.GetAllSentenceItemsWithoutConsonant(length));
             return Sentences;
         }
 

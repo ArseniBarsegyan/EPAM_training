@@ -12,13 +12,13 @@ namespace Demo
             List<Sentence> sentences = text.ParseText();
             Document document = new Document(sentences);
 
-            var sentences1 = document.ReplaceAllWordsBySubString(2, "replaced string!");
-            foreach (var sentence in sentences1)
-            {
-                Console.WriteLine(sentence);
-            }
+            //var sentences1 = document.ReplaceAllWordsBySubString(2, "replaced string!");
+            //foreach (var sentence in sentences1)
+            //{
+            //    Console.WriteLine(sentence);
+            //}
 
-            var textWithoutConsonantWords = document.RemoveAllWordsStartWithConsonant();
+            var textWithoutConsonantWords = document.RemoveAllWordsStartWithConsonant(3);
             foreach (var sentence in textWithoutConsonantWords)
             {
                 Console.WriteLine(sentence);
