@@ -6,12 +6,12 @@ namespace Parser
 {
     public class Sentence
     {
-        public Sentence(ICollection<ISentenceItem> sentenceItems)
+        public Sentence(IList<ISentenceItem> sentenceItems)
         {
             SentenceItems = sentenceItems;
         }
 
-        public ICollection<ISentenceItem> SentenceItems { get; private set; }
+        public IList<ISentenceItem> SentenceItems { get; private set; }
 
         public int GetWordCount()
         {

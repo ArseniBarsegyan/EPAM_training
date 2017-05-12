@@ -41,5 +41,33 @@ namespace Parser
             }
             return Sentences;
         }
+
+        public ICollection<Sentence> ReplaceAllWordsBySubString(int length, string subString)
+        {
+            //Making sentence from substring
+            List<Sentence> subStringSentences = subString.ParseText();
+
+            List<ISentenceItem> subStringSenteceItems = subStringSentences
+                .SelectMany(sentence => sentence.SentenceItems)
+                .ToList();
+
+            subStringSenteceItems.Reverse();
+
+            foreach (var sentence in Sentences)
+            {
+                for (int i = 0; i < sentence.SentenceItems.Count; i++)
+                {
+                    var item = sentence.SentenceItems.ElementAt(i);
+                    if (!(item is Word)) continue;
+                    if (item.Value.Length != length) continue;
+                    sentence.SentenceItems.Remove(item);
+                    for (int j = 0; j < subStringSenteceItems.Count; j++)
+                    {
+                        sentence.SentenceItems.Insert(i, subStringSenteceItems.ElementAt(j));
+                    }
+                }
+            }
+            return Sentences;
+        }
     }
 }
