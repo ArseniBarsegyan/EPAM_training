@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Parser
 {
@@ -11,7 +12,7 @@ namespace Parser
             SentenceItems = sentenceItems;
         }
 
-        public IList<ISentenceItem> SentenceItems { get; private set; }
+        public IList<ISentenceItem> SentenceItems { get; set; }
 
         public int GetWordCount()
         {
@@ -33,6 +34,12 @@ namespace Parser
             return SentenceItems.Where(s => s is Word && s.Value.Length == length)
                 .GroupBy(s => s.Value)
                 .Select(s => (Word) s.First());
+        }
+
+        public List<ISentenceItem> GetAllSentenceItemsStartWithNoConsonant()
+        {
+            Regex consonantWord = new Regex(@"\b[b-d,f-h,j-n,p-t,v,w,x,z]\S+\b");
+            return SentenceItems.Where(x => !consonantWord.IsMatch(x.Value)).ToList();
         }
     }
 }
