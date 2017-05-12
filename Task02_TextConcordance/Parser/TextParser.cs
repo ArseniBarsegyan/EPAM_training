@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Parser
@@ -47,12 +48,7 @@ namespace Parser
         //in one string. Ignores case of letters
         private string JoinLines(Page page)
         {
-            string pageText = "";
-            foreach (string line in page.Lines)
-            {
-                pageText += line.ToLower() + " ";
-            }
-            return pageText;
+            return page.Lines.Aggregate("", (current, line) => current + (line.ToLower() + " "));
         }
 
         //Check if list of words already contains word. If true
@@ -62,20 +58,18 @@ namespace Parser
         {
             foreach (Word w in _words)
             {
-                if (w.Value.Equals(word.Value))
-                {
-                    w.RepeatCount++;
+                if (!w.Value.Equals(word.Value)) continue;
+                w.RepeatCount++;
 
-                    //Check if 'w' already contains page number
-                    foreach (int number in word.PagesNumbers)
+                //Check if 'w' already contains page number
+                foreach (int number in word.PagesNumbers)
+                {
+                    if (!w.PagesNumbers.Contains(number))
                     {
-                        if (!w.PagesNumbers.Contains(number))
-                        {
-                            w.PagesNumbers.Add(number);
-                        }
+                        w.PagesNumbers.Add(number);
                     }
-                    return true;
                 }
+                return true;
             }
             return false;
         }

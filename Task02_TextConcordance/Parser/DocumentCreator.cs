@@ -66,10 +66,7 @@ namespace Parser
                 ReadFileContent();
                 return new Document(_fileName, _pages);
             }
-            else
-            {
-                throw new FileNotFoundException();
-            }
+            throw new FileNotFoundException();
         }
     }
 }

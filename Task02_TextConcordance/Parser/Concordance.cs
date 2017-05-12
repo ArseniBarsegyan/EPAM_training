@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -29,12 +28,9 @@ namespace Parser
 
                 foreach (var g in group)
                 {
-                    string temp = String.Format("{0} {1}:", g.Value, g.RepeatCount);
+                    string temp = string.Format("{0} {1}:", g.Value, g.RepeatCount);
 
-                    foreach (int page in g.PagesNumbers)
-                    {
-                        temp += " " + page;
-                    }
+                    temp = g.PagesNumbers.Aggregate(temp, (current, page) => current + (" " + page));
                     resultList.Add(temp);
                 }
             }
