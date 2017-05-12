@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Parser
 {
@@ -34,11 +33,6 @@ namespace Parser
             return SentenceItems.Where(s => s is Word && s.Value.Length == length)
                 .GroupBy(s => s.Value)
                 .Select(s => (Word) s.First());
-        }
-
-        public IEnumerable<Word> GetAllWordsStartWithConsonantLetter()
-        {
-            return SentenceItems.OfType<Word>().Where(s => s.IsWordStartWithConsonantLetter());
         }
     }
 }
