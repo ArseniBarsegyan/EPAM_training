@@ -6,11 +6,11 @@ namespace Parser
 {
     public static class TextParser
     {
-        public static List<Sentence> ParseText(this string text)
+        public static ICollection<Sentence> ParseText(this string text)
         {
-            List<Sentence> sentences = new List<Sentence>();
-            List<Symbol> symbols = new List<Symbol>();
-            List<ISentenceItem> sentenceItems = new List<ISentenceItem>();
+            var sentences = new List<Sentence>();
+            var symbols = new List<Symbol>();
+            var sentenceItems = new List<ISentenceItem>();
 
             ReplaceAllTabsAndWhiteSpaceSequences(text);
 
