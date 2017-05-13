@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 
 namespace Parser
 {
@@ -12,16 +12,21 @@ namespace Parser
 
         public ICollection<Symbol> Symbols { get; private set; }
 
-        public override string ToString()
-        {
-            return Symbols.Aggregate(string.Empty, (current, s) => current + s.Value);
-        }
-
         public void AddSymbol(char c)
         {
             Symbols.Add(new Symbol(c));
         }
 
         public string Value { get { return ToString(); } }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var symbol in Symbols)
+            {
+                builder.Append(symbol.Value);
+            }
+            return builder.ToString();
+        }
     }
 }
