@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Parser
@@ -12,16 +12,11 @@ namespace Parser
             SentenceItems = sentenceItems;
         }
 
-        public IList<ISentenceItem> SentenceItems { get; set; }
+        public IList<ISentenceItem> SentenceItems { get; private set; }
 
         public int GetWordCount()
         {
             return SentenceItems.OfType<Word>().Count();
-        }
-
-        public override string ToString()
-        {
-            return SentenceItems.Aggregate(String.Empty, (current, element) => current + element.Value);
         }
 
         public bool IsInterrogativeSentence()
@@ -36,16 +31,37 @@ namespace Parser
                 .Select(s => (Word) s.First());
         }
 
-        public List<ISentenceItem> GetAllSentenceItemsWithoutConsonant(int length)
+        public void ReplaceAllWordsByLengthWithSubString(int wordLength, IEnumerable<ISentenceItem> items)
         {
-            Regex consonantWord = new Regex(@"\b[b-d,f-h,j-n,p-t,v,w,x,z]\S+\b");
-            List<Word> wordsToRemove = SentenceItems
-                .OfType<Word>()
-                .Where(x => consonantWord.IsMatch(x.Value) && x.Value.Length == length)
-                .ToList();
+            for (int i = 0; i < SentenceItems.Count; i++)
+            {
+                var item = SentenceItems.ElementAt(i);
+                if (!(item is Word)) continue;
+                if (item.Value.Length != wordLength) continue;
+                SentenceItems.Remove(item);
+                foreach (var subItem in items)
+                {
+                    SentenceItems.Insert(i, subItem);
+                }
+            }
+        }
 
-            wordsToRemove.ForEach(x => { SentenceItems.Remove(x); });
-            return SentenceItems.ToList();
+        public void ReplaceAllSentenceWordsStartWithConsonant(int length)
+        {
+            Regex consonantWord = new Regex(@"\b[b-d,f-h,j-n,p-t,v,w,x,z]\S+\b", RegexOptions.IgnoreCase);
+            var wordsToRemove = SentenceItems.Where(x => x is Word)
+                .Where(x => consonantWord.IsMatch(x.Value) && x.Value.Length == length);
+            SentenceItems = SentenceItems.Except(wordsToRemove).ToList();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var element in SentenceItems)
+            {
+                builder.Append(element.Value);
+            }
+            return builder.ToString();
         }
     }
 }
