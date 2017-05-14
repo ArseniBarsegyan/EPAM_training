@@ -10,7 +10,7 @@ namespace Parser
             Sentences = sentences;
         }
 
-        public ICollection<Sentence> Sentences { get; private set; }
+        public ICollection<Sentence> Sentences { get; }
 
         public IEnumerable<Sentence> GetSortedSentencesByWordsCount()
         {

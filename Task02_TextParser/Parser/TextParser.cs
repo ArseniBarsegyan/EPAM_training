@@ -6,7 +6,7 @@ namespace Parser
 {
     public static class TextParser
     {
-        public static ICollection<Sentence> ParseText(this string text)
+        public static IEnumerable<Sentence> ParseText(this string text)
         {
             var sentences = new List<Sentence>();
             var symbols = new List<Symbol>();
