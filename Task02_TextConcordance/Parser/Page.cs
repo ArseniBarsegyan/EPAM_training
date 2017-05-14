@@ -4,16 +4,16 @@ namespace Parser
 {
     public class Page
     {
-        public Page(int currentPageNumber, int numberOfLines)
+        public Page(int currentPageNumber, int numberOfLines, ICollection<string> lines)
         {
             CurrentPageNumber = currentPageNumber;
             NumberOfLines = numberOfLines;
-            Lines = new List<string>();
+            Lines = lines;
         }
 
         public int CurrentPageNumber { get; private set; }
         public int NumberOfLines { get; private set; }
-        public List<string> Lines { get; private set; }
+        public ICollection<string> Lines { get; }
 
         public void AddLine(string line)
         {
