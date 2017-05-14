@@ -10,14 +10,14 @@ namespace Parser
             Symbols = symbols;
         }
 
-        public ICollection<Symbol> Symbols { get; private set; }
+        private ICollection<Symbol> Symbols { get; }
 
         public void AddSymbol(char c)
         {
             Symbols.Add(new Symbol(c));
         }
 
-        public string Value { get { return ToString(); } }
+        public string Value => ToString();
 
         public override string ToString()
         {

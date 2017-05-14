@@ -11,8 +11,8 @@ namespace Parser
             var sentences = new List<Sentence>();
             var symbols = new List<Symbol>();
             var sentenceItems = new List<ISentenceItem>();
-
-            ReplaceAllTabsAndWhiteSpaceSequences(text);
+            
+            text = ReplaceAllTabsAndWhiteSpaceSequences(text);
 
             for (int i = 0; i < text.Length - 1; i++)
             {
@@ -69,10 +69,11 @@ namespace Parser
             }
         }
 
-        private static void ReplaceAllTabsAndWhiteSpaceSequences(string text)
+        private static string ReplaceAllTabsAndWhiteSpaceSequences(string text)
         {
             text = Regex.Replace(text, @"\s+", " ");
             text = Regex.Replace(text, @"\t+", " ");
+            return text;
         }
 
         private static bool IsSymbol(string s)
