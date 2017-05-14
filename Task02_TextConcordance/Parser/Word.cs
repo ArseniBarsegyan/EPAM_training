@@ -14,7 +14,7 @@ namespace Parser
         }
 
         public string Value { get; private set; }
-        public int RepeatCount { get; set; }
+        public int RepeatCount { get; private set; }
         public ICollection<int> PagesNumbers { get; }
 
         public void IncreaseRepeatCount()
