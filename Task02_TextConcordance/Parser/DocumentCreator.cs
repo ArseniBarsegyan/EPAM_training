@@ -7,7 +7,7 @@ namespace Parser
     public class DocumentCreator
     {
         private StreamReader _streamReader;
-        private List<Page> _pages;
+        private ICollection<Page> _pages;
         private Page _page;
         private string _fileName;
         private int _numberOfLinesPerPage;
@@ -28,7 +28,7 @@ namespace Parser
             string line;
             int countLines = 1;
             int pageNumber = 1;
-            _page = new Page(pageNumber, _numberOfLinesPerPage);
+            _page = new Page(pageNumber, _numberOfLinesPerPage, new List<string>());
 
             while((line = _streamReader.ReadLine()) != null)
             {
@@ -38,7 +38,7 @@ namespace Parser
                 {
                     _pages.Add(_page);
                     pageNumber++;
-                    _page = new Page(pageNumber, _numberOfLinesPerPage);
+                    _page = new Page(pageNumber, _numberOfLinesPerPage, new List<string>());
                     countLines = 1;
                 }
 
@@ -49,8 +49,6 @@ namespace Parser
 
             //Adding last page to page list
             _pages.Add(_page);
-
-            //Closing stream
             _streamReader.Close();
         }
 
@@ -61,12 +59,9 @@ namespace Parser
         /// <exception cref="FileNotFoundException" />
         public Document CreateDocumentModel()
         {
-            if (File.Exists(_fileName))
-            {
-                ReadFileContent();
-                return new Document(_fileName, _pages);
-            }
-            throw new FileNotFoundException();
+            if (!File.Exists(_fileName)) throw new FileNotFoundException();
+            ReadFileContent();
+            return new Document(_fileName, _pages);
         }
     }
 }
