@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Parser
@@ -8,8 +9,8 @@ namespace Parser
     //provides list of words
     public class TextParser
     {
-        private List<Page> _pages;
-        private List<Word> _words;
+        private ICollection<Page> _pages;
+        private ICollection<Word> _words;
 
         public TextParser(Document document)
         {
@@ -20,21 +21,18 @@ namespace Parser
         private void FillInWordsList()
         {
             Regex regex = new Regex(@"[A-Za-z]+");
-            string pageText;
-            MatchCollection matches;
-            Word word;
             _words = new List<Word>();
 
             foreach (Page page in _pages)
             {
                 //Creating collection of all words on page
-                pageText = JoinLines(page);
-                matches = regex.Matches(pageText);
+                var pageText = JoinLines(page);
+                var matches = regex.Matches(pageText);
 
                 foreach (Match m in matches)
                 {
                     //Creating Word object from every word on page
-                    word = new Word(m.Value, 1, page.CurrentPageNumber);
+                    var word = new Word(m.Value, 1, page.CurrentPageNumber, new List<int>());
 
                     if (!IsWordsContainsWord(word))
                     {
@@ -48,7 +46,12 @@ namespace Parser
         //in one string. Ignores case of letters
         private string JoinLines(Page page)
         {
-            return page.Lines.Aggregate("", (current, line) => current + (line.ToLower() + " "));
+            StringBuilder builder = new StringBuilder();
+            foreach (var line in page.Lines)
+            {
+                builder.Append(line.ToLower() + " ");
+            }
+            return builder.ToString();
         }
 
         //Check if list of words already contains word. If true
@@ -59,7 +62,7 @@ namespace Parser
             foreach (Word w in _words)
             {
                 if (!w.Value.Equals(word.Value)) continue;
-                w.RepeatCount++;
+                w.IncreaseRepeatCount();
 
                 //Check if 'w' already contains page number
                 foreach (int number in word.PagesNumbers)
