@@ -76,8 +76,24 @@ namespace AtsCompany.Classes
 
         private void SubscribeOnAllPortEvents(Port port)
         {
+            port.PortStateSetToActive += PortOnPortStateSetToActive;
             port.PortEnabled += PortOnPortEnabled;
             port.PortDisabled += PortOnPortDisabled;
+        }
+
+        private void PortOnPortStateSetToActive(object sender, PhoneNumberArgs phoneNumberArgs)
+        {
+            var port = sender as Port;
+            if (DisabledPorts.Contains(port))
+            {
+                DisabledPorts.Remove(port);
+                ActivePorts.Add(port, phoneNumberArgs.number);
+            }
+            if (EnabledPorts.Contains(port))
+            {
+                EnabledPorts.Remove(port);
+                ActivePorts.Add(port, phoneNumberArgs.number);
+            }
         }
     }
 }
