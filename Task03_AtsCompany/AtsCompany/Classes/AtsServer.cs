@@ -94,6 +94,49 @@ namespace AtsCompany.Classes
                 EnabledPorts.Remove(port);
                 ActivePorts.Add(port, phoneNumberArgs.number);
             }
+            CheckActivePortCalledNumber(port, phoneNumberArgs.number);
+        }
+
+
+        public delegate void PortContactHandler(object sender, string message);
+
+        public event PortContactHandler UserIsUnavaliable;
+        public event PortContactHandler UserIsBusy;
+        public event PortContactHandler UserDoesntExists;
+
+        private void CheckActivePortCalledNumber(Port port, int callNumber)
+        {
+            if (IsDisableListContainsCalledNumber(callNumber))
+            {
+                UserIsUnavaliable?.Invoke(port, "User is unavaliable now. Please try again.");
+            }
+            else if (IsActiveListContainsCalledNumber(callNumber))
+            {
+                UserIsBusy?.Invoke(port, "User is busy. Please try again later.");
+            }
+            else if (IsEnabledListContainsCalledNumber(callNumber))
+            {
+                
+            }
+            else
+            {
+                UserDoesntExists?.Invoke(port, "We're sorry, but user with this number doesn't exists.");
+            }
+        }
+
+        private bool IsDisableListContainsCalledNumber(int number)
+        {
+            return DisabledPorts.Any(port => port.Number == number);
+        }
+
+        private bool IsActiveListContainsCalledNumber(int number)
+        {
+            return ActivePorts.Any(pair => pair.Key.Number == number);
+        }
+
+        private bool IsEnabledListContainsCalledNumber(int number)
+        {
+            return EnabledPorts.Any(port => port.Number == number);
         }
     }
 }
