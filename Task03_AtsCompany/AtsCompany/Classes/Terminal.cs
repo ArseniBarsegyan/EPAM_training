@@ -1,4 +1,6 @@
-﻿namespace AtsCompany.Classes
+﻿using System;
+
+namespace AtsCompany.Classes
 {
     public class Terminal
     {
@@ -10,6 +12,13 @@
 
         public AtsServer Server { get; private set; }
         public int Number { get; private set; }
+
+        public event EventHandler<PhoneNumberArgs> BeginCall;
+
+        public void MakeCall(int number)
+        {
+            BeginCall?.Invoke(this, new PhoneNumberArgs(number));
+        }
 
         //Event happens when terminal turn on (state set to enabled)
         public delegate void TerminalEnableHandler(object sender);
