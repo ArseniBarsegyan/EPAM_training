@@ -1,4 +1,6 @@
-﻿namespace AtsCompany.Classes
+﻿using System;
+
+namespace AtsCompany.Classes
 {
     public class Port
     {
@@ -46,8 +48,22 @@
             PortDisabled?.Invoke(this);
         }
 
+        private void TerminalOnBeginCall(object sender, PhoneNumberArgs e)
+        {
+            State = PortState.Active;
+            OnPortStateSetToActive(e);
+        }
+
+        public event EventHandler<PhoneNumberArgs> PortStateSetToActive;
+
+        private void OnPortStateSetToActive(PhoneNumberArgs e)
+        {
+            PortStateSetToActive?.Invoke(this, e);
+        }
+
         private void SubscribeOnAllTerminalEvents()
         {
+            Terminal.BeginCall += TerminalOnBeginCall;
             Terminal.TerminalIsEnabled += TerminalOnTerminalIsEnabled;
             Terminal.TerminalIsDisabled += TerminalOnTerminalIsDisabled;
         }
