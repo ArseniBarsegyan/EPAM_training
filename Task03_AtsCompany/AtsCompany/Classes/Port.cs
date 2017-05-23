@@ -11,6 +11,7 @@ namespace AtsCompany.Classes
             Terminal = terminal;
             Server = server;
             SubscribeOnAllTerminalEvents();
+            SubscribeOnAllServerEvents();
         }
 
         public Terminal Terminal { get; }
@@ -66,6 +67,34 @@ namespace AtsCompany.Classes
             Terminal.BeginCall += TerminalOnBeginCall;
             Terminal.TerminalIsEnabled += TerminalOnTerminalIsEnabled;
             Terminal.TerminalIsDisabled += TerminalOnTerminalIsDisabled;
+        }
+
+        public void SubscribeOnAllServerEvents()
+        {
+            Server.UserDoesntExists += ServerOnUserDoesntExists;
+            Server.UserIsBusy += ServerOnUserIsBusy;
+            Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
+        }
+
+        private void ServerOnUserIsUnavaliable(object sender, string message)
+        {
+            if (sender as Port != this) return;
+            State = PortState.Enabled;
+            OnPortEnabled();
+        }
+
+        private void ServerOnUserIsBusy(object sender, string message)
+        {
+            if (sender as Port != this) return;
+            State = PortState.Enabled;
+            OnPortEnabled();
+        }
+
+        private void ServerOnUserDoesntExists(object sender, string message)
+        {
+            if (sender as Port != this) return;
+            State = PortState.Enabled;
+            OnPortEnabled();
         }
     }
 }
