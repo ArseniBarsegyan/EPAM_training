@@ -11,6 +11,8 @@ namespace Demo
             var terminal = server.CreateTerminal();
             terminal.TurnOnTerminal();
             var terminal2 = server.CreateTerminal();
+            terminal.MakeCall(111);
+            terminal2.MakeCall(terminal.Number);
         }
     }
 }

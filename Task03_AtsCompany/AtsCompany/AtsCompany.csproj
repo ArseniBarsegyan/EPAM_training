@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Classes\AtsServer.cs" />
     <Compile Include="Classes\Call.cs" />
+    <Compile Include="Classes\PhoneNumberArgs.cs" />
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Classes\PortState.cs" />
     <Compile Include="Classes\Terminal.cs" />
