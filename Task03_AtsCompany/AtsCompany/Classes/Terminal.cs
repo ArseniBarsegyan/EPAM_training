@@ -10,5 +10,25 @@
 
         public AtsServer Server { get; private set; }
         public int Number { get; private set; }
+
+        //Event happens when terminal turn on (state set to enabled)
+        public delegate void TerminalEnableHandler(object sender);
+
+        public event TerminalEnableHandler TerminalIsEnabled;
+
+        public void TurnOnTerminal()
+        {
+            TerminalIsEnabled?.Invoke(this);
+        }
+
+        //Event happens when terminal turn off (state set to disabled)
+        public delegate void TerminalDisableHandler(object sender);
+
+        public event TerminalDisableHandler TerminalIsDisabled;
+
+        public void TurnOffTerminal()
+        {
+            TerminalIsDisabled?.Invoke(this);
+        }
     }
 }
