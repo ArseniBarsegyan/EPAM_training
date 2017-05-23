@@ -8,6 +8,34 @@ namespace AtsCompany.Classes
         {
             Number = number;
             Server = server;
+            SubscribeOnAllServerEvents();
+        }
+
+        private void ServerOnUserIsUnavaliable(object sender, string message)
+        {
+            var port = sender as Port;
+            if (port != null && port.Number == Number)
+            {
+                Console.WriteLine(message);
+            }
+        }
+
+        private void ServerOnUserIsBusy(object sender, string message)
+        {
+            var port = sender as Port;
+            if (port != null && port.Number == Number)
+            {
+                Console.WriteLine(message);
+            }
+        }
+
+        private void ServerOnUserDoesntExists(object sender, string message)
+        {
+            var port = sender as Port;
+            if (port != null && port.Number == Number)
+            {
+                Console.WriteLine(message);
+            }
         }
 
         public AtsServer Server { get; private set; }
@@ -38,6 +66,13 @@ namespace AtsCompany.Classes
         public void TurnOffTerminal()
         {
             TerminalIsDisabled?.Invoke(this);
+        }
+
+        public void SubscribeOnAllServerEvents()
+        {
+            Server.UserDoesntExists += ServerOnUserDoesntExists;
+            Server.UserIsBusy += ServerOnUserIsBusy;
+            Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
         }
     }
 }
