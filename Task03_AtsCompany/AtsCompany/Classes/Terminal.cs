@@ -4,11 +4,11 @@ namespace AtsCompany.Classes
 {
     public class Terminal
     {
-        public Terminal(int number, AtsServer server)
+        public Terminal(Port port)
         {
-            Number = number;
-            Server = server;
-            SubscribeOnAllServerEvents();
+            Port = port;
+            Number = port.Number;
+            SubscribeOnAllPortEvents();
         }
 
         private void ServerOnUserIsUnavaliable(object sender, string message)
@@ -38,9 +38,6 @@ namespace AtsCompany.Classes
             }
         }
 
-        public AtsServer Server { get; private set; }
-        public int Number { get; private set; }
-
         public event EventHandler<PhoneNumberArgs> BeginCall;
 
         public void MakeCall(int number)
@@ -68,11 +65,11 @@ namespace AtsCompany.Classes
             TerminalIsDisabled?.Invoke(this);
         }
 
-        public void SubscribeOnAllServerEvents()
+        public int Number { get; private set; }
+        public Port Port { get; private set; }
+
+        private void SubscribeOnAllPortEvents()
         {
-            Server.UserDoesntExists += ServerOnUserDoesntExists;
-            Server.UserIsBusy += ServerOnUserIsBusy;
-            Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
         }
     }
 }
