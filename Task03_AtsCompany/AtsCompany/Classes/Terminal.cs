@@ -87,12 +87,30 @@ namespace AtsCompany.Classes
             }
         }
 
+        private void PortOnSendAcceptMessageToTerminal(int number1, int number2, string message)
+        {
+            if (Number == number1)
+            {
+                Console.WriteLine(message);
+            }
+        }
+
+        private void PortOnSendRejectMessageToTerminal(int number, string message)
+        {
+            if (Number == number)
+            {
+                Console.WriteLine(message);
+            }
+        }
+
         private void SubscribeOnAllPortEvents()
         {
             Port.UserIsUnavaliable += PortOnUserIsUnavaliable;
             Port.UserIsBusy += PortOnUserIsBusy;
             Port.UserDoesntExists += PortOnUserDoesntExists;
             Port.CallRequesting += PortOnCallRequesting;
+            Port.SendRejectMessageToTerminal += PortOnSendRejectMessageToTerminal;
+            Port.SendAcceptMessageToTerminal += PortOnSendAcceptMessageToTerminal;
         }
 
         private void PortOnPortRemovedTerminal()
@@ -101,6 +119,8 @@ namespace AtsCompany.Classes
             Port.UserIsBusy -= PortOnUserIsBusy;
             Port.UserDoesntExists -= PortOnUserDoesntExists;
             Port.CallRequesting -= PortOnCallRequesting;
+            Port.SendRejectMessageToTerminal -= PortOnSendRejectMessageToTerminal;
+            Port.SendAcceptMessageToTerminal -= PortOnSendAcceptMessageToTerminal;
         }
     }
 }
