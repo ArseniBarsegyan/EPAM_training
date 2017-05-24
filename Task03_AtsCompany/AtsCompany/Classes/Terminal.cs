@@ -11,7 +11,7 @@ namespace AtsCompany.Classes
             SubscribeOnAllPortEvents();
         }
 
-        private void ServerOnUserIsUnavaliable(object sender, string message)
+        private void PortOnUserIsUnavaliable(object sender, string message)
         {
             var port = sender as Port;
             if (port != null && port.Number == Number)
@@ -20,7 +20,7 @@ namespace AtsCompany.Classes
             }
         }
 
-        private void ServerOnUserIsBusy(object sender, string message)
+        private void PortOnUserIsBusy(object sender, string message)
         {
             var port = sender as Port;
             if (port != null && port.Number == Number)
@@ -29,7 +29,7 @@ namespace AtsCompany.Classes
             }
         }
 
-        private void ServerOnUserDoesntExists(object sender, string message)
+        private void PortOnUserDoesntExists(object sender, string message)
         {
             var port = sender as Port;
             if (port != null && port.Number == Number)
@@ -70,6 +70,9 @@ namespace AtsCompany.Classes
 
         private void SubscribeOnAllPortEvents()
         {
+            Port.UserIsUnavaliable += PortOnUserIsUnavaliable;
+            Port.UserIsBusy += PortOnUserIsBusy;
+            Port.UserDoesntExists += PortOnUserDoesntExists;
         }
     }
 }
