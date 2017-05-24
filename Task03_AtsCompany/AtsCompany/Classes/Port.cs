@@ -73,6 +73,8 @@ namespace AtsCompany.Classes
             Terminal.BeginCall += TerminalOnBeginCall;
             Terminal.TerminalIsEnabled += TerminalOnTerminalIsEnabled;
             Terminal.TerminalIsDisabled += TerminalOnTerminalIsDisabled;
+            Terminal.RejectCall += TerminalOnRejectCall;
+            Terminal.AcceptCall += TerminalOnAcceptCall;
         }
 
         private void UnsubscribeOnAllTerminalEvents()
@@ -82,6 +84,8 @@ namespace AtsCompany.Classes
             Terminal.TerminalIsDisabled -= TerminalOnTerminalIsDisabled;
             Terminal.RejectCall -= TerminalOnRejectCall;
             Terminal.AcceptCall -= TerminalOnAcceptCall;
+            Server.AnswerOnReject += OnAnswerOnReject;
+            Server.AnswerOnAccept += ServerOnAnswerOnAccept;
         }
 
         public void SubscribeOnAllServerEvents()
@@ -90,8 +94,7 @@ namespace AtsCompany.Classes
             Server.UserIsBusy += ServerOnUserIsBusy;
             Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
             Server.ConnectionEstablish += ServerOnConnectionEstablish;
-            Terminal.RejectCall += TerminalOnRejectCall;
-            Terminal.AcceptCall += TerminalOnAcceptCall;
+            
         }
 
         public delegate void TerminalContactHandler(object sender, string message);
@@ -149,6 +152,53 @@ namespace AtsCompany.Classes
         private void TerminalOnRejectCall(int number1, int number2, string message)
         {
             CallRejected?.Invoke(number1, number2, message);
+        }
+
+        public delegate void PortStateCallingHandler(object sender1, object sender2);
+
+        public event PortStateCallingHandler PortConnectionEstablished;
+
+        public delegate void ServerAcceptHandler(int number1, int number2, string message);
+
+        public event ServerAcceptHandler SendAcceptMessageToTerminal;
+
+        private void ServerOnAnswerOnAccept(object sender1, object sender2, string message)
+        {
+            var port1 = sender1 as Port;
+            var port2 = sender2 as Port;
+
+            if (this == port1)
+            {
+                State = PortState.Calling;
+                if (port2 != null)
+                {
+                    PortConnectionEstablished?.Invoke(sender1, sender2);
+                    SendAcceptMessageToTerminal?.Invoke(port1.Number, port2.Number, message);
+                }
+            }
+
+            if (this == port2)
+            {
+                State = PortState.Calling;
+            }
+        }
+
+        public delegate void ServerRejectHandler(int number, string message);
+
+        public event ServerRejectHandler SendRejectMessageToTerminal;
+
+        private void OnAnswerOnReject(object sender, string message)
+        {
+            if (this == sender)
+            {
+                var port1 = sender as Port;
+                if (port1 != null)
+                {
+                    SendRejectMessageToTerminal?.Invoke(port1.Number, message);
+                }
+                State = PortState.Enabled;
+                OnPortEnabled();
+            }
         }
 
         public Terminal Terminal { get; private set; }
