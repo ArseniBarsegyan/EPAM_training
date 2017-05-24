@@ -87,6 +87,7 @@ namespace AtsCompany.Classes
             Server.UserDoesntExists += ServerOnUserDoesntExists;
             Server.UserIsBusy += ServerOnUserIsBusy;
             Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
+            Server.ConnectionEstablish += ServerOnConnectionEstablish;
         }
 
         public delegate void TerminalContactHandler(object sender, string message);
@@ -117,6 +118,18 @@ namespace AtsCompany.Classes
             State = PortState.Enabled;
             UserDoesntExists?.Invoke(sender, message);
             OnPortEnabled();
+        }
+
+        public delegate void CallRequestHandler(int number1, int number2, string message);
+
+        public event CallRequestHandler CallRequesting;
+
+        private void ServerOnConnectionEstablish(Port port1, Port port2)
+        {
+            if (this == port2)
+            {
+                CallRequesting?.Invoke(port1.Number, this.Number, $"{port1.Number} requesting connection");
+            }
         }
 
         public Terminal Terminal { get; private set; }
