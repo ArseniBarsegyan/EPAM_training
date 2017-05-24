@@ -6,6 +6,9 @@ namespace AtsCompany.Classes
 {
     public class AtsServer
     {
+        private List<Call> _currentCalls = new List<Call>();
+        private List<Call> _storageCalls = new List<Call>();
+
         public AtsServer(string name, ICollection<Port> disabledPorts)
         {
             Name = name;
@@ -80,6 +83,7 @@ namespace AtsCompany.Classes
             port.PortDisabled += PortOnPortDisabled;
             port.CallRejected += PortOnCallRejected;
             port.CallAccepted += PortOnCallAccepted;
+            port.PortConnectionEstablished += PortOnPortConnectionEstablished;
         }
 
         private void PortOnPortStateSetToActive(object sender, PhoneNumberArgs phoneNumberArgs)
@@ -171,6 +175,42 @@ namespace AtsCompany.Classes
         private bool IsEnabledListContainsCalledNumber(int number)
         {
             return EnabledPorts.Any(port => port.Number == number);
+        }
+
+        private bool IsPortListsContainPortByNumber(int number)
+        {
+            if (IsActiveListContainsCalledNumber(number))
+                return true;
+            if (IsDisableListContainsCalledNumber(number))
+                return true;
+            if (IsEnabledListContainsCalledNumber(number))
+                return true;
+            return false;
+        }
+
+        private void PortOnPortConnectionEstablished(object sender1, object sender2)
+        {
+            var port1 = sender1 as Port;
+            var port2 = sender2 as Port;
+
+            if (port1 != null && port2 != null)
+            {
+                ActivePorts.Remove(port1);
+                EnabledPorts.Remove(port2);
+                CallingPorts.Add(port1);
+                CallingPorts.Add(port2);
+
+                var call = CreateCallObject(port1.Number, port2.Number);
+                _currentCalls.Add(call);
+            }
+        }
+
+        private Call CreateCallObject(int senderNumber, int recieverNumber)
+        {
+            var call = new Call();
+            call.SetSenderNumber(senderNumber);
+            call.SetRecieverNumber(recieverNumber);
+            return call;
         }
     }
 }
