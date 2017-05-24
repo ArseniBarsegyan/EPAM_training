@@ -12,18 +12,13 @@ namespace AtsCompany.Classes
             SubscribeOnAllServerEvents();
         }
 
-        public Terminal Terminal { get; private set; }
-        public int Number { get; }
-        public PortState State { get; private set; }
-        public AtsServer Server { get; private set; }
-
         public void SetCurrentTerminal(Terminal terminal)
         {
             Terminal = terminal;
             SubscribeOnAllTerminalEvents();
         }
 
-        public void ReplaceCurrentTerminalWithNew(Terminal terminal)
+        public void ReplaceCurrentTerminalWithNewTerminal(Terminal terminal)
         {
             UnsubscribeOnAllTerminalEvents();
             Terminal = terminal;
@@ -94,10 +89,17 @@ namespace AtsCompany.Classes
             Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
         }
 
+        public delegate void TerminalContactHandler(object sender, string message);
+
+        public event TerminalContactHandler UserIsUnavaliable;
+        public event TerminalContactHandler UserIsBusy;
+        public event TerminalContactHandler UserDoesntExists;
+
         private void ServerOnUserIsUnavaliable(object sender, string message)
         {
             if (sender as Port != this) return;
             State = PortState.Enabled;
+            UserIsUnavaliable?.Invoke(sender, message);
             OnPortEnabled();
         }
 
@@ -105,6 +107,7 @@ namespace AtsCompany.Classes
         {
             if (sender as Port != this) return;
             State = PortState.Enabled;
+            UserIsBusy?.Invoke(sender, message);
             OnPortEnabled();
         }
 
@@ -112,7 +115,13 @@ namespace AtsCompany.Classes
         {
             if (sender as Port != this) return;
             State = PortState.Enabled;
+            UserDoesntExists?.Invoke(sender, message);
             OnPortEnabled();
         }
+
+        public Terminal Terminal { get; private set; }
+        public int Number { get; }
+        public PortState State { get; private set; }
+        public AtsServer Server { get; private set; }
     }
 }
