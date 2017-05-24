@@ -22,7 +22,7 @@ namespace AtsCompany.Classes
         public ICollection<Port> CallingPorts { get; }
 
         //When terminal created it's port get into DisabledPorts list
-        public Terminal CreateTerminal()
+        public Port CreatePort()
         {
             var randomNumber = new Random();
             var number = randomNumber.Next(111111, 999999);
@@ -31,11 +31,10 @@ namespace AtsCompany.Classes
             {
                 number = randomNumber.Next(111111, 999999);
             }
-            var terminal = new Terminal(number, this);
-            var port = new Port(number, terminal, this);
+            var port = new Port(number, this);
             DisabledPorts.Add(port);
             SubscribeOnAllPortEvents(port);
-            return terminal;
+            return port;
         }
 
         private void PortOnPortEnabled(object sender)
