@@ -80,6 +80,8 @@ namespace AtsCompany.Classes
             Terminal.BeginCall -= TerminalOnBeginCall;
             Terminal.TerminalIsEnabled -= TerminalOnTerminalIsEnabled;
             Terminal.TerminalIsDisabled -= TerminalOnTerminalIsDisabled;
+            Terminal.RejectCall -= TerminalOnRejectCall;
+            Terminal.AcceptCall -= TerminalOnAcceptCall;
         }
 
         public void SubscribeOnAllServerEvents()
@@ -88,6 +90,8 @@ namespace AtsCompany.Classes
             Server.UserIsBusy += ServerOnUserIsBusy;
             Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
             Server.ConnectionEstablish += ServerOnConnectionEstablish;
+            Terminal.RejectCall += TerminalOnRejectCall;
+            Terminal.AcceptCall += TerminalOnAcceptCall;
         }
 
         public delegate void TerminalContactHandler(object sender, string message);
@@ -130,6 +134,21 @@ namespace AtsCompany.Classes
             {
                 CallRequesting?.Invoke(port1.Number, this.Number, $"{port1.Number} requesting connection");
             }
+        }
+
+        public delegate void PortCallStateHandler(int number1, int number2, string message);
+
+        public event PortCallStateHandler CallRejected;
+        public event PortCallStateHandler CallAccepted;
+
+        private void TerminalOnAcceptCall(int number1, int number2, string message)
+        {
+            CallAccepted?.Invoke(number1, number2, message);
+        }
+
+        private void TerminalOnRejectCall(int number1, int number2, string message)
+        {
+            CallRejected?.Invoke(number1, number2, message);
         }
 
         public Terminal Terminal { get; private set; }
