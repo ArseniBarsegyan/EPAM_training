@@ -12,8 +12,18 @@ namespace AtsCompany.Classes
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
         public TimeSpan Duration { get; private set; }
-        public int SenderNumber { get; }
-        public int RecieverNumber { get; }
+        public int SenderNumber { get; private set; }
+        public int RecieverNumber { get; private set; }
+
+        public void SetSenderNumber(int number)
+        {
+            SenderNumber = number;
+        }
+
+        public void SetRecieverNumber(int number)
+        {
+            RecieverNumber = number;
+        }
 
         public void FinishCall()
         {
