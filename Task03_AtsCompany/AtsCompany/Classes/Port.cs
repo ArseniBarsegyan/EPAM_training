@@ -4,20 +4,31 @@ namespace AtsCompany.Classes
 {
     public class Port
     {
-        public Port(int number, Terminal terminal, AtsServer server)
+        public Port(int number, AtsServer server)
         {
             Number = number;
             State = PortState.Disabled;
-            Terminal = terminal;
             Server = server;
-            SubscribeOnAllTerminalEvents();
             SubscribeOnAllServerEvents();
         }
 
-        public Terminal Terminal { get; }
+        public Terminal Terminal { get; private set; }
         public int Number { get; }
         public PortState State { get; private set; }
         public AtsServer Server { get; private set; }
+
+        public void SetCurrentTerminal(Terminal terminal)
+        {
+            Terminal = terminal;
+            SubscribeOnAllTerminalEvents();
+        }
+
+        public void ReplaceCurrentTerminalWithNew(Terminal terminal)
+        {
+            UnsubscribeOnAllTerminalEvents();
+            Terminal = terminal;
+            SubscribeOnAllTerminalEvents();
+        }
 
         private void TerminalOnTerminalIsEnabled(object sender)
         {
@@ -67,6 +78,13 @@ namespace AtsCompany.Classes
             Terminal.BeginCall += TerminalOnBeginCall;
             Terminal.TerminalIsEnabled += TerminalOnTerminalIsEnabled;
             Terminal.TerminalIsDisabled += TerminalOnTerminalIsDisabled;
+        }
+
+        private void UnsubscribeOnAllTerminalEvents()
+        {
+            Terminal.BeginCall -= TerminalOnBeginCall;
+            Terminal.TerminalIsEnabled -= TerminalOnTerminalIsEnabled;
+            Terminal.TerminalIsDisabled -= TerminalOnTerminalIsDisabled;
         }
 
         public void SubscribeOnAllServerEvents()
