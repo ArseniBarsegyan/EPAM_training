@@ -67,12 +67,40 @@ namespace AtsCompany.Classes
 
         public int Number { get; private set; }
         public Port Port { get; private set; }
+        
+        public delegate void AnswerHandler(int number1, int number2, string message);
+
+        public event AnswerHandler RejectCall;
+        public event AnswerHandler AcceptCall;
+
+        private void PortOnCallRequesting(int number1, int number2, string message)
+        {
+            Console.WriteLine("Incoming call. Type 'y' to answer, 'n' to reject");
+            var answer = Console.ReadLine();
+            if (answer != null && answer.ToLower().Equals("y"))
+            {
+                AcceptCall?.Invoke(number1, number2, $"User 2 : Connection with {number1} established");
+            }
+            else
+            {
+                RejectCall?.Invoke(number1, number2, $"{number2} has rejected call");
+            }
+        }
 
         private void SubscribeOnAllPortEvents()
         {
             Port.UserIsUnavaliable += PortOnUserIsUnavaliable;
             Port.UserIsBusy += PortOnUserIsBusy;
             Port.UserDoesntExists += PortOnUserDoesntExists;
+            Port.CallRequesting += PortOnCallRequesting;
+        }
+
+        private void PortOnPortRemovedTerminal()
+        {
+            Port.UserIsUnavaliable -= PortOnUserIsUnavaliable;
+            Port.UserIsBusy -= PortOnUserIsBusy;
+            Port.UserDoesntExists -= PortOnUserDoesntExists;
+            Port.CallRequesting -= PortOnCallRequesting;
         }
     }
 }
