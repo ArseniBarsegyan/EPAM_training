@@ -84,8 +84,6 @@ namespace AtsCompany.Classes
             Terminal.TerminalIsDisabled -= TerminalOnTerminalIsDisabled;
             Terminal.RejectCall -= TerminalOnRejectCall;
             Terminal.AcceptCall -= TerminalOnAcceptCall;
-            Server.AnswerOnReject += OnAnswerOnReject;
-            Server.AnswerOnAccept += ServerOnAnswerOnAccept;
         }
 
         public void SubscribeOnAllServerEvents()
@@ -94,7 +92,8 @@ namespace AtsCompany.Classes
             Server.UserIsBusy += ServerOnUserIsBusy;
             Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
             Server.ConnectionEstablish += ServerOnConnectionEstablish;
-            
+            Server.AnswerOnReject += OnAnswerOnReject;
+            Server.AnswerOnAccept += ServerOnAnswerOnAccept;
         }
 
         public delegate void TerminalContactHandler(object sender, string message);
