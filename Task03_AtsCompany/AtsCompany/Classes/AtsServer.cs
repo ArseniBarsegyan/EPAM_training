@@ -115,12 +115,24 @@ namespace AtsCompany.Classes
             }
             else if (IsEnabledListContainsCalledNumber(callNumber))
             {
-                
+                var port2 = EnabledPorts.FirstOrDefault(x => x.Number == callNumber);
+                if (port2 != null)
+                {
+                    EstablishConnection(port, port2);
+                }
             }
             else
             {
                 UserDoesntExists?.Invoke(port, "We're sorry, but user with this number doesn't exists.");
             }
+        }
+
+        public delegate void ConnectionHandler(Port port1, Port port2);
+        public event ConnectionHandler ConnectionEstablish;
+
+        private void EstablishConnection(Port port1, Port port2)
+        {
+            ConnectionEstablish?.Invoke(port1, port2);
         }
 
         private bool IsDisableListContainsCalledNumber(int number)
