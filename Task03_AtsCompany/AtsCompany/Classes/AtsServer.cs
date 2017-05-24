@@ -78,6 +78,8 @@ namespace AtsCompany.Classes
             port.PortStateSetToActive += PortOnPortStateSetToActive;
             port.PortEnabled += PortOnPortEnabled;
             port.PortDisabled += PortOnPortDisabled;
+            port.CallRejected += PortOnCallRejected;
+            port.CallAccepted += PortOnCallAccepted;
         }
 
         private void PortOnPortStateSetToActive(object sender, PhoneNumberArgs phoneNumberArgs)
@@ -133,6 +135,27 @@ namespace AtsCompany.Classes
         private void EstablishConnection(Port port1, Port port2)
         {
             ConnectionEstablish?.Invoke(port1, port2);
+        }
+
+        public delegate void ServerAcceptHandler(object sender1, object sender2, string message);
+
+        public event ServerAcceptHandler AnswerOnAccept;
+
+        private void PortOnCallAccepted(int number1, int number2, string message)
+        {
+            var port1 = ActivePorts.FirstOrDefault(x => x.Key.Number == number1).Key;
+            var port2 = EnabledPorts.FirstOrDefault(x => x.Number == number2);
+            AnswerOnAccept?.Invoke(port1, port2, message);
+        }
+
+        public delegate void ServerRejectHandler(object sender, string message);
+
+        public event ServerRejectHandler AnswerOnReject;
+
+        private void PortOnCallRejected(int number1, int number2, string message)
+        {
+            var port1 = ActivePorts.FirstOrDefault(x => x.Key.Number == number1).Key;
+            AnswerOnReject?.Invoke(port1, message);
         }
 
         private bool IsDisableListContainsCalledNumber(int number)
