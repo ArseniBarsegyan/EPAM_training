@@ -18,53 +18,38 @@ namespace AtsCompany.Classes
             SubscribeOnAllTerminalEvents();
         }
 
-        public void ReplaceCurrentTerminalWithNewTerminal(Terminal terminal)
+        public event Action PortRemoved;
+
+        public Port RemovePortFromTerminal(Terminal terminal)
         {
             UnsubscribeOnAllTerminalEvents();
-            Terminal = terminal;
-            SubscribeOnAllTerminalEvents();
+            PortRemoved?.Invoke();
+            return this;
         }
+
+        public delegate void PortEnabledHandler(object sender);
+        public event PortEnabledHandler PortEnabled;
 
         private void TerminalOnTerminalIsEnabled(object sender)
         {
             State = PortState.Enabled;
-            OnPortEnabled();
-        }
-
-        public delegate void PortEnabledHandler(object sender);
-
-        public event PortEnabledHandler PortEnabled;
-
-        protected virtual void OnPortEnabled()
-        {
             PortEnabled?.Invoke(this);
         }
+        
+        public delegate void PortDisabledHandler(object sender);
+        public event PortDisabledHandler PortDisabled;
 
         private void TerminalOnTerminalIsDisabled(object sender)
         {
             State = PortState.Disabled;
-            OnPortDisabled();
-        }
-
-        public delegate void PortDisabledHandler(object sender);
-
-        public event PortDisabledHandler PortDisabled;
-
-        protected virtual void OnPortDisabled()
-        {
             PortDisabled?.Invoke(this);
-        }
-
-        private void TerminalOnBeginCall(object sender, PhoneNumberArgs e)
-        {
-            State = PortState.Active;
-            OnPortStateSetToActive(e);
         }
 
         public event EventHandler<PhoneNumberArgs> PortStateSetToActive;
 
-        private void OnPortStateSetToActive(PhoneNumberArgs e)
+        private void TerminalOnBeginCall(object sender, PhoneNumberArgs e)
         {
+            State = PortState.Active;
             PortStateSetToActive?.Invoke(this, e);
         }
 
@@ -96,7 +81,7 @@ namespace AtsCompany.Classes
             Terminal.CallIsEnd -= TerminalOnCallIsEnd;
         }
 
-        public void SubscribeOnAllServerEvents()
+        private void SubscribeOnAllServerEvents()
         {
             Server.UserDoesntExists += ServerOnUserDoesntExists;
             Server.UserIsBusy += ServerOnUserIsBusy;
@@ -115,7 +100,7 @@ namespace AtsCompany.Classes
             if (this == port1 || this == port2)
             {
                 State = PortState.Enabled;
-                OnPortEnabled();
+                PortEnabled?.Invoke(this);
                 PortFinishedCall?.Invoke(message);
             }
         }
@@ -131,7 +116,7 @@ namespace AtsCompany.Classes
             if (sender as Port != this) return;
             State = PortState.Enabled;
             UserIsUnavaliable?.Invoke(sender, message);
-            OnPortEnabled();
+            PortEnabled?.Invoke(this);
         }
 
         private void ServerOnUserIsBusy(object sender, string message)
@@ -139,7 +124,7 @@ namespace AtsCompany.Classes
             if (sender as Port != this) return;
             State = PortState.Enabled;
             UserIsBusy?.Invoke(sender, message);
-            OnPortEnabled();
+            PortEnabled?.Invoke(this);
         }
 
         private void ServerOnUserDoesntExists(object sender, string message)
@@ -147,11 +132,10 @@ namespace AtsCompany.Classes
             if (sender as Port != this) return;
             State = PortState.Enabled;
             UserDoesntExists?.Invoke(sender, message);
-            OnPortEnabled();
+            PortEnabled?.Invoke(this);
         }
 
         public delegate void CallRequestHandler(int number1, int number2, string message);
-
         public event CallRequestHandler CallRequesting;
 
         private void ServerOnConnectionEstablish(Port port1, Port port2)
@@ -178,11 +162,9 @@ namespace AtsCompany.Classes
         }
 
         public delegate void PortStateCallingHandler(object sender1, object sender2);
-
         public event PortStateCallingHandler PortConnectionEstablished;
 
         public delegate void ServerAcceptHandler(int number1, int number2, string message);
-
         public event ServerAcceptHandler SendAcceptMessageToTerminal;
 
         private void ServerOnAnswerOnAccept(object sender1, object sender2, string message)
@@ -207,7 +189,6 @@ namespace AtsCompany.Classes
         }
 
         public delegate void ServerRejectHandler(int number, string message);
-
         public event ServerRejectHandler SendRejectMessageToTerminal;
 
         private void OnAnswerOnReject(object sender, string message)
@@ -220,7 +201,7 @@ namespace AtsCompany.Classes
                     SendRejectMessageToTerminal?.Invoke(port1.Number, message);
                 }
                 State = PortState.Enabled;
-                OnPortEnabled();
+                PortEnabled?.Invoke(this);
             }
         }
 
