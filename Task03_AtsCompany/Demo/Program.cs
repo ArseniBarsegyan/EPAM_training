@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using AtsCompany.Classes;
 
 namespace Demo
@@ -20,6 +21,8 @@ namespace Demo
             port2.SetCurrentTerminal(terminal2);
             terminal2.TurnOnTerminal();
             terminal1.MakeCall(port2.Number);
+            Thread.Sleep(1000);
+            terminal2.EndCall();
         }
     }
 }
