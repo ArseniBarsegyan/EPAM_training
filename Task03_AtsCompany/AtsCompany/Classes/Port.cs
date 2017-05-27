@@ -116,8 +116,8 @@ namespace AtsCompany.Classes
             {
                 State = PortState.Enabled;
                 OnPortEnabled();
+                PortFinishedCall?.Invoke(message);
             }
-            PortFinishedCall?.Invoke(message);
         }
 
         public delegate void TerminalContactHandler(object sender, string message);
