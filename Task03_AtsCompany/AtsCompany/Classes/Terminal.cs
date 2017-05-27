@@ -119,6 +119,12 @@ namespace AtsCompany.Classes
             Port.CallRequesting += PortOnCallRequesting;
             Port.SendRejectMessageToTerminal += PortOnSendRejectMessageToTerminal;
             Port.SendAcceptMessageToTerminal += PortOnSendAcceptMessageToTerminal;
+            Port.PortFinishedCall += PortOnPortFinishedCall;
+        }
+
+        private void PortOnPortFinishedCall(string message)
+        {
+            Console.WriteLine(message);
         }
 
         private void PortOnPortRemovedTerminal()
@@ -129,6 +135,7 @@ namespace AtsCompany.Classes
             Port.CallRequesting -= PortOnCallRequesting;
             Port.SendRejectMessageToTerminal -= PortOnSendRejectMessageToTerminal;
             Port.SendAcceptMessageToTerminal -= PortOnSendAcceptMessageToTerminal;
+            Port.PortFinishedCall -= PortOnPortFinishedCall;
         }
     }
 }
