@@ -17,6 +17,7 @@ namespace BillingSystem.Classes
             ChangeRateTime = RegistrationTime;
             FreeMinutes = currentRate.FreeMinutes;
             Manager = manager;
+            Balance = 50;
         }
 
         private double Balance { get; set; }
@@ -57,6 +58,43 @@ namespace BillingSystem.Classes
         public void TurnOffTerminal(Terminal terminal)
         {
             terminal.TurnOffTerminal();
+        }
+
+        //User can pay his debt
+        public void Deposit(int sum)
+        {
+            Balance += sum;
+        }
+        
+        public void WithDraw(int sum)
+        {
+            Balance -= sum;
+        }
+
+        //User can change rate once in month
+        public void ChangeRate(IRate rate)
+        {
+            if (!IsOneMonthExpired()) Console.WriteLine("You can change rate only 1 time in month");
+            CurrentRate = rate;
+            ChangeRateTime = DateTime.Now;
+            Console.WriteLine("Rate has been changed succesfully");
+        }
+
+        private bool IsOneMonthExpired()
+        {
+            var timeFromChangeRate = DateTime.Now - RegistrationTime;
+            var expiredDays = timeFromChangeRate.TotalDays;
+            if (DateTime.DaysInMonth(ChangeRateTime.Year, ChangeRateTime.Month) == 31)
+            {
+                if (expiredDays >= 31)
+                    return true;
+            }
+            else
+            {
+                if (expiredDays >= 30)
+                    return true;
+            }
+            return false;
         }
     }
 }
