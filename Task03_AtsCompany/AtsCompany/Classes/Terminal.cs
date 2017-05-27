@@ -11,6 +11,12 @@ namespace AtsCompany.Classes
             SubscribeOnAllPortEvents();
         }
 
+        public void SetCurrentPort(Port port)
+        {
+            Port = port;
+            SubscribeOnAllPortEvents();
+        }
+
         private void PortOnUserIsUnavaliable(object sender, string message)
         {
             var port = sender as Port;
@@ -44,8 +50,7 @@ namespace AtsCompany.Classes
         {
             BeginCall?.Invoke(this, new PhoneNumberArgs(number));
         }
-
-        //Event happens when terminal turn on (state set to enabled)
+        
         public delegate void TerminalEnableHandler(object sender);
 
         public event TerminalEnableHandler TerminalIsEnabled;
@@ -54,8 +59,7 @@ namespace AtsCompany.Classes
         {
             TerminalIsEnabled?.Invoke(this);
         }
-
-        //Event happens when terminal turn off (state set to disabled)
+        
         public delegate void TerminalDisableHandler(object sender);
 
         public event TerminalDisableHandler TerminalIsDisabled;
@@ -120,14 +124,10 @@ namespace AtsCompany.Classes
             Port.SendRejectMessageToTerminal += PortOnSendRejectMessageToTerminal;
             Port.SendAcceptMessageToTerminal += PortOnSendAcceptMessageToTerminal;
             Port.PortFinishedCall += PortOnPortFinishedCall;
+            Port.PortRemoved += PortOnPortRemoved;
         }
 
-        private void PortOnPortFinishedCall(string message)
-        {
-            Console.WriteLine(message);
-        }
-
-        private void PortOnPortRemovedTerminal()
+        private void PortOnPortRemoved()
         {
             Port.UserIsUnavaliable -= PortOnUserIsUnavaliable;
             Port.UserIsBusy -= PortOnUserIsBusy;
@@ -136,6 +136,11 @@ namespace AtsCompany.Classes
             Port.SendRejectMessageToTerminal -= PortOnSendRejectMessageToTerminal;
             Port.SendAcceptMessageToTerminal -= PortOnSendAcceptMessageToTerminal;
             Port.PortFinishedCall -= PortOnPortFinishedCall;
+        }
+
+        private void PortOnPortFinishedCall(string message)
+        {
+            Console.WriteLine(message);
         }
     }
 }
