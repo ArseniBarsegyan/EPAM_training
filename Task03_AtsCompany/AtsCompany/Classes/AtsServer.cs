@@ -102,6 +102,10 @@ namespace AtsCompany.Classes
             if (port2 == null) return;
             call.Finish();
             ServerFinishedCall?.Invoke(port1, port2, string.Format($"Call finished. Duration: {call.Duration:hh\\:mm\\:ss}"));
+            CallingPorts.Remove(port1);
+            CallingPorts.Remove(port2);
+            EnabledPorts.Add(port1);
+            EnabledPorts.Add(port2);
 
             _currentCalls.Remove(call);
             _storageCalls.Add(call);
@@ -215,8 +219,8 @@ namespace AtsCompany.Classes
 
                 var call = new Call(port1.Number, port2.Number);
                 call.Start();
-                _currentCalls.Add(call);
                 CallFinished?.Invoke(call);
+                _currentCalls.Add(call);
             }
         }
     }
