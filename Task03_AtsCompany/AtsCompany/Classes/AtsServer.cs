@@ -198,17 +198,6 @@ namespace AtsCompany.Classes
             return EnabledPorts.Any(port => port.Number == number);
         }
 
-        private bool IsPortListsContainPortByNumber(int number)
-        {
-            if (IsActiveListContainsCalledNumber(number))
-                return true;
-            if (IsDisableListContainsCalledNumber(number))
-                return true;
-            if (IsEnabledListContainsCalledNumber(number))
-                return true;
-            return false;
-        }
-
         private void PortOnPortConnectionEstablished(object sender1, object sender2)
         {
             var port1 = sender1 as Port;
@@ -221,17 +210,10 @@ namespace AtsCompany.Classes
                 CallingPorts.Add(port1);
                 CallingPorts.Add(port2);
 
-                var call = CreateCallObject(port1.Number, port2.Number);
+                var call = new Call(port1.Number, port2.Number);
+                call.Start();
                 _currentCalls.Add(call);
             }
-        }
-
-        private Call CreateCallObject(int senderNumber, int recieverNumber)
-        {
-            var call = new Call();
-            call.SetSenderNumber(senderNumber);
-            call.SetRecieverNumber(recieverNumber);
-            return call;
         }
     }
 }
