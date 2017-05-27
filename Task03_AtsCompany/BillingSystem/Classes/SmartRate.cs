@@ -1,4 +1,6 @@
-﻿namespace BillingSystem
+﻿using BillingSystem.Interfaces;
+
+namespace BillingSystem.Classes
 {
     public class SmartRate : IRate
     {
