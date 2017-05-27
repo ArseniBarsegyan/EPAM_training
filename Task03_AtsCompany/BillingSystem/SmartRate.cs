@@ -1,6 +1,6 @@
 ﻿namespace BillingSystem
 {
-    class SmartRate : IRate
+    public class SmartRate : IRate
     {
         public SmartRate(string name, int oneMinutePrice, int freeMinutes)
         {
