@@ -84,6 +84,27 @@ namespace AtsCompany.Classes
             port.CallRejected += PortOnCallRejected;
             port.CallAccepted += PortOnCallAccepted;
             port.PortConnectionEstablished += PortOnPortConnectionEstablished;
+            port.PortEndCall += PortOnPortEndCall;
+        }
+
+        public delegate void ServerEndCallHandler(Port port1, Port port2, string message);
+        public event ServerEndCallHandler ServerFinishedCall;
+
+        private void PortOnPortEndCall(int initializatorNumber)
+        {
+            var call = _currentCalls.FirstOrDefault(x => x.RecieverNumber == initializatorNumber || x.SenderNumber == initializatorNumber);
+            if (call == null) return;
+
+            var port1 = CallingPorts.FirstOrDefault(x => x.Number == call.SenderNumber);
+            if (port1 == null) return;
+
+            var port2 = CallingPorts.FirstOrDefault(x => x.Number == call.RecieverNumber);
+            if (port2 == null) return;
+            call.Finish();
+            ServerFinishedCall?.Invoke(port1, port2, string.Format($"Call finished. Duration: {call.Duration:hh\\:mm\\:ss}"));
+
+            _currentCalls.Remove(call);
+            _storageCalls.Add(call);
         }
 
         private void PortOnPortStateSetToActive(object sender, PhoneNumberArgs phoneNumberArgs)
