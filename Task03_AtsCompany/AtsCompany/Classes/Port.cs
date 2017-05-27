@@ -75,6 +75,15 @@ namespace AtsCompany.Classes
             Terminal.TerminalIsDisabled += TerminalOnTerminalIsDisabled;
             Terminal.RejectCall += TerminalOnRejectCall;
             Terminal.AcceptCall += TerminalOnAcceptCall;
+            Terminal.CallIsEnd += TerminalOnCallIsEnd;
+        }
+
+        public delegate void PortEndCallHandler(int initializatorNumber);
+        public event PortEndCallHandler PortEndCall;
+
+        private void TerminalOnCallIsEnd(int senderNumber)
+        {
+            PortEndCall?.Invoke(senderNumber);
         }
 
         private void UnsubscribeOnAllTerminalEvents()
@@ -84,6 +93,7 @@ namespace AtsCompany.Classes
             Terminal.TerminalIsDisabled -= TerminalOnTerminalIsDisabled;
             Terminal.RejectCall -= TerminalOnRejectCall;
             Terminal.AcceptCall -= TerminalOnAcceptCall;
+            Terminal.CallIsEnd -= TerminalOnCallIsEnd;
         }
 
         public void SubscribeOnAllServerEvents()
