@@ -74,10 +74,16 @@ namespace BillingSystem.Classes
         //User can change rate once in month
         public void ChangeRate(IRate rate)
         {
-            if (!IsOneMonthExpired()) Console.WriteLine("You can change rate only 1 time in month");
-            CurrentRate = rate;
-            ChangeRateTime = DateTime.Now;
-            Console.WriteLine("Rate has been changed succesfully");
+            if (IsOneMonthExpired())
+            {
+                CurrentRate = rate;
+                ChangeRateTime = DateTime.Now;
+                Console.WriteLine("Rate has been changed succesfully");
+            }
+            else
+            {
+                Console.WriteLine("You can change rate only 1 time in month");
+            }            
         }
 
         private bool IsOneMonthExpired()
