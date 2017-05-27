@@ -87,6 +87,14 @@ namespace AtsCompany.Classes
             }
         }
 
+        public delegate void TerminalCallIsEndHandler(int senderNumber);
+        public event TerminalCallIsEndHandler CallIsEnd;
+
+        public void EndCall()
+        {
+            CallIsEnd?.Invoke(Number);
+        }
+
         private void PortOnSendAcceptMessageToTerminal(int number1, int number2, string message)
         {
             if (Number == number1)
