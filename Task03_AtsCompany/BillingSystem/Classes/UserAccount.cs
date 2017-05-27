@@ -20,7 +20,7 @@ namespace BillingSystem.Classes
             Balance = 50;
         }
 
-        private double Balance { get; set; }
+        public double Balance { get; private set; }
         public DateTime ChangeRateTime { get; private set; }
         public DateTime RegistrationTime { get; private set; }
         public string Name { get; }
