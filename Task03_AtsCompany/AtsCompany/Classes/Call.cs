@@ -4,9 +4,10 @@ namespace AtsCompany.Classes
 {
     class Call
     {
-        public Call()
+        public Call(int senderNumber, int recieverNumber)
         {
-            StartTime = DateTime.Now;
+            SenderNumber = senderNumber;
+            RecieverNumber = recieverNumber;
         }
 
         public DateTime StartTime { get; private set; }
@@ -15,17 +16,12 @@ namespace AtsCompany.Classes
         public int SenderNumber { get; private set; }
         public int RecieverNumber { get; private set; }
 
-        public void SetSenderNumber(int number)
+        public void Start()
         {
-            SenderNumber = number;
+            StartTime = DateTime.Now;
         }
 
-        public void SetRecieverNumber(int number)
-        {
-            RecieverNumber = number;
-        }
-
-        public void FinishCall()
+        public void Finish()
         {
             EndTime = DateTime.Now;
             Duration = EndTime - StartTime;
