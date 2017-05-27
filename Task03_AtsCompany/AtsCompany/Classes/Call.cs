@@ -2,7 +2,7 @@
 
 namespace AtsCompany.Classes
 {
-    class Call
+    public class Call
     {
         public Call(int senderNumber, int recieverNumber)
         {
