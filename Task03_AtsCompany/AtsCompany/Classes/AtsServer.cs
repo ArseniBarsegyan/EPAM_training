@@ -198,6 +198,9 @@ namespace AtsCompany.Classes
             return EnabledPorts.Any(port => port.Number == number);
         }
 
+        public delegate void CallFinishedHandler(Call call);
+        public event CallFinishedHandler CallFinished;
+
         private void PortOnPortConnectionEstablished(object sender1, object sender2)
         {
             var port1 = sender1 as Port;
@@ -213,6 +216,7 @@ namespace AtsCompany.Classes
                 var call = new Call(port1.Number, port2.Number);
                 call.Start();
                 _currentCalls.Add(call);
+                CallFinished?.Invoke(call);
             }
         }
     }
