@@ -40,7 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\AtsManager.cs" />
+    <Compile Include="Classes\CallInfo.cs" />
+    <Compile Include="Interfaces\IRate.cs" />
+    <Compile Include="Classes\PayServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Classes\SmartRate.cs" />
+    <Compile Include="Classes\UserAccount.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AtsCompany\AtsCompany.csproj">
+      <Project>{ff6c7835-5625-4675-a82e-38a0a0a7e146}</Project>
+      <Name>AtsCompany</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
