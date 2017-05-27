@@ -109,6 +109,7 @@ namespace AtsCompany.Classes
 
             _currentCalls.Remove(call);
             _storageCalls.Add(call);
+            CallFinished?.Invoke(call);
         }
 
         private void PortOnPortStateSetToActive(object sender, PhoneNumberArgs phoneNumberArgs)
@@ -219,7 +220,6 @@ namespace AtsCompany.Classes
 
                 var call = new Call(port1.Number, port2.Number);
                 call.Start();
-                CallFinished?.Invoke(call);
                 _currentCalls.Add(call);
             }
         }
