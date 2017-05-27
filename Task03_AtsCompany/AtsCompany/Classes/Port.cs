@@ -104,6 +104,20 @@ namespace AtsCompany.Classes
             Server.ConnectionEstablish += ServerOnConnectionEstablish;
             Server.AnswerOnReject += OnAnswerOnReject;
             Server.AnswerOnAccept += ServerOnAnswerOnAccept;
+            Server.ServerFinishedCall += ServerOnServerFinishedCall;
+        }
+
+        public delegate void PortCallFinishedHandler(string message);
+        public event PortCallFinishedHandler PortFinishedCall;
+
+        private void ServerOnServerFinishedCall(Port port1, Port port2, string message)
+        {
+            if (this == port1 || this == port2)
+            {
+                State = PortState.Enabled;
+                OnPortEnabled();
+            }
+            PortFinishedCall?.Invoke(message);
         }
 
         public delegate void TerminalContactHandler(object sender, string message);
