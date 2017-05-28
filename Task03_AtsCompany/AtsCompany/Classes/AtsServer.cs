@@ -6,8 +6,8 @@ namespace AtsCompany.Classes
 {
     public class AtsServer
     {
-        private List<Call> _currentCalls = new List<Call>();
-        private List<Call> _storageCalls = new List<Call>();
+        private ICollection<Call> _currentCalls;
+        private ICollection<Call> _storageCalls;
 
         public AtsServer(string name, ICollection<Port> disabledPorts)
         {
@@ -16,6 +16,8 @@ namespace AtsCompany.Classes
             ActivePorts = new Dictionary<Port, int>();
             EnabledPorts = new List<Port>();
             CallingPorts = new List<Port>();
+            _currentCalls = new List<Call>();
+            _storageCalls = new List<Call>();
         }
 
         public string Name { get; }
@@ -211,17 +213,15 @@ namespace AtsCompany.Classes
             var port1 = sender1 as Port;
             var port2 = sender2 as Port;
 
-            if (port1 != null && port2 != null)
-            {
-                ActivePorts.Remove(port1);
-                EnabledPorts.Remove(port2);
-                CallingPorts.Add(port1);
-                CallingPorts.Add(port2);
+            if (port1 == null || port2 == null) return;
+            ActivePorts.Remove(port1);
+            EnabledPorts.Remove(port2);
+            CallingPorts.Add(port1);
+            CallingPorts.Add(port2);
 
-                var call = new Call(port1.Number, port2.Number);
-                call.Start();
-                _currentCalls.Add(call);
-            }
+            var call = new Call(port1.Number, port2.Number);
+            call.Start();
+            _currentCalls.Add(call);
         }
     }
 }
