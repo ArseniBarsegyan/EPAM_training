@@ -20,7 +20,7 @@ namespace BillingSystem.Classes
             Balance = 50;
         }
 
-        public double Balance { get; private set; }
+        public int Balance { get; private set; }
         public DateTime ChangeRateTime { get; private set; }
         public DateTime RegistrationTime { get; private set; }
         public string Name { get; }
@@ -59,11 +59,15 @@ namespace BillingSystem.Classes
         {
             terminal.TurnOffTerminal();
         }
+        
 
-        //User can pay his debt
+        //When user deposit money PayService handle this event
+        public event EventHandler<MoneyArgs> MoneyAdded;
+
         public void Deposit(int sum)
         {
             Balance += sum;
+            MoneyAdded?.Invoke(this, new MoneyArgs(Balance));
         }
         
         public void WithDraw(int sum)
@@ -71,7 +75,7 @@ namespace BillingSystem.Classes
             Balance -= sum;
         }
 
-        //User can change rate once in month
+        //User can change rate only once in month
         public void ChangeRate(IRate rate)
         {
             if (IsOneMonthExpired())
@@ -85,7 +89,7 @@ namespace BillingSystem.Classes
                 Console.WriteLine("You can change rate only 1 time in month");
             }            
         }
-
+        
         private bool IsOneMonthExpired()
         {
             var timeFromChangeRate = DateTime.Now - RegistrationTime;
