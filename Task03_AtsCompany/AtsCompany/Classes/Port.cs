@@ -20,11 +20,10 @@ namespace AtsCompany.Classes
 
         public event Action PortRemoved;
 
-        public Port RemovePortFromTerminal(Terminal terminal)
+        public void RemovePortFromTerminal(Terminal terminal)
         {
             UnsubscribeOnAllTerminalEvents();
             PortRemoved?.Invoke();
-            return this;
         }
 
         public delegate void PortEnabledHandler(object sender);

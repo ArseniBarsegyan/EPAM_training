@@ -1,0 +1,5 @@
+﻿1>------ Build started: Project: BillingSystem, Configuration: Debug Any CPU ------
+1>  BillingSystem -> E:\IT\C#\.Net Training\TrainingTasks\EPAM_training\Task03_AtsCompany\BillingSystem\bin\Debug\BillingSystem.dll
+2>------ Build started: Project: Demo, Configuration: Debug Any CPU ------
+2>  Demo -> E:\IT\C#\.Net Training\TrainingTasks\EPAM_training\Task03_AtsCompany\Demo\bin\Debug\Demo.exe
+========== Build: 2 succeeded, 0 failed, 1 up-to-date, 0 skipped ==========

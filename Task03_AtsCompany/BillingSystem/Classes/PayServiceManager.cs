@@ -8,7 +8,8 @@ namespace BillingSystem.Classes
     //This class stores information about every user call (rate, time etc.)
     public class PayServiceManager
     {
-        public IDictionary<UserAccount, List<CallInfo>> UsersCallsInfoDictionary { get; private set; }
+        private IDictionary<UserAccount, List<CallInfo>> UsersCallsInfoDictionary { get; set; }
+        private List<Port> _withdrawedPorts;
 
         public PayServiceManager(AtsManager manager, AtsServer server)
         {
@@ -16,10 +17,16 @@ namespace BillingSystem.Classes
             Server = server;
             server.CallFinished += ServerOnCallFinished;
             UsersCallsInfoDictionary = new Dictionary<UserAccount, List<CallInfo>>();
+            _withdrawedPorts = new List<Port>();
         }
 
-        public AtsManager Manager { get; }
-        public AtsServer Server { get; }
+        private AtsManager Manager { get; }
+        private AtsServer Server { get; }
+
+        public IEnumerable<CallInfo> OrderUserHistory(UserAccount userAccount)
+        {
+            return (from pair in UsersCallsInfoDictionary where pair.Key == userAccount select pair.Value).FirstOrDefault();
+        }
 
         private void ServerOnCallFinished(Call call)
         {
@@ -74,9 +81,9 @@ namespace BillingSystem.Classes
             foreach (var pair in UsersCallsInfoDictionary)
             {
                 var userAccount = pair.Key;
-                List<CallInfo> userCalls = pair.Value
-                    .Where(x => x.StartTime > startTime && x.StartTime < endTime && x.EndTime < endTime)
-                    .ToList();
+                List<CallInfo> userCalls = pair.Value;
+                    //.Where(x => x.StartTime > startTime && x.StartTime < endTime && x.EndTime < endTime)
+                    //.ToList();
 
                 var totalPay = userCalls.Sum(x => x.Price);
 
@@ -91,6 +98,7 @@ namespace BillingSystem.Classes
 
         public IDictionary<UserAccount, int> GetUsersPaysForPreviousMonth()
         {
+            SubscribeOnAllUsersEvents();
             var previousPeriodStart = GetPreviousDatePeriod();
             var daysInPreviousPeriod = DateTime.DaysInMonth(previousPeriodStart.Year, previousPeriodStart.Month);
 
@@ -101,23 +109,41 @@ namespace BillingSystem.Classes
             {
                 pair.Key.WithDraw(pair.Value);
             }
+
+            foreach (var userAccount in usersPays.Keys)
+            {
+                _withdrawedPorts.AddRange(GetWithdrawedPorts(userAccount));
+            }
+
             return usersPays;
         }
 
-        private IEnumerable<Port> WithdrawedPorts(UserAccount userAccount)
+        //withdraw port from every user with balance <= 0
+        private IEnumerable<Port> GetWithdrawedPorts(UserAccount userAccount)
         {
             var withdrawedPorts = new List<Port>();
-            if (userAccount.Balance <= 0)
+            if (userAccount.Balance > 0) return withdrawedPorts;
+            var userTerminals = userAccount.Terminals;
+            foreach (var terminal in userTerminals)
             {
-                var userTerminals = userAccount.Terminals;
-                foreach (var terminal in userTerminals)
-                {
-                    var port = terminal.Port;
-                    port.RemovePortFromTerminal(terminal);
-                    withdrawedPorts.Add(port);
-                }
+                var port = terminal.Port;
+                port.RemovePortFromTerminal(terminal);
+                withdrawedPorts.Add(port);
             }
             return withdrawedPorts;
+        }
+
+        private void GetBackWithdrawedPorts(UserAccount userAccount)
+        {
+            foreach (var terminal in userAccount.Terminals)
+            {
+                foreach (var port in _withdrawedPorts)
+                {
+                    if (port.Number != terminal.Number) continue;
+                    terminal.SetCurrentPort(port);
+                    port.SetCurrentTerminal(terminal);
+                }
+            }
         }
 
         private DateTime GetPreviousDatePeriod()
@@ -138,6 +164,24 @@ namespace BillingSystem.Classes
                 previousPeriodYear -= 1;
             }
             return new DateTime(previousPeriodYear, previousPeriodMonth, 1);
+        }
+
+        private void SubscribeOnAllUsersEvents()
+        {
+            foreach (var userAccount in UsersCallsInfoDictionary.Keys)
+            {
+                userAccount.MoneyAdded += UserAccountOnMoneyAdded;
+            }
+        }
+
+        private void UserAccountOnMoneyAdded(object sender, MoneyArgs e)
+        {
+            var userAccount = sender as UserAccount;
+            if (userAccount == null) return;
+            if (e.balance > 0)
+            {
+                GetBackWithdrawedPorts(userAccount);
+            }
         }
     }
 }

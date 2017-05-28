@@ -8,16 +8,17 @@ namespace BillingSystem.Classes
 {
     public class UserAccount
     {
-        public UserAccount(string name, IRate currentRate, ICollection<Terminal> terminals, AtsManager manager)
+        public UserAccount(string name, IRate currentRate, AtsManager manager, PayServiceManager serviceManager)
         {
             Name = name;
             CurrentRate = currentRate;
-            Terminals = terminals;
+            Terminals = new List<Terminal>();
             RegistrationTime = DateTime.Now;
             ChangeRateTime = RegistrationTime;
             FreeMinutes = currentRate.FreeMinutes;
+            ServiceManager = serviceManager;
             Manager = manager;
-            Balance = 50;
+            Balance = 1;
         }
 
         public int Balance { get; private set; }
@@ -27,6 +28,7 @@ namespace BillingSystem.Classes
         public IRate CurrentRate { get; private set; }
         public ICollection<Terminal> Terminals { get; }
         public AtsManager Manager { get; private set; }
+        public PayServiceManager ServiceManager { get; private set; }
         public int FreeMinutes { get; private set; }
 
         public void SpendFreeMinute()
@@ -73,6 +75,27 @@ namespace BillingSystem.Classes
         public void WithDraw(int sum)
         {
             Balance -= sum;
+        }
+
+        //Order call history
+        public IEnumerable<CallInfo> OrderCallInfos()
+        {
+            return ServiceManager.OrderUserHistory(this);
+        }
+
+        public IEnumerable<CallInfo> GetHistoryOrderedByDuration()
+        {
+            return OrderCallInfos().OrderByDescending(x => x.Duration);
+        }
+
+        public IEnumerable<CallInfo> GetHistoryOrderedByPrice()
+        {
+            return OrderCallInfos().OrderByDescending(x => x.Price);
+        }
+
+        public IEnumerable<CallInfo> GetHistoryOrderedByOutComingCalls()
+        {
+            return OrderCallInfos().OrderByDescending(x => x.RecieverNumber);
         }
 
         //User can change rate only once in month

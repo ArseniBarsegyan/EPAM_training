@@ -17,9 +17,9 @@ namespace BillingSystem.Classes
         public AtsServer Server { get; }
         public ICollection<UserAccount> UsersAccounts { get; }
 
-        public UserAccount CreateUserAccount(string name, IRate rate)
+        public UserAccount CreateUserAccount(string name, IRate rate, PayServiceManager serviceManager)
         {
-            var user = new UserAccount(name, rate, new List<Terminal>(), this);
+            var user = new UserAccount(name, rate, this, serviceManager);
             UsersAccounts.Add(user);
             return user;
         }
