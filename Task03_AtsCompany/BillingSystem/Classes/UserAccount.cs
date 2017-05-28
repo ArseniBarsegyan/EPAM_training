@@ -44,12 +44,32 @@ namespace BillingSystem.Classes
         public void MakeCall(Terminal fromTerminal, int number)
         {
             var terminal = Terminals.FirstOrDefault(x => x.Equals(fromTerminal));
+            if (terminal == null) return;
+            terminal.TerminalSendMessage += TerminalOnTerminalSendMessage;
             terminal?.MakeCall(number);
+            terminal.TerminalSendMessage -= TerminalOnTerminalSendMessage;
+        }
+
+        public void Answer(Terminal terminal)
+        {
+            terminal.Answer("yes");
+        }
+
+        public void Reject(Terminal terminal)
+        {
+            terminal.Answer("no");
+        }
+
+        private void TerminalOnTerminalSendMessage(string message)
+        {
+            Console.WriteLine(message);
         }
 
         public void EndCall(Terminal terminal)
         {
+            terminal.TerminalSendMessage += TerminalOnTerminalSendMessage;
             terminal.EndCall();
+            terminal.TerminalSendMessage -= TerminalOnTerminalSendMessage;
         }
 
         public void TurnOnTerminal(Terminal terminal)
@@ -61,7 +81,6 @@ namespace BillingSystem.Classes
         {
             terminal.TurnOffTerminal();
         }
-        
 
         //When user deposit money PayService handle this event
         public event EventHandler<MoneyArgs> MoneyAdded;

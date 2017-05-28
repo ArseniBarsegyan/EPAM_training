@@ -28,8 +28,11 @@ namespace BillingSystem.Classes
             return (from pair in UsersCallsInfoDictionary where pair.Key == userAccount select pair.Value).FirstOrDefault();
         }
 
-        private void ServerOnCallFinished(Call call)
+        private void ServerOnCallFinished(object sender)
         {
+            var call = sender as Call;
+            if (call == null) return;
+            
             foreach (var userAccount in Manager.UsersAccounts)
             {
                 if (!UsersCallsInfoDictionary.ContainsKey(userAccount))

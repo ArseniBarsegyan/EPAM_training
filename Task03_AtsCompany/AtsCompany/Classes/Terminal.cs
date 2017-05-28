@@ -17,12 +17,17 @@ namespace AtsCompany.Classes
             SubscribeOnAllPortEvents();
         }
 
+        public delegate void TerminalMessageHandler(string message);
+
+        public event TerminalMessageHandler TerminalSendMessage;
+
         private void PortOnUserIsUnavaliable(object sender, string message)
         {
             var port = sender as Port;
             if (port != null && port.Number == Number)
             {
-                Console.WriteLine(message);
+                TerminalSendMessage?.Invoke(message);
+                //Console.WriteLine(message);
             }
         }
 
@@ -31,7 +36,8 @@ namespace AtsCompany.Classes
             var port = sender as Port;
             if (port != null && port.Number == Number)
             {
-                Console.WriteLine(message);
+                TerminalSendMessage?.Invoke(message);
+                //Console.WriteLine(message);
             }
         }
 
@@ -40,7 +46,8 @@ namespace AtsCompany.Classes
             var port = sender as Port;
             if (port != null && port.Number == Number)
             {
-                Console.WriteLine(message);
+                TerminalSendMessage?.Invoke(message);
+                //Console.WriteLine(message);
             }
         }
 
@@ -77,6 +84,11 @@ namespace AtsCompany.Classes
         public event AnswerHandler RejectCall;
         public event AnswerHandler AcceptCall;
 
+        public void Answer(string message)
+        {
+
+        }
+
         private void PortOnCallRequesting(int number1, int number2, string message)
         {
             Console.WriteLine("Incoming call. Type 'y' to answer, 'n' to reject");
@@ -103,7 +115,8 @@ namespace AtsCompany.Classes
         {
             if (Number == number1)
             {
-                Console.WriteLine(message);
+                TerminalSendMessage?.Invoke(message);
+                //Console.WriteLine(message);
             }
         }
 
@@ -111,7 +124,8 @@ namespace AtsCompany.Classes
         {
             if (Number == number)
             {
-                Console.WriteLine(message);
+                TerminalSendMessage?.Invoke(message);
+                //Console.WriteLine(message);
             }
         }
 
@@ -140,7 +154,8 @@ namespace AtsCompany.Classes
 
         private void PortOnPortFinishedCall(string message)
         {
-            Console.WriteLine(message);
+            TerminalSendMessage?.Invoke(message);
+            //Console.WriteLine(message);
         }
     }
 }

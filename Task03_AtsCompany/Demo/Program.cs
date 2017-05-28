@@ -20,28 +20,29 @@ namespace Demo
             var user2 = manager.CreateUserAccount("user2", new SmartRate("Smart2", 2, 60), payService);
             manager.CreateTerminalForUser(user2);
             
+            user.MakeCall(user.Terminals.ElementAt(0), 1111);
             user2.Terminals.ElementAt(0).TurnOnTerminal();
             //Making few calls
             user.MakeCall(user.Terminals.ElementAt(0), user2.Terminals.ElementAt(0).Number);
             Thread.Sleep(1000);
             user.EndCall(user.Terminals.ElementAt(0));
-
+            
             user.MakeCall(user.Terminals.ElementAt(0), user2.Terminals.ElementAt(0).Number);
             Thread.Sleep(1000);
             user.EndCall(user.Terminals.ElementAt(0));
             var pays = payService.GetUsersPaysForPreviousMonth();
 
             //Now is unavaliable
-            user.Terminals.ElementAt(0).MakeCall(1221);
+            user.MakeCall(user.Terminals.ElementAt(0), 1111);
 
             //When user's balance become more then 0, he can call again
             user.Deposit(10);
-            user.Terminals.ElementAt(0).MakeCall(1221);
+            user.MakeCall(user.Terminals.ElementAt(0), 1111);
 
             var infos = user.OrderCallInfos();
             foreach (var info in infos)
             {
-                Console.WriteLine($"{info.Duration}, {info.Price}, {info.RecieverNumber}");
+                Console.WriteLine($"{info.Duration:hh\\:mm\\:ss}, {info.Price}, {info.RecieverNumber}");
             }
         }
     }

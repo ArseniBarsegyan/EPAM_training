@@ -205,7 +205,7 @@ namespace AtsCompany.Classes
             return EnabledPorts.Any(port => port.Number == number);
         }
 
-        public delegate void CallFinishedHandler(Call call);
+        public delegate void CallFinishedHandler(object sender);
         public event CallFinishedHandler CallFinished;
 
         private void PortOnPortConnectionEstablished(object sender1, object sender2)
