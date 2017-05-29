@@ -21,7 +21,7 @@ namespace BillingSystem.Classes
             Balance = 1;
         }
 
-        public event EventHandler<MoneyArgs> MoneyAdded;
+        public event EventHandler<UserEventArgs> MoneyAdded;
 
         public int Balance { get; private set; }
         public DateTime ChangeRateTime { get; private set; }
@@ -44,10 +44,12 @@ namespace BillingSystem.Classes
             Terminals.Add(terminal);
         }
 
-        private void TerminalOnTerminalRequiredAnswer(int number, string message)
+        protected virtual void TerminalOnTerminalRequiredAnswer(object sender, string message)
         {
+            var terminal = sender as Terminal;
+            if (terminal == null) return;
             Console.WriteLine(message);
-            var terminal = Terminals.FirstOrDefault(x => x.Number == number);
+            var userTerminal = Terminals.FirstOrDefault(x => x.Number == terminal.Number);
             terminal?.Answer(Console.ReadLine());
         }
 
@@ -56,12 +58,12 @@ namespace BillingSystem.Classes
             Manager.CreateTerminalForUser(this);
         }
 
-        public void MakeCall(Terminal fromTerminal, int number)
+        public void Call(Terminal fromTerminal, int number)
         {
             var terminal = Terminals.FirstOrDefault(x => x.Equals(fromTerminal));
             if (terminal == null) return;
             terminal.TerminalSendMessage += TerminalOnTerminalSendMessage;
-            terminal?.MakeCall(number);
+            terminal?.Call(number);
             terminal.TerminalSendMessage -= TerminalOnTerminalSendMessage;
         }
 
@@ -75,7 +77,7 @@ namespace BillingSystem.Classes
             terminal.Answer("no");
         }
 
-        private void TerminalOnTerminalSendMessage(string message)
+        protected virtual void TerminalOnTerminalSendMessage(object sender, string message)
         {
             Console.WriteLine(message);
         }
@@ -100,15 +102,14 @@ namespace BillingSystem.Classes
         public void Deposit(int sum)
         {
             Balance += sum;
-            MoneyAdded?.Invoke(this, new MoneyArgs(Balance));
+            MoneyAdded?.Invoke(this, new UserEventArgs(Balance));
         }
         
         public void WithDraw(int sum)
         {
             Balance -= sum;
         }
-
-        //Order call history
+        
         public IEnumerable<CallInfo> OrderCallInfos()
         {
             return ServiceManager.OrderUserHistory(this);
@@ -128,8 +129,7 @@ namespace BillingSystem.Classes
         {
             return OrderCallInfos().OrderByDescending(x => x.RecieverNumber);
         }
-
-        //User can change rate only once in month
+        
         public void ChangeRate(IRate rate)
         {
             if (IsOneMonthExpired())

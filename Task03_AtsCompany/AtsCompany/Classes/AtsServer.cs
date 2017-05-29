@@ -4,13 +4,8 @@ using System.Linq;
 
 namespace AtsCompany.Classes
 {
-    //
-    //
     public class AtsServer
     {
-        private ICollection<Call> _currentCalls;
-        private ICollection<Call> _storageCalls;
-
         public AtsServer(string name, ICollection<Port> disabledPorts)
         {
             Name = name;
@@ -18,43 +13,27 @@ namespace AtsCompany.Classes
             ActivePorts = new Dictionary<Port, int>();
             EnabledPorts = new List<Port>();
             CallingPorts = new List<Port>();
-            _currentCalls = new List<Call>();
-            _storageCalls = new List<Call>();
+            CurrentCalls = new List<Call>();
+            StorageCalls = new List<Call>();
         }
-
-        public delegate void ServerEndCallHandler(Port port1, Port port2, string message);
-
-        public event ServerEndCallHandler ServerFinishedCall;
-
-        public delegate void PortContactHandler(object sender, string message);
-
-        public event PortContactHandler UserIsUnavaliable;
-        public event PortContactHandler UserIsBusy;
-        public event PortContactHandler UserDoesntExists;
-
-        public delegate void ConnectionHandler(Port port1, Port port2);
-
-        public event ConnectionHandler ConnectionEstablish;
-
-        public delegate void ServerAcceptHandler(object sender1, object sender2, string message);
-
-        public event ServerAcceptHandler AnswerOnAccept;
-
-        public delegate void ServerRejectHandler(object sender, string message);
-
-        public event ServerRejectHandler AnswerOnReject;
-
-        public delegate void CallFinishedHandler(object sender);
-
-        public event CallFinishedHandler CallFinished;
+        
+        public event EventHandler<string> UserIsUnavaliable;
+        public event EventHandler<string> UserIsBusy;
+        public event EventHandler<string> UserDoesntExists;
+        public event EventHandler<ConnectionEventArgs> EstablishConnection;
+        public event EventHandler<ConnectionEventArgs> AnswerOnAccept;
+        public event EventHandler<string> AnswerOnReject;
+        public event EventHandler<ConnectionEventArgs> ServerFinishedCall;
+        public event EventHandler CallFinished;
 
         public string Name { get; }
+        public ICollection<Call> CurrentCalls { get; private set; }
+        public ICollection<Call> StorageCalls { get; private set; }
         public IDictionary<Port, int> ActivePorts { get; }
         public ICollection<Port> DisabledPorts { get; }
         public ICollection<Port> EnabledPorts { get; }
         public ICollection<Port> CallingPorts { get; }
 
-        //When terminal created it's port get into DisabledPorts list
         public Port CreatePort()
         {
             var randomNumber = new Random();
@@ -70,7 +49,9 @@ namespace AtsCompany.Classes
             return port;
         }
 
-        private void PortOnPortEnabled(object sender)
+        //Methods-handlers of Port events
+
+        protected virtual void PortOnPortEnabled(object sender, EventArgs e)
         {
             var port = sender as Port;
             if (DisabledPorts.Contains(port))
@@ -85,7 +66,7 @@ namespace AtsCompany.Classes
             }
         }
 
-        private void PortOnPortDisabled(object sender)
+        protected virtual void PortOnPortDisabled(object sender, EventArgs e)
         {
             var port = sender as Port;
 
@@ -101,29 +82,7 @@ namespace AtsCompany.Classes
             }
         }
 
-        private void PortOnPortEndCall(int initializatorNumber)
-        {
-            var call = _currentCalls.FirstOrDefault(x => x.RecieverNumber == initializatorNumber || x.SenderNumber == initializatorNumber);
-            if (call == null) return;
-
-            var port1 = CallingPorts.FirstOrDefault(x => x.Number == call.SenderNumber);
-            if (port1 == null) return;
-
-            var port2 = CallingPorts.FirstOrDefault(x => x.Number == call.RecieverNumber);
-            if (port2 == null) return;
-            call.Finish();
-            ServerFinishedCall?.Invoke(port1, port2, string.Format($"Call finished. Duration: {call.Duration:hh\\:mm\\:ss}"));
-            CallingPorts.Remove(port1);
-            CallingPorts.Remove(port2);
-            EnabledPorts.Add(port1);
-            EnabledPorts.Add(port2);
-
-            _currentCalls.Remove(call);
-            _storageCalls.Add(call);
-            CallFinished?.Invoke(call);
-        }
-
-        private void PortOnPortStateSetToActive(object sender, PhoneNumberArgs phoneNumberArgs)
+        protected virtual void PortOnPortStateSetToActive(object sender, CallEventArgs phoneNumberArgs)
         {
             var port = sender as Port;
             if (DisabledPorts.Contains(port))
@@ -154,7 +113,7 @@ namespace AtsCompany.Classes
                 var port2 = EnabledPorts.FirstOrDefault(x => x.Number == callNumber);
                 if (port2 != null)
                 {
-                    EstablishConnection(port, port2);
+                    EstablishConnection?.Invoke(this, new ConnectionEventArgs(port, port2));
                 }
             }
             else
@@ -163,22 +122,55 @@ namespace AtsCompany.Classes
             }
         }
 
-        private void EstablishConnection(Port port1, Port port2)
+        protected virtual void PortOnCallAccepted(object sender, AnswerEventArgs e)
         {
-            ConnectionEstablish?.Invoke(port1, port2);
+            var port1 = ActivePorts.FirstOrDefault(x => x.Key.Number == e.number1).Key;
+            var port2 = EnabledPorts.FirstOrDefault(x => x.Number == e.number2);
+            AnswerOnAccept?.Invoke(this, new ConnectionEventArgs(port1, port2, e.message));
         }
 
-        private void PortOnCallAccepted(int number1, int number2, string message)
+        protected virtual void PortOnCallRejected(object sender, AnswerEventArgs e)
         {
-            var port1 = ActivePorts.FirstOrDefault(x => x.Key.Number == number1).Key;
-            var port2 = EnabledPorts.FirstOrDefault(x => x.Number == number2);
-            AnswerOnAccept?.Invoke(port1, port2, message);
+            var port1 = ActivePorts.FirstOrDefault(x => x.Key.Number == e.number1).Key;
+            AnswerOnReject?.Invoke(port1, e.message);
         }
 
-        private void PortOnCallRejected(int number1, int number2, string message)
+        protected virtual void PortOnPortConnectionEstablished(object sender, ConnectionEstablishedEventArgs e)
         {
-            var port1 = ActivePorts.FirstOrDefault(x => x.Key.Number == number1).Key;
-            AnswerOnReject?.Invoke(port1, message);
+            var port1 = e.port1;
+            var port2 = e.port2;
+
+            if (port1 == null || port2 == null) return;
+            ActivePorts.Remove(port1);
+            EnabledPorts.Remove(port2);
+            CallingPorts.Add(port1);
+            CallingPorts.Add(port2);
+
+            var call = new Call(port1.Number, port2.Number);
+            call.Start();
+            CurrentCalls.Add(call);
+        }
+
+        protected virtual void PortOnPortEndCall(object sender, CallEventArgs e)
+        {
+            var call = CurrentCalls.FirstOrDefault(x => x.RecieverNumber == e.number || x.SenderNumber == e.number);
+            if (call == null) return;
+
+            var port1 = CallingPorts.FirstOrDefault(x => x.Number == call.SenderNumber);
+            if (port1 == null) return;
+
+            var port2 = CallingPorts.FirstOrDefault(x => x.Number == call.RecieverNumber);
+            if (port2 == null) return;
+            call.Finish();
+            ServerFinishedCall?.Invoke(this, new ConnectionEventArgs(port1, port2, string.Format($"Call finished. Duration: {call.Duration:hh\\:mm\\:ss}")));
+            CallingPorts.Remove(port1);
+            CallingPorts.Remove(port2);
+            EnabledPorts.Add(port1);
+            EnabledPorts.Add(port2);
+
+            CurrentCalls.Remove(call);
+            StorageCalls.Add(call);
+            CallFinished?.Invoke(call, EventArgs.Empty);
         }
 
         private bool IsDisableListContainsCalledNumber(int number)
@@ -194,22 +186,6 @@ namespace AtsCompany.Classes
         private bool IsEnabledListContainsCalledNumber(int number)
         {
             return EnabledPorts.Any(port => port.Number == number);
-        }
-
-        private void PortOnPortConnectionEstablished(object sender1, object sender2)
-        {
-            var port1 = sender1 as Port;
-            var port2 = sender2 as Port;
-
-            if (port1 == null || port2 == null) return;
-            ActivePorts.Remove(port1);
-            EnabledPorts.Remove(port2);
-            CallingPorts.Add(port1);
-            CallingPorts.Add(port2);
-
-            var call = new Call(port1.Number, port2.Number);
-            call.Start();
-            _currentCalls.Add(call);
         }
 
         private void SubscribeOnAllPortEvents(Port port)

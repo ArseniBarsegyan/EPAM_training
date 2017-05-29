@@ -28,7 +28,7 @@ namespace BillingSystem.Classes
             return (from pair in UsersCallsInfoDictionary where pair.Key == userAccount select pair.Value).FirstOrDefault();
         }
 
-        private void ServerOnCallFinished(object sender)
+        private void ServerOnCallFinished(object sender, EventArgs e)
         {
             var call = sender as Call;
             if (call == null) return;
@@ -84,7 +84,7 @@ namespace BillingSystem.Classes
             foreach (var pair in UsersCallsInfoDictionary)
             {
                 var userAccount = pair.Key;
-                List<CallInfo> userCalls = pair.Value
+                var userCalls = pair.Value
                     .Where(x => x.StartTime > startTime && x.StartTime < endTime && x.EndTime < endTime)
                     .ToList();
 
@@ -177,7 +177,7 @@ namespace BillingSystem.Classes
             }
         }
 
-        private void UserAccountOnMoneyAdded(object sender, MoneyArgs e)
+        private void UserAccountOnMoneyAdded(object sender, UserEventArgs e)
         {
             var userAccount = sender as UserAccount;
             if (userAccount == null) return;

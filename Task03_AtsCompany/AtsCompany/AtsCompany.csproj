@@ -42,7 +42,10 @@
   <ItemGroup>
     <Compile Include="Classes\AtsServer.cs" />
     <Compile Include="Classes\Call.cs" />
-    <Compile Include="Classes\PhoneNumberArgs.cs" />
+    <Compile Include="Classes\CallEventArgs.cs" />
+    <Compile Include="Classes\AnswerEventArgs.cs" />
+    <Compile Include="Classes\ConnectionEstablishedEventArgs.cs" />
+    <Compile Include="Classes\ConnectionEventArgs.cs" />
     <Compile Include="Classes\Port.cs" />
     <Compile Include="Classes\PortState.cs" />
     <Compile Include="Classes\Terminal.cs" />

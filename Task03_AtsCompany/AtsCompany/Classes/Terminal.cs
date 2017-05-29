@@ -19,81 +19,38 @@ namespace AtsCompany.Classes
             SubscribeOnAllPortEvents();
         }
 
-        public delegate void TerminalEnableHandler(object sender);
-
-        public event TerminalEnableHandler TerminalIsEnabled;
-
-        public delegate void TerminalDisableHandler(object sender);
-
-        public event TerminalDisableHandler TerminalIsDisabled;
-
-        public delegate void TerminalCallIsEndHandler(int senderNumber);
-
-        public event TerminalCallIsEndHandler CallIsEnd;
-
-        public delegate void TerminalMessageHandler(string message);
-
-        public event TerminalMessageHandler TerminalSendMessage;
-
-        public event EventHandler<PhoneNumberArgs> BeginCall;
-
-        public delegate void TerminalRequiredAnswerHandler(int number, string message);
-
-        public event TerminalRequiredAnswerHandler TerminalRequiredAnswer;
-
-        public delegate void AnswerHandler(int number1, int number2, string message);
-
-        public event AnswerHandler RejectCall;
-        public event AnswerHandler AcceptCall;
+        public event EventHandler TerminalIsEnabled;
+        public event EventHandler TerminalIsDisabled;
+        public event EventHandler<CallEventArgs> BeginCall;
+        public event EventHandler<CallEventArgs> CallIsEnd;
+        public event EventHandler<string> TerminalSendMessage;
+        public event EventHandler<string> TerminalRequiredAnswer;
+        public event EventHandler<AnswerEventArgs> RejectCall;
+        public event EventHandler<AnswerEventArgs> AcceptCall;
 
         public int Number { get; private set; }
         public Port Port { get; private set; }
 
+        //Following methods invoke events
+
         public void TurnOnTerminal()
         {
-            TerminalIsEnabled?.Invoke(this);
+            TerminalIsEnabled?.Invoke(this, EventArgs.Empty);
         }
 
         public void TurnOffTerminal()
         {
-            TerminalIsDisabled?.Invoke(this);
+            TerminalIsDisabled?.Invoke(this, EventArgs.Empty);
         }
 
         public void EndCall()
         {
-            CallIsEnd?.Invoke(Number);
+            CallIsEnd?.Invoke(this, new CallEventArgs(Number));
         }
 
-        private void PortOnUserIsUnavaliable(object sender, string message)
+        public void Call(int number)
         {
-            var port = sender as Port;
-            if (port != null && port.Number == Number)
-            {
-                TerminalSendMessage?.Invoke(message);
-            }
-        }
-
-        private void PortOnUserIsBusy(object sender, string message)
-        {
-            var port = sender as Port;
-            if (port != null && port.Number == Number)
-            {
-                TerminalSendMessage?.Invoke(message);
-            }
-        }
-
-        private void PortOnUserDoesntExists(object sender, string message)
-        {
-            var port = sender as Port;
-            if (port != null && port.Number == Number)
-            {
-                TerminalSendMessage?.Invoke(message);
-            }
-        }
-
-        public void MakeCall(int number)
-        {
-            BeginCall?.Invoke(this, new PhoneNumberArgs(number));
+            BeginCall?.Invoke(this, new CallEventArgs(number));
         }
         
         public void Answer(string message)
@@ -101,33 +58,67 @@ namespace AtsCompany.Classes
             _userAnswer = message;
         }
 
-        private void PortOnCallRequesting(int number1, int number2, string message)
+        //methods-handlers of port events
+
+        protected virtual void PortOnCallRequesting(object sender, AnswerEventArgs e)
         {
-            TerminalRequiredAnswer?.Invoke(number2, "Incoming call. Type 'y' to answer, 'n' to reject");
+            TerminalRequiredAnswer?.Invoke(this, "Incoming call. Type 'y' to answer, 'n' to reject");
             if (_userAnswer != null && _userAnswer.ToLower().Equals("y"))
             {
-                AcceptCall?.Invoke(number1, number2, $"User 2 : Connection with {number1} established");
+                AcceptCall?.Invoke(this, new AnswerEventArgs(e.number1, e.number2, $"User 2 : Connection with {e.number1} established"));
             }
             else
             {
-                RejectCall?.Invoke(number1, number2, $"{number2} has rejected call");
+                RejectCall?.Invoke(this, new AnswerEventArgs(e.number1, e.number2, $"{e.number2} has rejected call"));
             }
         }
 
-        private void PortOnSendAcceptMessageToTerminal(int number1, int number2, string message)
+        protected virtual void PortOnSendAcceptMessageToTerminal(object sender, AnswerEventArgs e)
         {
-            if (Number == number1)
+            if (Number == e.number1)
             {
-                TerminalSendMessage?.Invoke(message);
+                TerminalSendMessage?.Invoke(this, e.message);
             }
         }
 
-        private void PortOnSendRejectMessageToTerminal(int number, string message)
+        protected virtual void PortOnSendRejectMessageToTerminal(object sender, AnswerEventArgs e)
         {
-            if (Number == number)
+            if (Number == e.number2)
             {
-                TerminalSendMessage?.Invoke(message);
+                TerminalSendMessage?.Invoke(this, e.message);
             }
+        }
+
+        protected virtual void PortOnUserIsUnavaliable(object sender, string message)
+        {
+            var port = sender as Port;
+            if (port != null && port.Number == Number)
+            {
+                TerminalSendMessage?.Invoke(this, message);
+            }
+        }
+
+        protected virtual void PortOnUserIsBusy(object sender, string message)
+        {
+            var port = sender as Port;
+            if (port != null && port.Number == Number)
+            {
+                TerminalSendMessage?.Invoke(this, message);
+            }
+        }
+
+        protected virtual void PortOnUserDoesntExists(object sender, string message)
+        {
+            var port = sender as Port;
+            if (port != null && port.Number == Number)
+            {
+                TerminalSendMessage?.Invoke(this, message);
+            }
+        }
+
+        protected virtual void PortOnPortFinishedCall(object sender, string message)
+        {
+            TerminalSendMessage?.Invoke(this, message);
         }
 
         private void SubscribeOnAllPortEvents()
@@ -151,11 +142,6 @@ namespace AtsCompany.Classes
             Port.SendRejectMessageToTerminal -= PortOnSendRejectMessageToTerminal;
             Port.SendAcceptMessageToTerminal -= PortOnSendAcceptMessageToTerminal;
             Port.PortFinishedCall -= PortOnPortFinishedCall;
-        }
-
-        private void PortOnPortFinishedCall(string message)
-        {
-            TerminalSendMessage?.Invoke(message);
         }
     }
 }

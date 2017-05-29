@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Classes\AtsManager.cs" />
     <Compile Include="Classes\CallInfo.cs" />
-    <Compile Include="Classes\MoneyArgs.cs" />
+    <Compile Include="Classes\UserEventArgs.cs" />
     <Compile Include="Interfaces\IRate.cs" />
     <Compile Include="Classes\PayServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
