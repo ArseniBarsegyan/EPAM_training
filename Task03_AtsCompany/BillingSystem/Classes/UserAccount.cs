@@ -36,7 +36,20 @@ namespace BillingSystem.Classes
             FreeMinutes -= 1;
         }
 
-        public void AddNewTerminal()
+        public void AddTerminal(Terminal terminal)
+        {
+            terminal.TerminalRequiredAnswer += TerminalOnTerminalRequiredAnswer;
+            Terminals.Add(terminal);
+        }
+
+        private void TerminalOnTerminalRequiredAnswer(int number, string message)
+        {
+            Console.WriteLine(message);
+            var terminal = Terminals.FirstOrDefault(x => x.Number == number);
+            terminal?.Answer(Console.ReadLine());
+        }
+
+        public void CreateNewTerminal()
         {
             Manager.CreateTerminalForUser(this);
         }
