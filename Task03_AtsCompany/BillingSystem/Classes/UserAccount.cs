@@ -21,6 +21,8 @@ namespace BillingSystem.Classes
             Balance = 1;
         }
 
+        public event EventHandler<MoneyArgs> MoneyAdded;
+
         public int Balance { get; private set; }
         public DateTime ChangeRateTime { get; private set; }
         public DateTime RegistrationTime { get; private set; }
@@ -94,9 +96,6 @@ namespace BillingSystem.Classes
         {
             terminal.TurnOffTerminal();
         }
-
-        //When user deposit money PayService handle this event
-        public event EventHandler<MoneyArgs> MoneyAdded;
 
         public void Deposit(int sum)
         {

@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace AtsCompany.Classes
 {
+    //
+    //
     public class AtsServer
     {
         private ICollection<Call> _currentCalls;
@@ -20,6 +22,32 @@ namespace AtsCompany.Classes
             _storageCalls = new List<Call>();
         }
 
+        public delegate void ServerEndCallHandler(Port port1, Port port2, string message);
+
+        public event ServerEndCallHandler ServerFinishedCall;
+
+        public delegate void PortContactHandler(object sender, string message);
+
+        public event PortContactHandler UserIsUnavaliable;
+        public event PortContactHandler UserIsBusy;
+        public event PortContactHandler UserDoesntExists;
+
+        public delegate void ConnectionHandler(Port port1, Port port2);
+
+        public event ConnectionHandler ConnectionEstablish;
+
+        public delegate void ServerAcceptHandler(object sender1, object sender2, string message);
+
+        public event ServerAcceptHandler AnswerOnAccept;
+
+        public delegate void ServerRejectHandler(object sender, string message);
+
+        public event ServerRejectHandler AnswerOnReject;
+
+        public delegate void CallFinishedHandler(object sender);
+
+        public event CallFinishedHandler CallFinished;
+
         public string Name { get; }
         public IDictionary<Port, int> ActivePorts { get; }
         public ICollection<Port> DisabledPorts { get; }
@@ -32,7 +60,7 @@ namespace AtsCompany.Classes
             var randomNumber = new Random();
             var number = randomNumber.Next(111111, 999999);
 
-            while (IsPortListContainPortByNumber(number))
+            while (IsDisableListContainsCalledNumber(number))
             {
                 number = randomNumber.Next(111111, 999999);
             }
@@ -73,25 +101,6 @@ namespace AtsCompany.Classes
             }
         }
 
-        private bool IsPortListContainPortByNumber(int number)
-        {
-            return DisabledPorts.Any(x => x.Number == number);
-        }
-
-        private void SubscribeOnAllPortEvents(Port port)
-        {
-            port.PortStateSetToActive += PortOnPortStateSetToActive;
-            port.PortEnabled += PortOnPortEnabled;
-            port.PortDisabled += PortOnPortDisabled;
-            port.CallRejected += PortOnCallRejected;
-            port.CallAccepted += PortOnCallAccepted;
-            port.PortConnectionEstablished += PortOnPortConnectionEstablished;
-            port.PortEndCall += PortOnPortEndCall;
-        }
-
-        public delegate void ServerEndCallHandler(Port port1, Port port2, string message);
-        public event ServerEndCallHandler ServerFinishedCall;
-
         private void PortOnPortEndCall(int initializatorNumber)
         {
             var call = _currentCalls.FirstOrDefault(x => x.RecieverNumber == initializatorNumber || x.SenderNumber == initializatorNumber);
@@ -130,13 +139,6 @@ namespace AtsCompany.Classes
             CheckActivePortCalledNumber(port, phoneNumberArgs.number);
         }
 
-
-        public delegate void PortContactHandler(object sender, string message);
-
-        public event PortContactHandler UserIsUnavaliable;
-        public event PortContactHandler UserIsBusy;
-        public event PortContactHandler UserDoesntExists;
-
         private void CheckActivePortCalledNumber(Port port, int callNumber)
         {
             if (IsDisableListContainsCalledNumber(callNumber))
@@ -161,17 +163,10 @@ namespace AtsCompany.Classes
             }
         }
 
-        public delegate void ConnectionHandler(Port port1, Port port2);
-        public event ConnectionHandler ConnectionEstablish;
-
         private void EstablishConnection(Port port1, Port port2)
         {
             ConnectionEstablish?.Invoke(port1, port2);
         }
-
-        public delegate void ServerAcceptHandler(object sender1, object sender2, string message);
-
-        public event ServerAcceptHandler AnswerOnAccept;
 
         private void PortOnCallAccepted(int number1, int number2, string message)
         {
@@ -179,10 +174,6 @@ namespace AtsCompany.Classes
             var port2 = EnabledPorts.FirstOrDefault(x => x.Number == number2);
             AnswerOnAccept?.Invoke(port1, port2, message);
         }
-
-        public delegate void ServerRejectHandler(object sender, string message);
-
-        public event ServerRejectHandler AnswerOnReject;
 
         private void PortOnCallRejected(int number1, int number2, string message)
         {
@@ -205,9 +196,6 @@ namespace AtsCompany.Classes
             return EnabledPorts.Any(port => port.Number == number);
         }
 
-        public delegate void CallFinishedHandler(object sender);
-        public event CallFinishedHandler CallFinished;
-
         private void PortOnPortConnectionEstablished(object sender1, object sender2)
         {
             var port1 = sender1 as Port;
@@ -222,6 +210,17 @@ namespace AtsCompany.Classes
             var call = new Call(port1.Number, port2.Number);
             call.Start();
             _currentCalls.Add(call);
+        }
+
+        private void SubscribeOnAllPortEvents(Port port)
+        {
+            port.PortStateSetToActive += PortOnPortStateSetToActive;
+            port.PortEnabled += PortOnPortEnabled;
+            port.PortDisabled += PortOnPortDisabled;
+            port.CallRejected += PortOnCallRejected;
+            port.CallAccepted += PortOnCallAccepted;
+            port.PortConnectionEstablished += PortOnPortConnectionEstablished;
+            port.PortEndCall += PortOnPortEndCall;
         }
     }
 }

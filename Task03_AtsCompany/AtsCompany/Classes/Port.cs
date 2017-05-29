@@ -12,13 +12,63 @@ namespace AtsCompany.Classes
             SubscribeOnAllServerEvents();
         }
 
+        public event Action PortRemoved;
+
+        public delegate void PortEnabledHandler(object sender);
+
+        public event PortEnabledHandler PortEnabled;
+
+        public delegate void PortDisabledHandler(object sender);
+
+        public event PortDisabledHandler PortDisabled;
+
+        public event EventHandler<PhoneNumberArgs> PortStateSetToActive;
+
+        public delegate void PortEndCallHandler(int initializatorNumber);
+
+        public event PortEndCallHandler PortEndCall;
+
+        public delegate void PortCallFinishedHandler(string message);
+
+        public event PortCallFinishedHandler PortFinishedCall;
+
+        public delegate void TerminalContactHandler(object sender, string message);
+
+        public event TerminalContactHandler UserIsUnavaliable;
+        public event TerminalContactHandler UserIsBusy;
+        public event TerminalContactHandler UserDoesntExists;
+
+        public delegate void CallRequestHandler(int number1, int number2, string message);
+
+        public event CallRequestHandler CallRequesting;
+
+        public delegate void PortCallStateHandler(int number1, int number2, string message);
+
+        public event PortCallStateHandler CallRejected;
+        public event PortCallStateHandler CallAccepted;
+
+        public delegate void PortStateCallingHandler(object sender1, object sender2);
+
+        public event PortStateCallingHandler PortConnectionEstablished;
+
+        public delegate void ServerAcceptHandler(int number1, int number2, string message);
+
+        public event ServerAcceptHandler SendAcceptMessageToTerminal;
+
+        public delegate void ServerRejectHandler(int number, string message);
+
+        public event ServerRejectHandler SendRejectMessageToTerminal;
+
+        public Terminal Terminal { get; private set; }
+        public int Number { get; }
+        public PortState State { get; private set; }
+        public AtsServer Server { get; private set; }
+
         public void SetCurrentTerminal(Terminal terminal)
         {
             Terminal = terminal;
             SubscribeOnAllTerminalEvents();
         }
-
-        public event Action PortRemoved;
 
         public void RemovePortFromTerminal(Terminal terminal)
         {
@@ -26,25 +76,17 @@ namespace AtsCompany.Classes
             PortRemoved?.Invoke();
         }
 
-        public delegate void PortEnabledHandler(object sender);
-        public event PortEnabledHandler PortEnabled;
-
         private void TerminalOnTerminalIsEnabled(object sender)
         {
             State = PortState.Enabled;
             PortEnabled?.Invoke(this);
         }
-        
-        public delegate void PortDisabledHandler(object sender);
-        public event PortDisabledHandler PortDisabled;
 
         private void TerminalOnTerminalIsDisabled(object sender)
         {
             State = PortState.Disabled;
             PortDisabled?.Invoke(this);
         }
-
-        public event EventHandler<PhoneNumberArgs> PortStateSetToActive;
 
         private void TerminalOnBeginCall(object sender, PhoneNumberArgs e)
         {
@@ -62,37 +104,10 @@ namespace AtsCompany.Classes
             Terminal.CallIsEnd += TerminalOnCallIsEnd;
         }
 
-        public delegate void PortEndCallHandler(int initializatorNumber);
-        public event PortEndCallHandler PortEndCall;
-
         private void TerminalOnCallIsEnd(int senderNumber)
         {
             PortEndCall?.Invoke(senderNumber);
         }
-
-        private void UnsubscribeOnAllTerminalEvents()
-        {
-            Terminal.BeginCall -= TerminalOnBeginCall;
-            Terminal.TerminalIsEnabled -= TerminalOnTerminalIsEnabled;
-            Terminal.TerminalIsDisabled -= TerminalOnTerminalIsDisabled;
-            Terminal.RejectCall -= TerminalOnRejectCall;
-            Terminal.AcceptCall -= TerminalOnAcceptCall;
-            Terminal.CallIsEnd -= TerminalOnCallIsEnd;
-        }
-
-        private void SubscribeOnAllServerEvents()
-        {
-            Server.UserDoesntExists += ServerOnUserDoesntExists;
-            Server.UserIsBusy += ServerOnUserIsBusy;
-            Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
-            Server.ConnectionEstablish += ServerOnConnectionEstablish;
-            Server.AnswerOnReject += OnAnswerOnReject;
-            Server.AnswerOnAccept += ServerOnAnswerOnAccept;
-            Server.ServerFinishedCall += ServerOnServerFinishedCall;
-        }
-
-        public delegate void PortCallFinishedHandler(string message);
-        public event PortCallFinishedHandler PortFinishedCall;
 
         private void ServerOnServerFinishedCall(Port port1, Port port2, string message)
         {
@@ -103,12 +118,6 @@ namespace AtsCompany.Classes
                 PortFinishedCall?.Invoke(message);
             }
         }
-
-        public delegate void TerminalContactHandler(object sender, string message);
-
-        public event TerminalContactHandler UserIsUnavaliable;
-        public event TerminalContactHandler UserIsBusy;
-        public event TerminalContactHandler UserDoesntExists;
 
         private void ServerOnUserIsUnavaliable(object sender, string message)
         {
@@ -134,9 +143,6 @@ namespace AtsCompany.Classes
             PortEnabled?.Invoke(this);
         }
 
-        public delegate void CallRequestHandler(int number1, int number2, string message);
-        public event CallRequestHandler CallRequesting;
-
         private void ServerOnConnectionEstablish(Port port1, Port port2)
         {
             if (this == port2)
@@ -144,11 +150,6 @@ namespace AtsCompany.Classes
                 CallRequesting?.Invoke(port1.Number, this.Number, $"{port1.Number} requesting connection");
             }
         }
-
-        public delegate void PortCallStateHandler(int number1, int number2, string message);
-
-        public event PortCallStateHandler CallRejected;
-        public event PortCallStateHandler CallAccepted;
 
         private void TerminalOnAcceptCall(int number1, int number2, string message)
         {
@@ -159,12 +160,6 @@ namespace AtsCompany.Classes
         {
             CallRejected?.Invoke(number1, number2, message);
         }
-
-        public delegate void PortStateCallingHandler(object sender1, object sender2);
-        public event PortStateCallingHandler PortConnectionEstablished;
-
-        public delegate void ServerAcceptHandler(int number1, int number2, string message);
-        public event ServerAcceptHandler SendAcceptMessageToTerminal;
 
         private void ServerOnAnswerOnAccept(object sender1, object sender2, string message)
         {
@@ -187,9 +182,6 @@ namespace AtsCompany.Classes
             }
         }
 
-        public delegate void ServerRejectHandler(int number, string message);
-        public event ServerRejectHandler SendRejectMessageToTerminal;
-
         private void OnAnswerOnReject(object sender, string message)
         {
             if (this == sender)
@@ -204,9 +196,25 @@ namespace AtsCompany.Classes
             }
         }
 
-        public Terminal Terminal { get; private set; }
-        public int Number { get; }
-        public PortState State { get; private set; }
-        public AtsServer Server { get; private set; }
+        private void UnsubscribeOnAllTerminalEvents()
+        {
+            Terminal.BeginCall -= TerminalOnBeginCall;
+            Terminal.TerminalIsEnabled -= TerminalOnTerminalIsEnabled;
+            Terminal.TerminalIsDisabled -= TerminalOnTerminalIsDisabled;
+            Terminal.RejectCall -= TerminalOnRejectCall;
+            Terminal.AcceptCall -= TerminalOnAcceptCall;
+            Terminal.CallIsEnd -= TerminalOnCallIsEnd;
+        }
+
+        private void SubscribeOnAllServerEvents()
+        {
+            Server.UserDoesntExists += ServerOnUserDoesntExists;
+            Server.UserIsBusy += ServerOnUserIsBusy;
+            Server.UserIsUnavaliable += ServerOnUserIsUnavaliable;
+            Server.ConnectionEstablish += ServerOnConnectionEstablish;
+            Server.AnswerOnReject += OnAnswerOnReject;
+            Server.AnswerOnAccept += ServerOnAnswerOnAccept;
+            Server.ServerFinishedCall += ServerOnServerFinishedCall;
+        }
     }
 }

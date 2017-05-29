@@ -40,7 +40,7 @@ namespace Demo
             //users money
             var pays = payService.GetUsersPaysForPreviousMonth();
 
-            //Now is unavaliable - if balance less than 0 his terminal won't work
+            //Will be unavaliable - if balance less than 0 his terminal won't work
             user.MakeCall(user.Terminals.ElementAt(0), 1111);
 
             //When user's balance become more then 0, he can call again
@@ -50,7 +50,13 @@ namespace Demo
             var userInfos = user.OrderCallInfos();
             foreach (var info in userInfos)
             {
-                Console.WriteLine($"{info.Duration:hh\\:mm\\:ss}, {info.Price}, {info.RecieverNumber}");
+                Console.WriteLine($"{info.Duration:hh\\:mm\\:ss}, {info.Price}, {info.IsOutComingCall}, {info.StartTime}");
+            }
+
+            var user2Infos = user2.OrderCallInfos();
+            foreach (var info in user2Infos)
+            {
+                Console.WriteLine($"{info.Duration:hh\\:mm\\:ss}, {info.Price}, {info.IsOutComingCall}, {info.StartTime}");
             }
         }
     }
