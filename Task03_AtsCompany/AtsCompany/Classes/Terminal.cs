@@ -86,14 +86,19 @@ namespace AtsCompany.Classes
 
         public void Answer(string message)
         {
-
+            _userAnswer = message;
         }
+
+        private string _userAnswer;
+
+        public delegate void TerminalRequiredAnswerHandler(int number, string message);
+
+        public event TerminalRequiredAnswerHandler TerminalRequiredAnswer;
 
         private void PortOnCallRequesting(int number1, int number2, string message)
         {
-            Console.WriteLine("Incoming call. Type 'y' to answer, 'n' to reject");
-            var answer = Console.ReadLine();
-            if (answer != null && answer.ToLower().Equals("y"))
+            TerminalRequiredAnswer?.Invoke(number2, "Incoming call. Type 'y' to answer, 'n' to reject");
+            if (_userAnswer != null && _userAnswer.ToLower().Equals("y"))
             {
                 AcceptCall?.Invoke(number1, number2, $"User 2 : Connection with {number1} established");
             }
