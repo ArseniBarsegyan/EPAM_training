@@ -29,7 +29,7 @@ namespace BillingSystem.Classes
             var port = Server.CreatePort();
             var terminal = new Terminal(port);
             port.SetCurrentTerminal(terminal);
-            userAccount.Terminals.Add(terminal);
+            userAccount.AddTerminal(terminal);
         }
     }
 }

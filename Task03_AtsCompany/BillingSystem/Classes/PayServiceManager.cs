@@ -84,9 +84,9 @@ namespace BillingSystem.Classes
             foreach (var pair in UsersCallsInfoDictionary)
             {
                 var userAccount = pair.Key;
-                List<CallInfo> userCalls = pair.Value;
-                    //.Where(x => x.StartTime > startTime && x.StartTime < endTime && x.EndTime < endTime)
-                    //.ToList();
+                List<CallInfo> userCalls = pair.Value
+                    .Where(x => x.StartTime > startTime && x.StartTime < endTime && x.EndTime < endTime)
+                    .ToList();
 
                 var totalPay = userCalls.Sum(x => x.Price);
 
