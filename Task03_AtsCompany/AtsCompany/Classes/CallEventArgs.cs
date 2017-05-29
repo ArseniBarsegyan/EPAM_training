@@ -2,11 +2,11 @@
 
 namespace AtsCompany.Classes
 {
-    public class PhoneNumberArgs : EventArgs
+    public class CallEventArgs : EventArgs
     {
         public readonly int number;
 
-        public PhoneNumberArgs(int number)
+        public CallEventArgs(int number)
         {
             this.number = number;
         }

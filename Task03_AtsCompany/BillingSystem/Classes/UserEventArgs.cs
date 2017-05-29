@@ -2,11 +2,11 @@
 
 namespace BillingSystem.Classes
 {
-    public class MoneyArgs : EventArgs
+    public class UserEventArgs : EventArgs
     {
         public readonly int balance;
 
-        public MoneyArgs(int balance)
+        public UserEventArgs(int balance)
         {
             this.balance = balance;
         }
