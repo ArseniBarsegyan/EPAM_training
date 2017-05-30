@@ -67,16 +67,6 @@ namespace BillingSystem.Classes
             terminal.TerminalSendMessage -= TerminalOnTerminalSendMessage;
         }
 
-        public void Answer(Terminal terminal)
-        {
-            terminal.Answer("yes");
-        }
-
-        public void Reject(Terminal terminal)
-        {
-            terminal.Answer("no");
-        }
-
         protected virtual void TerminalOnTerminalSendMessage(object sender, string message)
         {
             Console.WriteLine(message);
