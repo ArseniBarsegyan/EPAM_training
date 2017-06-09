@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerSystem.DAL", "ManagerSystem.DAL\ManagerSystem.DAL.csproj", "{0405C688-8356-47C7-931A-90116BC74B60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManagerSystem.ConsoleClient", "ManagerSystem.ConsoleClient\ManagerSystem.ConsoleClient.csproj", "{94F9490E-E3D0-40D4-BB08-7F4A15AAE1DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0405C688-8356-47C7-931A-90116BC74B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0405C688-8356-47C7-931A-90116BC74B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0405C688-8356-47C7-931A-90116BC74B60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94F9490E-E3D0-40D4-BB08-7F4A15AAE1DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94F9490E-E3D0-40D4-BB08-7F4A15AAE1DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94F9490E-E3D0-40D4-BB08-7F4A15AAE1DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94F9490E-E3D0-40D4-BB08-7F4A15AAE1DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
