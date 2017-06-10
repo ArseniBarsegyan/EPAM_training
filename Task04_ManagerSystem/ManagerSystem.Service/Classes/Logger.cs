@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ManagerSystem.Service.Classes
 {
@@ -9,10 +10,12 @@ namespace ManagerSystem.Service.Classes
         private readonly FileSystemWatcher _watcher;
         private readonly object _obj = new object();
         private bool _enabled = true;
+        private CsvDbRecorder _dbRecorder;
 
         public Logger()
         {
             _watcher = new FileSystemWatcher(ConfigurationManager.AppSettings["ServerPath"]);
+            _dbRecorder = new CsvDbRecorder("DefaultConnection");
 
             _watcher.Created += WatcherOnCreated;
             _watcher.Changed += WatcherOnChanged;
@@ -41,6 +44,16 @@ namespace ManagerSystem.Service.Classes
         private void WatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             RecordEntry("changed ", fileSystemEventArgs.FullPath);
+
+            var task = new Task(() =>
+            {
+                _dbRecorder.WriteDataToDataBaseFromFile(fileSystemEventArgs.FullPath);
+                //Delete file after recording to database, write to log about success
+                File.Delete(fileSystemEventArgs.FullPath);
+                RecordEntry("successfully proceeded ", fileSystemEventArgs.FullPath);
+            });
+            task.Start();
+            task.Wait();
         }
 
         private void RecordEntry(string fileEvent, string filePath)
