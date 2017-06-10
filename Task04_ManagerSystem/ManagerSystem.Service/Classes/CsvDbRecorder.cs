@@ -61,6 +61,24 @@ namespace ManagerSystem.Service.Classes
                     });
 
                     var product = Mapper.Map<PurchaseDto, Product>(purchaseDto);
+
+                    lock (_lockObject)
+                    {
+                        var manager = _managerRepo.GetAll().FirstOrDefault(x => x.LastName == purchaseDto.ManagerName);
+                        if (manager == null)
+                        {
+                            manager = Mapper.Map<PurchaseDto, Manager>(purchaseDto);
+                            manager.Products.Add(product);
+                            _managerRepo.Create(manager);
+                        }
+                        else
+                        {
+                            manager.Products.Add(product);
+                            _managerRepo.Update(manager);
+                        }
+                        _managerRepo.Save();
+                    }
+
                 }
             }
         }
