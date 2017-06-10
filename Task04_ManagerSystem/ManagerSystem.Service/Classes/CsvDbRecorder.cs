@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using ManagerSystem.DAL.EF;
 using ManagerSystem.DAL.Entities;
@@ -14,8 +11,8 @@ namespace ManagerSystem.Service.Classes
 {
     public class CsvDbRecorder
     {
-        private string _nameOrConnectionString;
-        private object _lockObject = new object();
+        private readonly string _nameOrConnectionString;
+        private readonly object _lockObject = new object();
         private GenericRepository<Manager> _managerRepo;
 
         public CsvDbRecorder(string nameOrConnectionString)
@@ -25,7 +22,10 @@ namespace ManagerSystem.Service.Classes
 
         public void WriteDataToDataBaseFromFile(string fileName)
         {
-            _managerRepo = new GenericRepository<Manager>(new AppDbContext(_nameOrConnectionString));
+            lock (_lockObject)
+            {
+                _managerRepo = new GenericRepository<Manager>(new AppDbContext(_nameOrConnectionString));
+            }
 
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
             if (fileNameWithoutExtension == null) return;
