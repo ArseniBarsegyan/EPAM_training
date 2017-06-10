@@ -44,7 +44,9 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,7 +56,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CsvDbRecorder.cs" />
     <Compile Include="Classes\Logger.cs" />
+    <Compile Include="ManagerSystemInstaller.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ManagerSystemInstaller.Designer.cs">
+      <DependentUpon>ManagerSystemInstaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\PurchaseDto.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
@@ -68,6 +77,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ManagerSystem.DAL\ManagerSystem.DAL.csproj">
+      <Project>{0405C688-8356-47C7-931A-90116BC74B60}</Project>
+      <Name>ManagerSystem.DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
