@@ -56,11 +56,7 @@ namespace ManagerSystem.ConsoleClient
         private static void CreateCsvFile(string fileName, IEnumerable<string> lines)
         {
             var errorMessage = "Please, check input format";
-
-            if (!Directory.Exists(ConfigurationManager.AppSettings["outputFileDirectory"]))
-            {
-                Directory.CreateDirectory(ConfigurationManager.AppSettings["outputFileDirectory"]);
-            }
+            
             try
             {
                 using (var fileStream = new StreamWriter(ConfigurationManager.AppSettings["outputFileDirectory"]

@@ -15,6 +15,8 @@ namespace ManagerSystem.Service.Classes
 
         public Logger()
         {
+            CreateDirectoriesForServer();
+
             _watcher = new FileSystemWatcher(ConfigurationManager.AppSettings["ServerPath"]);
             _dbRecorder = new CsvDbRecorder("DefaultConnection");
 
@@ -37,6 +39,18 @@ namespace ManagerSystem.Service.Classes
             _enabled = false;
         }
 
+        private void CreateDirectoriesForServer()
+        {
+            if (!Directory.Exists(ConfigurationManager.AppSettings["ServerPath"]))
+            {
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["ServerPath"]);
+            }
+            if (!Directory.Exists(ConfigurationManager.AppSettings["ManagerStorage"]))
+            {
+                Directory.CreateDirectory(ConfigurationManager.AppSettings["ManagerStorage"]);
+            }
+        }
+
         private void WatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
         {
             RecordEntry("created ", fileSystemEventArgs.FullPath);
@@ -52,7 +66,7 @@ namespace ManagerSystem.Service.Classes
                 {
                     _dbRecorder.WriteDataToDataBaseFromFile(fileSystemEventArgs.FullPath);
                     File.Delete(fileSystemEventArgs.FullPath);
-                    RecordEntry("successfully proceeded ", fileSystemEventArgs.FullPath);
+                    RecordEntry("successfully processed ", fileSystemEventArgs.FullPath);
                 });
                 task.Start();
                 task.Wait();
@@ -66,7 +80,7 @@ namespace ManagerSystem.Service.Classes
                 var destinationPath = ConfigurationManager.AppSettings["FailedFilesStorage"];
                 var destinationFullName = destinationPath + Path.GetFileName(sourceFullName);
 
-                RecordEntry("error occured when proceeded ", fileSystemEventArgs.FullPath);
+                RecordEntry("error occured when processed ", fileSystemEventArgs.FullPath);
                 if (!Directory.Exists(destinationPath))
                 {
                     Directory.CreateDirectory(ConfigurationManager.AppSettings["FailedFilesStorage"]);
