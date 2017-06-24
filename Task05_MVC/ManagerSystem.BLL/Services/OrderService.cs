@@ -107,6 +107,7 @@ namespace ManagerSystem.BLL.Services
                 client = Mapper.Map<OrderDto, Client>(orderDto);
                 UnitOfWork.ClientRepository.Create(client);
             }
+            order.Date = orderDto.Date;
             order.Product = product;
             order.Client = client;
             order.Manager = manager;
