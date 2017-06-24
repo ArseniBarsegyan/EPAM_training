@@ -45,5 +45,29 @@ namespace ManagerSystem.WebUI.Controllers
             }
             return View();
         }
+
+        public ActionResult Delete(string id)
+        {
+            var userDto = UserService.GetById(id);
+            if (userDto != null)
+            {
+                return View(userDto);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(UserDto userDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var operationDetails = await UserService.DeleteAsync(userDto);
+
+                if (operationDetails.Succedeed)
+                    return RedirectToAction("Index", "Admin");
+                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
+            }
+            return View();
+        }
     }
 }
