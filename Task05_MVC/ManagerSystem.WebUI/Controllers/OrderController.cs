@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.BLL.Services;
@@ -70,6 +66,29 @@ namespace ManagerSystem.WebUI.Controllers
                 ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
             return View(orderDto);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var purchaseDto = _orderService.GetOrderDtoById(id);
+            if (purchaseDto != null)
+            {
+                return View(purchaseDto);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var operationDetails = _orderService.Delete(id);
+                if (operationDetails.Succedeed)
+                    return RedirectToAction("Index");
+                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
+            }
+            return View();
         }
     }
 }
