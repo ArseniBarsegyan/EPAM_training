@@ -25,3 +25,35 @@
     </div>
     <input type="submit" value="Filter" class="btn btn-default" />
 </form>
+
+<table class="table table-striped">
+    <tr>
+        <th>Manager name</th>
+        <th>Product name</th>
+        <th>Date</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Orders)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="btn-group">
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x }))
+</div>
