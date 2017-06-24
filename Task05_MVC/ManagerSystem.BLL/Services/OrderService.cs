@@ -4,6 +4,9 @@ using System.Linq;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.DAL.Repositories;
+using AutoMapper;
+using ManagerSystem.BLL.Infrastructure;
+using ManagerSystem.DAL.Entities;
 
 namespace ManagerSystem.BLL.Services
 {
@@ -41,6 +44,60 @@ namespace ManagerSystem.BLL.Services
                 orderList.Add(orderDto);
             }
             return orderList;
+        }
+
+        public OperationDetails Create(OrderDto orderDto)
+        {
+            InitializeMapper();
+            var order = Mapper.Map<OrderDto, Order>(orderDto);
+            var manager = UnitOfWork.ManagerRepository.GetAll().FirstOrDefault(x => x.LastName == orderDto.ManagerName);
+            var product = UnitOfWork.ProductRepository.GetAll().FirstOrDefault(x => x.Name == orderDto.ProductName);
+            var client = UnitOfWork.ClientRepository.GetAll().FirstOrDefault(x => x.Name == orderDto.ClientName);
+
+            if (product == null)
+            {
+                product = Mapper.Map<OrderDto, Product>(orderDto);
+                UnitOfWork.ProductRepository.Create(product);
+            }
+            if (client == null)
+            {
+                client = Mapper.Map<OrderDto, Client>(orderDto);
+                UnitOfWork.ClientRepository.Create(client);
+            }
+            order.Product = product;
+            order.Client = client;
+
+            if (manager == null)
+            {
+                manager = Mapper.Map<OrderDto, Manager>(orderDto);
+                manager.Orders.Add(order);
+                UnitOfWork.ManagerRepository.Create(manager);
+            }
+            else
+            {
+                manager.Orders.Add(order);
+                UnitOfWork.ManagerRepository.Update(manager);
+            }
+            order.Manager = manager;
+            UnitOfWork.Save();
+
+            return new OperationDetails(true, "successfull create", "");
+        }
+
+        private void InitializeMapper()
+        {
+            Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<OrderDto, Product>()
+                    .ForMember(x => x.Name, opt => opt.MapFrom(src => src.ProductName))
+                    .ForMember(x => x.Price, opt => opt.MapFrom(src => src.Price));
+                cfg.CreateMap<OrderDto, Manager>()
+                    .ForMember(x => x.LastName, opt => opt.MapFrom(src => src.ManagerName));
+                cfg.CreateMap<OrderDto, Client>()
+                    .ForMember(x => x.Name, opt => opt.MapFrom(src => src.ClientName));
+                cfg.CreateMap<OrderDto, Order>()
+                    .ForMember(x => x.Date, opt => opt.MapFrom(src => src.Date));
+            });
         }
     }
 }
