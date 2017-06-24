@@ -48,6 +48,12 @@ namespace ManagerSystem.WebUI.Controllers
             return View(model);
         }
 
+        public ActionResult Logout()
+        {
+            AuthenticationManager.SignOut();
+            return RedirectToAction("Index", "Home");
+        }
+
         private async Task SetInitialDataAsync()
         {
             await UserService.SetInitialData(new UserDto
