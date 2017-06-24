@@ -1,0 +1,19 @@
+﻿@model ManagerSystem.BLL.DTO.ManagerDto
+
+@{
+    ViewBag.Title = "Create manager";
+}
+
+<h2>Create manager</h2>
+
+@Html.ValidationSummary(false)
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label>Manager name</label>
+        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <input type="button" class="btn btn-default" title="Back" value="Back" onclick="history.back()" />
+}
