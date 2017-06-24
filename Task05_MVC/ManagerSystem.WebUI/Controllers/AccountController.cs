@@ -54,6 +54,34 @@ namespace ManagerSystem.WebUI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userDto = new UserDto
+                {
+                    Name = model.Name,
+                    Password = model.Password,
+                    Role = "user"
+                };
+
+                var operationDetails = await UserService.CreateAsync(userDto);
+
+                if (operationDetails.Succedeed)
+                    return RedirectToAction("Index", "Home");
+                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
+            }
+            return View(model);
+        }
+
         private async Task SetInitialDataAsync()
         {
             await UserService.SetInitialData(new UserDto
