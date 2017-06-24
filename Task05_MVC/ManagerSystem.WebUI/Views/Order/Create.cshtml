@@ -1,0 +1,37 @@
+﻿@model ManagerSystem.WebUI.Models.OrderCreateModel
+
+@{
+    ViewBag.Title = "Create order";
+}
+
+@Html.ValidationSummary(false)
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        <label>Manager name</label>
+        @Html.TextBoxFor(x => x.ManagerName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Product name</label>
+        @Html.TextBoxFor(x => x.ProductName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Client name</label>
+        @Html.TextBoxFor(x => x.ClientName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Product price</label>
+        @Html.TextBoxFor(x => x.Price, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Date</label>
+        @Html.TextBoxFor(x => x.Date, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-success">Create</button>
+    <input type="button" class="btn btn-default" title="Back" value="Back" onclick="history.back()" />
+}
