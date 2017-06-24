@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.DAL.Interfaces;
@@ -23,6 +24,19 @@ namespace ManagerSystem.BLL.Services
                 Name = user.UserName
             };
             return userDto;
+        }
+
+        public IEnumerable<UserDto> GetAllUsersList()
+        {
+            var userList = UnitOfWork.UserManager.Users.ToList();
+
+            var userDtoList = userList.Select(user => new UserDto
+            {
+                Id = user.Id,
+                Name = user.UserName,
+                Role = user.Roles.First().RoleId
+            }).ToList();
+            return userDtoList.AsEnumerable();
         }
     }
 }
