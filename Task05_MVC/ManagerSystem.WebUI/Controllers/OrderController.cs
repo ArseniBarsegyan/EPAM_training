@@ -1,8 +1,6 @@
 ﻿using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
-using ManagerSystem.BLL.Services;
-using ManagerSystem.DAL.Repositories;
 using ManagerSystem.WebUI.Models;
 
 namespace ManagerSystem.WebUI.Controllers
@@ -10,7 +8,12 @@ namespace ManagerSystem.WebUI.Controllers
     [Authorize(Roles = "admin")]
     public class OrderController : Controller
     {
-        private IOrderService _orderService = new OrderService(new UnitOfWork("DefaultConnection"));
+        private IOrderService _orderService;
+
+        public OrderController(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
 
         public ActionResult Index()
         {
