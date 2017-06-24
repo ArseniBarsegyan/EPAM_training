@@ -10,6 +10,7 @@ using Microsoft.Owin.Security;
 
 namespace ManagerSystem.WebUI.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private IUserService UserService => HttpContext.GetOwinContext().GetUserManager<IUserService>();
