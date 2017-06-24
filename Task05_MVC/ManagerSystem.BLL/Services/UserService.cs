@@ -129,5 +129,22 @@ namespace ManagerSystem.BLL.Services
             }
             return claim;
         }
+
+        public async Task SetInitialData(UserDto adminDto, IEnumerable<string> roles)
+        {
+            foreach (var roleName in roles)
+            {
+                var role = await UnitOfWork.RoleManager.FindByNameAsync(roleName);
+                if (role != null) continue;
+                role = new ApplicationRole { Name = roleName };
+                await UnitOfWork.RoleManager.CreateAsync(role);
+            }
+            await CreateAsync(adminDto);
+        }
+
+        public void Dispose()
+        {
+            UnitOfWork.Dispose();
+        }
     }
 }
