@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ManagerSystem.BLL.DTO.OrderDto>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        All orders
+    </div>
+    <table class="table table-striped">
+        <tr>
+            <th>Product Id</th>
+            <th>Manager name</th>
+            <th>Client name</th>
+            <th>Product name</th>
+            <th>Product price</th>
+            <th>Purchase date</th>
+        </tr>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="3" class="text-center">There is no orders</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var purchase in Model)
+            {
+                <tr>
+                    <td>@purchase.Id</td>
+                    <td>@purchase.ManagerName</td>
+                    <td>@purchase.ClientName</td>
+                    <td>@purchase.ProductName</td>
+                    <td>@purchase.Price</td>
+                    <td>@purchase.Date</td>
+                    <td><p><a class="btn btn-default" href="/Order/Edit/@purchase.Id">Edit</a></p></td>
+                    <td><p><a class="btn btn-default" href="/Order/Delete/@purchase.Id">Delete</a></p></td>
+                </tr>
+            }
+        }
+    </table>
+</div>
+
+<a class="btn btn-success" href="/Order/Create/">Create</a>
+<a class="btn btn-default" href="/Admin/Index/">Users</a>
+<a class="btn btn-default" href="/Manager/Index/">Managers</a>
+<a class="btn btn-default" href="/Product/Index/">Products</a>

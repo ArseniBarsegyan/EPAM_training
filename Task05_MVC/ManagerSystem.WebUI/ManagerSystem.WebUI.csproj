@@ -219,10 +219,10 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Edit.cshtml" />
     <Content Include="Views\Admin\Delete.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Order\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -243,6 +243,10 @@
     <ProjectReference Include="..\ManagerSystem.BLL\ManagerSystem.BLL.csproj">
       <Project>{7120FBB3-F6E1-425D-B7A5-4D266D13ACE4}</Project>
       <Name>ManagerSystem.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ManagerSystem.DAL\ManagerSystem.DAL.csproj">
+      <Project>{E4546322-6A72-414A-B55C-CEBAAD711C38}</Project>
+      <Name>ManagerSystem.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
