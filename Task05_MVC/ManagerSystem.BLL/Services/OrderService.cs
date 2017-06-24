@@ -117,6 +117,14 @@ namespace ManagerSystem.BLL.Services
             return new OperationDetails(true, "successfull update", "");
         }
 
+        public OperationDetails Delete(int id)
+        {
+            UnitOfWork.OrderRepository.Delete(id);
+            UnitOfWork.Save(); ;
+
+            return new OperationDetails(true, "successfull delete", "");
+        }
+
         private void InitializeMapper()
         {
             Mapper.Initialize(cfg =>
