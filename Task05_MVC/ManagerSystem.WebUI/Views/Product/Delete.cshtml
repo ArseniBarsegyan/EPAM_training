@@ -1,0 +1,31 @@
+﻿@model ManagerSystem.BLL.DTO.ProductDto
+
+@{
+    ViewBag.Title = "Delete product";
+}
+
+<h2>Deleting product from database</h2>
+<h2>Warning! All records such as order history with this product will be erased!</h2>
+<h2>Are you sure?</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+    <div>
+        <label>Product Id</label>
+        <p>@Model.Id</p>
+    </div>
+
+    <div>
+        <label>Product name</label>
+        <p>@Model.Name</p>
+    </div>
+
+    <div>
+        <label>Product price</label>
+        <p>@Model.Price</p>
+    </div>
+
+    <input type="submit" class="btn btn-danger" value="Delete" />
+    <input type="button" class="btn btn-default" title="Back" value="Back" onclick="history.back()" />
+}
