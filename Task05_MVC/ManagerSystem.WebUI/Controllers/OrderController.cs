@@ -48,5 +48,28 @@ namespace ManagerSystem.WebUI.Controllers
             }
             return View(model);
         }
+
+        public ActionResult Edit(int id)
+        {
+            var purchaseDto = _orderService.GetOrderDtoById(id);
+            if (purchaseDto != null)
+            {
+                return View(purchaseDto);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Edit(OrderDto orderDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var operationDetails = _orderService.Edit(orderDto);
+                if (operationDetails.Succedeed)
+                    return RedirectToAction("Index");
+                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
+            }
+            return View(orderDto);
+        }
     }
 }
