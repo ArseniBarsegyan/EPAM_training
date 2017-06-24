@@ -6,6 +6,7 @@ using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.DAL.Entities;
 using ManagerSystem.DAL.Interfaces;
+using Microsoft.AspNet.Identity;
 
 namespace ManagerSystem.BLL.Services
 {
@@ -56,6 +57,49 @@ namespace ManagerSystem.BLL.Services
             await UnitOfWork.UserManager.AddToRoleAsync(user.Id, userDto.Role);
             await UnitOfWork.SaveAsync();
             return new OperationDetails(true, "register successfull", "");
+        }
+
+        public async Task<OperationDetails> EditAsync(UserDto userDto)
+        {
+            var user = await UnitOfWork.UserManager.FindByIdAsync(userDto.Id);
+            if (user != null)
+            {
+                if (userDto.Name != string.Empty)
+                {
+                    user.UserName = userDto.Name;
+                }
+                else
+                {
+                    return new OperationDetails(false, "User name can't be empty", "");
+                }
+
+                IdentityResult validPass = null;
+                if (userDto.Password != string.Empty)
+                {
+                    validPass = await UnitOfWork.UserManager.PasswordValidator.ValidateAsync(userDto.Password);
+
+                    if (validPass.Succeeded)
+                    {
+                        user.PasswordHash = UnitOfWork.UserManager.PasswordHasher.HashPassword(userDto.Password);
+                    }
+                    else
+                    {
+                        return new OperationDetails(false, "Password not valid", "");
+                    }
+                }
+
+                if ((validPass == null) || (userDto.Password != string.Empty && validPass.Succeeded))
+                {
+                    var result = await UnitOfWork.UserManager.UpdateAsync(user);
+                    await UnitOfWork.SaveAsync();
+                    if (result.Succeeded)
+                    {
+                        return new OperationDetails(true, "Successfully updated", "");
+                    }
+                }
+
+            }
+            return new OperationDetails(false, "User not found", "");
         }
     }
 }
