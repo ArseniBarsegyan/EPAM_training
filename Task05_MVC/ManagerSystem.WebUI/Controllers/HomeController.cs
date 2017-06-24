@@ -3,16 +3,19 @@ using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using ManagerSystem.BLL.Interfaces;
-using ManagerSystem.BLL.Services;
-using ManagerSystem.DAL.Repositories;
 using ManagerSystem.WebUI.Models;
 
 namespace ManagerSystem.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private IOrderService _orderService = new OrderService(new UnitOfWork("DefaultConnection"));
+        private IOrderService _orderService;
         private int PageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
+
+        public HomeController(IOrderService orderService)
+        {
+            _orderService = orderService;
+        }
 
         public ActionResult Index(string manager, string product, string date, decimal? fromValue
             , decimal? toValue, int page = 1)
