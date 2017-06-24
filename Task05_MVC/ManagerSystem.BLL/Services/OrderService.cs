@@ -84,6 +84,39 @@ namespace ManagerSystem.BLL.Services
             return new OperationDetails(true, "successfull create", "");
         }
 
+        public OperationDetails Edit(OrderDto orderDto)
+        {
+            InitializeMapper();
+            var order = UnitOfWork.OrderRepository.GetById(orderDto.Id);
+            var manager = UnitOfWork.ManagerRepository.GetAll().FirstOrDefault(x => x.LastName == orderDto.ManagerName);
+            var product = UnitOfWork.ProductRepository.GetAll().FirstOrDefault(x => x.Name == orderDto.ProductName);
+            var client = UnitOfWork.ClientRepository.GetAll().FirstOrDefault(x => x.Name == orderDto.ClientName);
+
+            if (manager == null)
+            {
+                manager = Mapper.Map<OrderDto, Manager>(orderDto);
+                UnitOfWork.ManagerRepository.Create(manager);
+            }
+            if (product == null)
+            {
+                product = Mapper.Map<OrderDto, Product>(orderDto);
+                UnitOfWork.ProductRepository.Create(product);
+            }
+            if (client == null)
+            {
+                client = Mapper.Map<OrderDto, Client>(orderDto);
+                UnitOfWork.ClientRepository.Create(client);
+            }
+            order.Product = product;
+            order.Client = client;
+            order.Manager = manager;
+
+            UnitOfWork.OrderRepository.Update(order);
+            UnitOfWork.Save();
+
+            return new OperationDetails(true, "successfull update", "");
+        }
+
         private void InitializeMapper()
         {
             Mapper.Initialize(cfg =>
