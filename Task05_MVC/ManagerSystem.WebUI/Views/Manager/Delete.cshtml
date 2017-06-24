@@ -1,0 +1,26 @@
+﻿@model ManagerSystem.BLL.DTO.ManagerDto
+
+@{
+    ViewBag.Title = "Delete manager";
+}
+
+<h2>Deleting manager from database</h2>
+<h2>Warning! All records such as order history with this manager will be erased!</h2>
+<h2>Are you sure?</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+    <div>
+        <label>Manager Id</label>
+        <p>@Model.Id</p>
+    </div>
+
+    <div>
+        <label>Manager name</label>
+        <p>@Model.LastName</p>
+    </div>
+
+    <input type="submit" class="btn btn-danger" value="Delete" />
+    <input type="button" class="btn btn-default" title="Back" value="Back" onclick="history.back()" />
+}
