@@ -1,15 +1,18 @@
 ﻿using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
-using ManagerSystem.BLL.Services;
-using ManagerSystem.DAL.Repositories;
 
 namespace ManagerSystem.WebUI.Controllers
 {
     [Authorize(Roles = "admin")]
     public class ManagerController : Controller
     {
-        private IManagerService _managerService = new ManagerService(new UnitOfWork("DefaultConnection"));
+        private IManagerService _managerService;
+
+        public ManagerController(IManagerService managerService)
+        {
+            _managerService = managerService;
+        }
 
         public ActionResult Index()
         {
