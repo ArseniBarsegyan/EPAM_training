@@ -88,7 +88,7 @@ namespace ManagerSystem.WebUI.Controllers
             await UserService.SetInitialData(new UserDto
             {
                 Name = "Admin",
-                Password = "Admin",
+                Password = "Administrator",
                 Role = "admin"
             }, new List<string> { "user", "admin" });
         }
