@@ -7,6 +7,7 @@ using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.DAL.Entities;
 using ManagerSystem.DAL.Interfaces;
 using Microsoft.AspNet.Identity;
+using System.Security.Claims;
 
 namespace ManagerSystem.BLL.Services
 {
@@ -115,6 +116,18 @@ namespace ManagerSystem.BLL.Services
                 }
             }
             return new OperationDetails(false, "User not found", "");
+        }
+
+        public async Task<ClaimsIdentity> Authenticate(UserDto userDto)
+        {
+            ClaimsIdentity claim = null;
+            var user = await UnitOfWork.UserManager.FindAsync(userDto.Name, userDto.Password);
+
+            if (user != null)
+            {
+                claim = await UnitOfWork.UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);
+            }
+            return claim;
         }
     }
 }
