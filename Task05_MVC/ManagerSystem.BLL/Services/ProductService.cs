@@ -5,15 +5,15 @@ using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.DAL.Entities;
-using ManagerSystem.DAL.Repositories;
+using ManagerSystem.DAL.Interfaces;
 
 namespace ManagerSystem.BLL.Services
 {
     public class ProductService : IProductService
     {
-        private UnitOfWork UnitOfWork { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
-        public ProductService(UnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
         }
