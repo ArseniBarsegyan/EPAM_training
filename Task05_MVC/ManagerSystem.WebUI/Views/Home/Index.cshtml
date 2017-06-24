@@ -1,3 +1,27 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model ManagerSystem.WebUI.Models.OrderListViewModel
+@{
+    ViewBag.Title = "Orders list";
 }
+
+<form method="get">
+    <div class="form-group">
+        <label class="control-label">Manager:</label>
+        @Html.DropDownList("manager", Model.Managers,
+            new { @class = "form-control" })
+
+        <label class="control-label">Product:</label>
+        @Html.DropDownList("product", Model.Products,
+            new { @class = "form-control" })
+
+        <label class="control-label">Date:</label>
+        @Html.DropDownList("date", Model.Dates,
+            new { @class = "form-control" })
+
+        <label class="control-label">From value:</label>
+        @Html.TextBoxFor(x => x.FromValue, new { @type = "number", @value = "10", @min = "0", @step = "0.01", @class = "form-control" })
+
+        <label class="control-label">To value:</label>
+        @Html.TextBoxFor(x => x.ToValue, new { @type = "number", @value = "200", @min = "0", @step = "0.01", @class = "form-control" })
+    </div>
+    <input type="submit" value="Filter" class="btn btn-default" />
+</form>
