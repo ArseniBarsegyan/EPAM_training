@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using ManagerSystem.BLL.DTO;
+using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;
+using ManagerSystem.DAL.Entities;
 using ManagerSystem.DAL.Repositories;
 
 namespace ManagerSystem.BLL.Services
@@ -41,6 +43,19 @@ namespace ManagerSystem.BLL.Services
                 Price = product.Price
             };
             return productDto;
+        }
+
+        public OperationDetails Create(ProductDto productDto)
+        {
+            var product = new Product
+            {
+                Name = productDto.Name,
+                Price = productDto.Price
+            };
+            UnitOfWork.ProductRepository.Create(product);
+            UnitOfWork.Save();
+
+            return new OperationDetails(true, "product create successful", "");
         }
     }
 }
