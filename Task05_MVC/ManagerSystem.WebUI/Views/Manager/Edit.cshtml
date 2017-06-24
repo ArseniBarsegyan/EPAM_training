@@ -1,0 +1,19 @@
+﻿@model ManagerSystem.BLL.DTO.ManagerDto
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit manager</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="form-group">
+        <label>Last name</label>
+        @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+    </div>
+
+    <input type="submit" class="btn btn-danger" value="Edit" />
+    <input type="button" class="btn btn-default" title="Back" value="Back" onclick="history.back()" />
+}
