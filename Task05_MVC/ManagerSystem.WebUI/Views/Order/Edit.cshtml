@@ -1,0 +1,39 @@
+﻿@model ManagerSystem.BLL.DTO.OrderDto
+
+@{
+    ViewBag.Title = "Edit order";
+}
+
+<h2>Edit order details</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+    <div class="form-group">
+        <label>Manager name</label>
+        @Html.TextBoxFor(x => x.ManagerName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Product name</label>
+        @Html.TextBoxFor(x => x.ProductName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Price</label>
+        @Html.TextBoxFor(x => x.Price, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Date</label>
+        @Html.TextBoxFor(x => x.Date, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label>Client name</label>
+        @Html.TextBoxFor(x => x.ClientName, new { @class = "form-control" })
+    </div>
+
+    <input type="submit" class="btn btn-danger" value="Edit" />
+    <input type="button" class="btn btn-default" title="Back" value="Back" onclick="history.back()" />
+}
