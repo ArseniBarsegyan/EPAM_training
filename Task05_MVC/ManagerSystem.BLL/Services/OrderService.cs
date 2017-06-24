@@ -3,18 +3,18 @@ using System.Data.Entity;
 using System.Linq;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
-using ManagerSystem.DAL.Repositories;
 using AutoMapper;
 using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.DAL.Entities;
+using ManagerSystem.DAL.Interfaces;
 
 namespace ManagerSystem.BLL.Services
 {
     public class OrderService : IOrderService
     {
-        private UnitOfWork UnitOfWork { get; }
+        private IUnitOfWork UnitOfWork { get; }
 
-        public OrderService(UnitOfWork unitOfWork)
+        public OrderService(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
         }
