@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;
@@ -67,6 +69,22 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.Save();
 
             return new OperationDetails(true, "product update successful", "");
+        }
+
+        public OperationDetails Delete(int id)
+        {
+            var product = UnitOfWork.ProductRepository.GetById(id);
+            var order = UnitOfWork.OrderRepository.GetAll()
+                .Include(x => x.Product)
+                .FirstOrDefault(x => x.Product.Id == product.Id);
+            if (order != null)
+            {
+                UnitOfWork.OrderRepository.Delete(order.Id);
+            }
+            UnitOfWork.ProductRepository.Delete(id);
+            UnitOfWork.Save();
+
+            return new OperationDetails(true, "product delete successful", "");
         }
     }
 }
