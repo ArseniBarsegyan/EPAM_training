@@ -1,0 +1,28 @@
+﻿@model ManagerSystem.BLL.DTO.OrderDto
+
+@{
+    ViewBag.Title = "Delete purchase";
+}
+
+<h2>Delete order</h2>
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(x => x.Id)
+    <div>
+        <label>Manager name</label>
+        <p>@Model.ManagerName</p>
+    </div>
+
+    <div>
+        <label>Product name</label>
+        <p>@Model.ProductName</p>
+    </div>
+
+    <div>
+        <label>Date</label>
+        <p>@Model.Date</p>
+    </div>
+
+    <input type="submit" class="btn btn-danger" value="Delete" />
+    <input type="button" class="btn btn-default" title="Back" value="Back" onclick="history.back()" />
+}
