@@ -15,6 +15,9 @@ namespace ManagerSystem.WebUI.Controllers
         private IUserService UserService => HttpContext.GetOwinContext().GetUserManager<IUserService>();
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
 
-
+        public ActionResult Index()
+        {
+            return View(UserService.GetAllUsersList());
+        }
     }
 }
