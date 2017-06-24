@@ -57,5 +57,28 @@ namespace ManagerSystem.WebUI.Controllers
             }
             return View(productDto);
         }
+
+        public ActionResult Delete(int id)
+        {
+            var purchaseDto = _productService.GetProductById(id);
+            if (purchaseDto != null)
+            {
+                return View(purchaseDto);
+            }
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var operationDetails = _productService.Delete(id);
+                if (operationDetails.Succedeed)
+                    return RedirectToAction("Index");
+                ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
+            }
+            return View();
+        }
     }
 }
