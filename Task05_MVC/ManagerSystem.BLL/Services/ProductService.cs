@@ -57,5 +57,16 @@ namespace ManagerSystem.BLL.Services
 
             return new OperationDetails(true, "product create successful", "");
         }
+
+        public OperationDetails Edit(ProductDto productDto)
+        {
+            var product = UnitOfWork.ProductRepository.GetById(productDto.Id);
+            product.Name = productDto.Name;
+            product.Price = productDto.Price;
+            UnitOfWork.ProductRepository.Update(product);
+            UnitOfWork.Save();
+
+            return new OperationDetails(true, "product update successful", "");
+        }
     }
 }
