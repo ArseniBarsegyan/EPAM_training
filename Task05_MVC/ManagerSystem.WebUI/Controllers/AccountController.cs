@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
@@ -25,6 +26,7 @@ namespace ManagerSystem.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginModel model)
         {
+            await SetInitialDataAsync();
             if (ModelState.IsValid)
             {
                 var userDto = new UserDto { Name = model.Name, Password = model.Password };
@@ -44,6 +46,16 @@ namespace ManagerSystem.WebUI.Controllers
                 }
             }
             return View(model);
+        }
+
+        private async Task SetInitialDataAsync()
+        {
+            await UserService.SetInitialData(new UserDto
+            {
+                Name = "Admin",
+                Password = "Admin",
+                Role = "admin"
+            }, new List<string> { "user", "admin" });
         }
     }
 }
