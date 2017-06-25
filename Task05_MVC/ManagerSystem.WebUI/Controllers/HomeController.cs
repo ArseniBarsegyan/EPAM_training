@@ -10,11 +10,13 @@ namespace ManagerSystem.WebUI.Controllers
     public class HomeController : Controller
     {
         private IOrderService _orderService;
+        private IManagerService _managerService;
         private int PageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
 
-        public HomeController(IOrderService orderService)
+        public HomeController(IOrderService orderService, IManagerService managerService)
         {
             _orderService = orderService;
+            _managerService = managerService;
         }
 
         public ActionResult Index(string manager, string product, string date, decimal? fromValue
@@ -70,6 +72,29 @@ namespace ManagerSystem.WebUI.Controllers
             };
 
             return View(ordersListViewModel);
+        }
+
+        public ActionResult GetManagersData()
+        {
+            var allOrders = _orderService.GetAllOrderList();
+
+            var managersViewsModels = _managerService.GetAllManagersList()
+                .Select(x => x.LastName)
+                .Select(name => new ManagerViewModel
+                {
+                    Name = name
+                }).ToList();
+
+            foreach (var t in managersViewsModels)
+            {
+                foreach (var order in allOrders)
+                {
+                    if (t.Name != order.ManagerName) continue;
+                    t.OrdersCount++;
+                    t.TotalPrice += order.Price;
+                }
+            }
+            return Json(managersViewsModels, JsonRequestBehavior.AllowGet);
         }
     }
 }
