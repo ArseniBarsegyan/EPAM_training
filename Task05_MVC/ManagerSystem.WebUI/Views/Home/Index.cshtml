@@ -3,27 +3,65 @@
     ViewBag.Title = "Orders list";
 }
 
+<head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['bar'] });
+
+        function onButtonClick() {
+            var actionUrl = '@Url.Action("GetManagersData", "Home")';
+            $.getJSON(actionUrl, drawChart);
+        }
+
+        function drawChart(response) {
+            var objs = [];
+            objs.push(['Manager', 'Orders count', 'Total price']);
+
+            for (var i = 0; i < response.length; i++) {
+                var obj = [response[i].Name, response[i].OrdersCount, response[i].TotalPrice];
+                objs.push(obj);
+            }
+
+            var data = google.visualization.arrayToDataTable(objs);
+
+            var options = {
+                chart: {
+                    title: 'Orders details for Managers',
+                    subtitle: 'Sale amount, Total price'
+                }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
+
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+    </script>
+</head>
+
+<body>
+    <input type="button" id="chartBuilder" class="btn btn-success" value="Build chart" onclick="onButtonClick()" />
+    
 <form method="get">
     <div class="form-group">
         <label class="control-label">Manager:</label>
         @Html.DropDownList("manager", Model.Managers,
-            new { @class = "form-control" })
+            new {@class = "form-control"})
 
         <label class="control-label">Product:</label>
         @Html.DropDownList("product", Model.Products,
-            new { @class = "form-control" })
+            new {@class = "form-control"})
 
         <label class="control-label">Date:</label>
         @Html.DropDownList("date", Model.Dates,
-            new { @class = "form-control" })
+            new {@class = "form-control"})
 
         <label class="control-label">From value:</label>
-        @Html.TextBoxFor(x => x.FromValue, new { @type = "number", @value = "10", @min = "0", @step = "0.01", @class = "form-control" })
+        @Html.TextBoxFor(x => x.FromValue, new {@type = "number", @value = "10", @min = "0", @step = "0.01", @class = "form-control"})
 
         <label class="control-label">To value:</label>
-        @Html.TextBoxFor(x => x.ToValue, new { @type = "number", @value = "200", @min = "0", @step = "0.01", @class = "form-control" })
+        @Html.TextBoxFor(x => x.ToValue, new {@type = "number", @value = "200", @min = "0", @step = "0.01", @class = "form-control"})
     </div>
-    <input type="submit" value="Filter" class="btn btn-default" />
+    <input type="submit" value="Filter" class="btn btn-default"/>
 </form>
 
 <table class="table table-striped">
@@ -55,5 +93,7 @@
 </table>
 
 <div class="btn-group">
-    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new { page = x }))
+    @Html.PageLinks(Model.PagingInfo, x => Url.Action("Index", new {page = x}))
 </div>
+    <div id="columnchart_material" style="width: 800px; height: 500px;"></div>
+</body>
