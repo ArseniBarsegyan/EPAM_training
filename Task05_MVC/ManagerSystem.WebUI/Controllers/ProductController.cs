@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
+using PagedList;
 
 namespace ManagerSystem.WebUI.Controllers
 {
@@ -14,10 +15,11 @@ namespace ManagerSystem.WebUI.Controllers
             _productService = productService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var allProducts = _productService.GetAllProductsList();
-            return View(allProducts);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(_productService.GetAllProductsList().ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Create()

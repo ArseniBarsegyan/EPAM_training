@@ -1,6 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Configuration;
+using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
+using PagedList;
 
 namespace ManagerSystem.WebUI.Controllers
 {
@@ -8,16 +11,18 @@ namespace ManagerSystem.WebUI.Controllers
     public class ManagerController : Controller
     {
         private IManagerService _managerService;
+        private int PageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
 
         public ManagerController(IManagerService managerService)
         {
             _managerService = managerService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var allManagers = _managerService.GetAllManagersList();
-            return View(allManagers);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(_managerService.GetAllManagersList().ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Create()

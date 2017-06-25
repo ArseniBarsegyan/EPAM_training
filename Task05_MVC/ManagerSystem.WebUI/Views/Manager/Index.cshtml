@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ManagerSystem.BLL.DTO.ManagerDto>
+﻿@model PagedList.IPagedList<ManagerSystem.BLL.DTO.ManagerDto>
+@using PagedList.Mvc;
+
 @{
     ViewBag.Title = "Index";
 }
@@ -35,3 +37,7 @@
         }
     </table>
 </div>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) from @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))

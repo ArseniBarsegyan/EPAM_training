@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -8,6 +9,7 @@ using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using PagedList;
 
 namespace ManagerSystem.WebUI.Controllers
 {
@@ -16,10 +18,13 @@ namespace ManagerSystem.WebUI.Controllers
     {
         private IUserService UserService => HttpContext.GetOwinContext().GetUserManager<IUserService>();
         private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
+        private int PageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            return View(UserService.GetAllUsersList());
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(UserService.GetAllUsersList().ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Edit(string id)

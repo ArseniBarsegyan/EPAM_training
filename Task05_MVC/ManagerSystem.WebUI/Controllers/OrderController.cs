@@ -2,6 +2,7 @@
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.WebUI.Models;
+using PagedList;
 
 namespace ManagerSystem.WebUI.Controllers
 {
@@ -15,10 +16,11 @@ namespace ManagerSystem.WebUI.Controllers
             _orderService = orderService;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
-            var allOrders = _orderService.GetAllOrderList();
-            return View(allOrders);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(_orderService.GetAllOrderList().ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Create()
