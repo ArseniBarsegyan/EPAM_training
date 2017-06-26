@@ -269,6 +269,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\OrdersSummary.cshtml" />
     <Content Include="Views\Admin\UserSearch.cshtml" />
+    <Content Include="Views\Manager\ManagerSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
