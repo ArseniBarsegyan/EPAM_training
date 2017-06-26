@@ -271,6 +271,7 @@
     <Content Include="Views\Admin\UserSearch.cshtml" />
     <Content Include="Views\Manager\ManagerSearch.cshtml" />
     <Content Include="Views\Product\ProductSearch.cshtml" />
+    <Content Include="Views\Order\OrderSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
