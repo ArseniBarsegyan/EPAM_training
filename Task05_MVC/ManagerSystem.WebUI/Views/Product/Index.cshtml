@@ -5,23 +5,27 @@
     ViewBag.Title = "Index";
 }
 
-@Scripts.Render("~/scripts/jquery-1.10.2.min.js")
-@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.min.js")
+<a class="btn btn-success" href="/Product/Create/">Create</a>
 
-<div class="btn btn-group">
-    <a class="btn btn-success" href="/Product/Create/">Create</a>
-    <a class="btn btn-default" href="/Manager/Index/">Managers</a>
-    <a class="btn btn-default" href="/Order/Index/">Orders</a>
-    <a class="btn btn-default" href="/Admin/Index/">Users</a>
-</div>
+@using (Ajax.BeginForm("ProductSearch", new AjaxOptions
+{
+    UpdateTargetId = "results",
+    LoadingElementId = "loading",
+    LoadingElementDuration = 500,
+    Confirm = "Execute AJAX-query?"
 
-@using (Ajax.BeginForm("ProductSearch", new AjaxOptions { UpdateTargetId = "results" }))
+}))
 {
     <div class="form-group">
-        <input type="text" name="name" class="form-control" />
-        <input type="submit" class="btn btn-default" value="Search" />
+        <label>Product name</label>
+        <input type="text" name="name" class="form-control"/>
+        <input type="submit" class="btn btn-default" value="Search"/>
     </div>
 }
+
+<div id="loading" style="display: none; color: red; font-weight: bold">
+    <p>loading...</p>
+</div>
 
 <div id="results">
 </div>
