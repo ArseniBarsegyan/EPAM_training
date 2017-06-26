@@ -5,7 +5,26 @@
     ViewBag.Title = "Index";
 }
 
-<a class="btn btn-default" href="/Order/Index/">Orders</a>
+@Scripts.Render("~/scripts/jquery-1.10.2.min.js")
+@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.min.js")
+
+<div class="btn btn-group">
+    <a class="btn btn-default" href="/Order/Index/">Orders</a>
+    <a class="btn btn-default" href="/Manager/Index/">Managers</a>
+    <a class="btn btn-default" href="/Product/Index/">Products</a>
+</div>
+
+@using (Ajax.BeginForm("UserSearch", new AjaxOptions { UpdateTargetId = "results" }))
+{
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control"/>
+        <input type="submit" class="btn btn-default" value="Search"/>
+    </div>
+}
+
+<div id="results">
+</div>
 
 <div class="panel panel-primary">
     <div class="panel-heading">
