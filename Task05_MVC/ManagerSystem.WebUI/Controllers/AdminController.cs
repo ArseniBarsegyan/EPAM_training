@@ -7,8 +7,8 @@ using System.Web;
 using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
+using ManagerSystem.WebUI.Util;
 using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
 using PagedList;
 
 namespace ManagerSystem.WebUI.Controllers
@@ -17,14 +17,21 @@ namespace ManagerSystem.WebUI.Controllers
     public class AdminController : Controller
     {
         private IUserService UserService => HttpContext.GetOwinContext().GetUserManager<IUserService>();
-        private IAuthenticationManager AuthenticationManager => HttpContext.GetOwinContext().Authentication;
-        private int PageSize = Convert.ToInt32(ConfigurationManager.AppSettings["PageSize"]);
 
         public ActionResult Index(int? page)
         {
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
+            var pageSize = ConstantStorage.pageSize;
+            var pageNumber = (page ?? 1);
             return View(UserService.GetAllUsersList().ToPagedList(pageNumber, pageSize));
+        }
+
+        [HttpPost]
+        public ActionResult UserSearch(string name)
+        {
+            name = name.ToLower();
+            var users = UserService.GetAllUsersList().Where(x => x.Name.ToLower() == name);
+            ViewBag.Users = users;
+            return PartialView(users);
         }
 
         public ActionResult Edit(string id)
