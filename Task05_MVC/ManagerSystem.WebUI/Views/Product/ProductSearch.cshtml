@@ -1,7 +1,10 @@
 ﻿@model IEnumerable<ManagerSystem.BLL.DTO.ProductDto>
 
-<div id="searchResults">
-    <h2>Results:</h2>
+<h2>Results:</h2>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        Founded products
+    </div>
     <table class="table table-striped">
         <tr>
             <th>Name</th>
@@ -22,8 +25,16 @@
                 <tr>
                     <td>@product.Name</td>
                     <td>@product.Price</td>
-                    <td><p><a class="btn btn-default" href="/Product/Edit/@product.Id">Edit</a></p></td>
-                    <td><p><a class="btn btn-default" href="/Product/Delete/@product.Id">Delete</a></p></td>
+                    <td>
+                        <p>
+                            <a class="btn btn-default" href="/Product/Edit/@product.Id">Edit</a>
+                        </p>
+                    </td>
+                    <td>
+                        <p>
+                            <a class="btn btn-default" href="/Product/Delete/@product.Id">Delete</a>
+                        </p>
+                    </td>
                 </tr>
             }
         }
