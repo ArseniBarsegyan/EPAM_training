@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ManagerSystem.BLL.DTO.ProductDto>
+
+<div id="searchResults">
+    <h2>Results:</h2>
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="3" class="text-center">There are no products</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var product in ViewBag.Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Price</td>
+                    <td><p><a class="btn btn-default" href="/Product/Edit/@product.Id">Edit</a></p></td>
+                    <td><p><a class="btn btn-default" href="/Product/Delete/@product.Id">Delete</a></p></td>
+                </tr>
+            }
+        }
+    </table>
+</div>
