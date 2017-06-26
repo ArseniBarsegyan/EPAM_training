@@ -1,7 +1,9 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.WebUI.Models;
+using ManagerSystem.WebUI.Util;
 using PagedList;
 
 namespace ManagerSystem.WebUI.Controllers
@@ -18,9 +20,18 @@ namespace ManagerSystem.WebUI.Controllers
 
         public ActionResult Index(int? page)
         {
-            int pageSize = 5;
-            int pageNumber = (page ?? 1);
+            var pageSize = ConstantStorage.pageSize;
+            var pageNumber = (page ?? 1);
             return View(_orderService.GetAllOrderList().ToPagedList(pageNumber, pageSize));
+        }
+
+        [HttpPost]
+        public ActionResult OrderSearch(string name)
+        {
+            name = name.ToLower();
+            var orders = _orderService.GetAllOrderList().Where(x => x.ManagerName.ToLower() == name);
+            ViewBag.Orders = orders;
+            return PartialView(orders);
         }
 
         public ActionResult Create()
