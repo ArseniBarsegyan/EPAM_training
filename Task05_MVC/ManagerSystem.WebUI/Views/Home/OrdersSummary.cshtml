@@ -1,0 +1,38 @@
+﻿@model PagedList.IPagedList<ManagerSystem.BLL.DTO.OrderDto>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+<table class="table table-striped">
+    <tr>
+        <th>Manager name</th>
+        <th>Product name</th>
+        <th>Date</th>
+        <th>Price</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ManagerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+        </tr>
+    }
+</table>
+
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) from @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
