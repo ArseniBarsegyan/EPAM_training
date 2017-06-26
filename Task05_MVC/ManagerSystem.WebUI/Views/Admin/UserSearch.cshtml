@@ -1,0 +1,30 @@
+﻿@model IEnumerable<ManagerSystem.BLL.DTO.UserDto>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="3" class="text-center">There are no users accounts</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var user in ViewBag.Users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Name</td>
+                    <td>@user.Role</td>
+                    <td><p><a class="btn btn-default" href="/Admin/Edit/@user.Id">Edit</a></p></td>
+                    <td><p><a class="btn btn-default" href="/Admin/Delete/@user.Id">Delete</a></p></td>
+                </tr>
+            }
+        }
+    </table>
