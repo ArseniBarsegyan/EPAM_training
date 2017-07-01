@@ -1,73 +1,37 @@
-﻿@model ManagerSystem.WebUI.Models.OrderListViewModel
+﻿
 @{
-    ViewBag.Title = "Orders list";
+    ViewBag.Title = "Home";
 }
 
-<head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', { 'packages': ['bar'] });
-
-        function onButtonClick() {
-            var actionUrl = '@Url.Action("GetManagersData", "Home")';
-            $.getJSON(actionUrl, drawChart);
-        }
-
-        function drawChart(response) {
-            var objs = [];
-            objs.push(['Manager', 'Orders count', 'Total price']);
-
-            for (var i = 0; i < response.length; i++) {
-                var obj = [response[i].Name, response[i].OrdersCount, response[i].TotalPrice];
-                objs.push(obj);
-            }
-
-            var data = google.visualization.arrayToDataTable(objs);
-
-            var options = {
-                chart: {
-                    title: 'Orders details for Managers',
-                    subtitle: 'Sale amount, Total price'
-                }
-            };
-
-            var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
-    </script>
-</head>
-
-<body>
-    <input type="button" id="chartBuilder" class="btn btn-success" value="Build chart" onclick="onButtonClick()" />
-    
-<form method="get">
-    <div class="form-group">
-        <label class="control-label">Manager:</label>
-        @Html.DropDownList("manager", Model.Managers,
-            new {@class = "form-control"})
-
-        <label class="control-label">Product:</label>
-        @Html.DropDownList("product", Model.Products,
-            new {@class = "form-control"})
-
-        <label class="control-label">Date:</label>
-        @Html.DropDownList("date", Model.Dates,
-            new {@class = "form-control"})
-
-        <label class="control-label">From value:</label>
-        @Html.TextBoxFor(x => x.FromValue, new {@type = "number", @value = "10", @min = "0", @step = "0.01", @class = "form-control"})
-
-        <label class="control-label">To value:</label>
-        @Html.TextBoxFor(x => x.ToValue, new {@type = "number", @value = "200", @min = "0", @step = "0.01", @class = "form-control"})
+<div class="container">
+    <div class="jumbotron">
+        <h1>Manager System</h1>
     </div>
-    <input type="submit" value="Filter" class="btn btn-default"/>
-</form>
-
-@Html.Partial("OrdersSummary", Model.Orders)
-
-<div id="columnchart_material" style="width: 800px; height: 500px;"></div>
-
-<div id="results">
-
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Orders</h2>
+            <img src="~/Images/OrdersIcon.png" width="100" height="100" alt="Order" />
+            <p>
+                See our managers orders list
+            </p>
+            <p><a class="btn btn-default" href="/Home/Orders">Search &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Charts</h2>
+            <img src="~/Images/Charts.png" width="150" height="120" alt="Charts" />
+            <p>
+                See our managers efficiency work
+            </p>
+            <p><a class="btn btn-default" href="/Home/Charts">View charts &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>About project</h2>
+            <img src="~/Images/InfoIcon.png" width="100" height="100" alt="Info" />
+            <p>
+                See more info about project
+            </p>
+            <p><a class="btn btn-default" href="/Home/About">Learn more &raquo;</a></p>
+        </div>
+    </div>
 </div>
+
