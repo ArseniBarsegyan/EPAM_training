@@ -1,0 +1,44 @@
+﻿@model ManagerSystem.WebUI.Models.OrderListViewModel
+@{
+    ViewBag.Title = "Orders list";
+}
+
+<form method="get">
+    <div class="form-inline">
+        <div class="form-group">
+            <label class="control-label">Manager:</label>
+            @Html.DropDownList("manager", Model.Managers,
+                new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Product:</label>
+            @Html.DropDownList("product", Model.Products,
+                new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label>Date:</label>
+            @Html.DropDownList("date", Model.Dates,
+                new { @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label>From value:</label>
+            @Html.TextBoxFor(x => x.FromValue, new { @type = "number", @value = "0", @min = "0", @step = "0.01", @class = "form-control" })
+        </div>
+
+        <div class="form-group">
+            <label>To value:</label>
+            @Html.TextBoxFor(x => x.ToValue, new { @type = "number", @value = "0", @min = "0", @step = "0.01", @class = "form-control" })
+        </div>
+
+        <div>
+            <input type="submit" value="Filter" class="btn btn-default" />
+        </div>
+    </div>
+</form>
+
+<form class="form-group">
+    @Html.Partial("OrdersSummary", Model.Orders)
+</form>

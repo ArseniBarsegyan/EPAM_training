@@ -20,7 +20,17 @@ namespace ManagerSystem.WebUI.Controllers
             _managerService = managerService;
         }
 
-        public ActionResult Index(string manager, string product, string date, decimal? fromValue
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Charts()
+        {
+            return View();
+        }
+
+        public ActionResult Orders(string manager, string product, string date, decimal? fromValue
             , decimal? toValue, int? page)
         {
             var pageSize = ConstantStorage.pageSize;

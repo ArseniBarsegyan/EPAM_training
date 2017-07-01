@@ -252,7 +252,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
@@ -276,6 +275,9 @@
     <Content Include="Views\Manager\ManagerSearch.cshtml" />
     <Content Include="Views\Product\ProductSearch.cshtml" />
     <Content Include="Views\Order\OrderSearch.cshtml" />
+    <Content Include="Views\Home\Charts.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
