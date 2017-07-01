@@ -9,6 +9,7 @@ using PagedList;
 
 namespace ManagerSystem.WebUI.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private IOrderService _orderService;
@@ -107,6 +108,11 @@ namespace ManagerSystem.WebUI.Controllers
                 }
             }
             return Json(managersViewsModels, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult About()
+        {
+            return View();
         }
     }
 }
