@@ -66,14 +66,6 @@ namespace ManagerSystem.BLL.Services
 
         public OperationDetails Delete(int id)
         {
-            var manager = UnitOfWork.ManagerRepository.GetById(id);
-            var order = UnitOfWork.OrderRepository.GetAll()
-                .Include(x => x.Manager)
-                .FirstOrDefault(x => x.Manager.Id == id);
-            if (order != null)
-            {
-                UnitOfWork.OrderRepository.Delete(order.Id);
-            }
             UnitOfWork.ManagerRepository.Delete(id);
             UnitOfWork.Save();
 
