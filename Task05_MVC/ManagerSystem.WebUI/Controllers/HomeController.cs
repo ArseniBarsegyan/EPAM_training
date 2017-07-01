@@ -52,7 +52,7 @@ namespace ManagerSystem.WebUI.Controllers
                 orders = orders.Where(x => x.Date.ToString("d") == date);
             }
 
-            if (fromValue != null && fromValue != 0)
+            if (fromValue != null && fromValue != 0 && toValue != null && toValue != 0)
             {
                 orders = orders.Where(x => x.Price >= fromValue && x.Price <= toValue);
             }
