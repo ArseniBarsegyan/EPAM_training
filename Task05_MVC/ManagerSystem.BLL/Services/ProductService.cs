@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;

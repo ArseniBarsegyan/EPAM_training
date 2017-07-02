@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Data.Entity;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.DAL.Entities;
-using System.Linq;
 using ManagerSystem.DAL.Interfaces;
 
 namespace ManagerSystem.BLL.Services
