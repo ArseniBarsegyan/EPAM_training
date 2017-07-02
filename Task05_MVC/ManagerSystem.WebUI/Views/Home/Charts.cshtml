@@ -5,6 +5,36 @@
 
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['bar'] });
+
+        function onDrawBarButtonClick() {
+            var actionUrl = '@Url.Action("GetManagersData", "Home")';
+            $.getJSON(actionUrl, drawBarChart);
+        }
+
+        function drawBarChart(response) {
+            var objs = [];
+            objs.push(['Manager', 'Total price']);
+
+            for (var i = 0; i < response.length; i++) {
+                var obj = [response[i].Name, response[i].TotalPrice];
+                objs.push(obj);
+            }
+            var data = google.visualization.arrayToDataTable(objs);
+
+            var options = {
+                chart: {
+                    title: 'Orders total prices'
+                }
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('chartArea'));
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+    </script>
+
     <script type="text/javascript">
         google.charts.load("current", { packages: ["corechart"] });
 
@@ -29,7 +59,7 @@
                 is3D: true
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+            var chart = new google.visualization.PieChart(document.getElementById('chartArea'));
             chart.draw(data, options);
         }
     </script>
@@ -37,6 +67,7 @@
 
 <body>
     <button type="button" class="btn btn-primary" onclick="onDrawPieButtonClick()">Managers orders</button>
-    <div id="piechart_3d" style="width: 800px; height: 500px;"></div>
+    <button type="button" class="btn btn-primary" onclick="onDrawBarButtonClick()">Total prices</button>
+    <div id="chartArea" style="width: 800px; height: 500px;"></div>
 </body>
 
