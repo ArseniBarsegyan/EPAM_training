@@ -19,7 +19,7 @@ namespace ManagerSystem.WebUI.Controllers
 
         public ActionResult Index(int? page)
         {
-            var pageSize = ConstantStorage.pageSize;
+            var pageSize = ConstantStorage.PageSize;
             var pageNumber = (page ?? 1);
             return View(_productService.GetAllProductsList().ToPagedList(pageNumber, pageSize));
         }

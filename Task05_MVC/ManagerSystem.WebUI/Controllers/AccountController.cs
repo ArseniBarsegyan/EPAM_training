@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using ManagerSystem.WebUI.Models;
+using ManagerSystem.WebUI.Util;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 
@@ -34,7 +35,7 @@ namespace ManagerSystem.WebUI.Controllers
                 var claim = await UserService.Authenticate(userDto);
                 if (claim == null)
                 {
-                    ModelState.AddModelError("", "Incorrect login or password");
+                    ModelState.AddModelError(string.Empty, ConstantStorage.LoginError);
                 }
                 else
                 {

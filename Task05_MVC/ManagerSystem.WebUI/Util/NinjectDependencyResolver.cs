@@ -31,22 +31,22 @@ namespace ManagerSystem.WebUI.Util
 
         private void AddBindings()
         {
-            kernel.Bind<IUnitOfWork>().To<UnitOfWork>().WithConstructorArgument("DefaultConnection");
+            kernel.Bind<IUnitOfWork>().To<UnitOfWork>().WithConstructorArgument(ConstantStorage.ConnectionString);
 
             kernel.Bind<IUnitOfWork>()
                 .To<UnitOfWork>()
                 .WhenInjectedInto<OrderService>()
-                .WithConstructorArgument("DefaultConnection");
+                .WithConstructorArgument(ConstantStorage.ConnectionString);
 
             kernel.Bind<IUnitOfWork>()
                 .To<UnitOfWork>()
                 .WhenInjectedInto<ProductService>()
-                .WithConstructorArgument("DefaultConnection");
+                .WithConstructorArgument(ConstantStorage.ConnectionString);
 
             kernel.Bind<IUnitOfWork>()
                 .To<UnitOfWork>()
                 .WhenInjectedInto<ManagerService>()
-                .WithConstructorArgument("DefaultConnection");
+                .WithConstructorArgument(ConstantStorage.ConnectionString);
 
             kernel.Bind<IOrderService>().To<OrderService>();
             kernel.Bind<IProductService>().To<ProductService>();

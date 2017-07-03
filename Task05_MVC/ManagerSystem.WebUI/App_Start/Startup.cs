@@ -2,6 +2,7 @@
 using ManagerSystem.BLL.Services;
 using ManagerSystem.DAL.Interfaces;
 using ManagerSystem.DAL.Repositories;
+using ManagerSystem.WebUI.Util;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
@@ -33,7 +34,7 @@ namespace ManagerSystem.WebUI
             kernel.Bind<IUnitOfWork>()
                 .To<UnitOfWork>()
                 .WhenInjectedInto<UserService>()
-                .WithConstructorArgument("DefaultConnection");
+                .WithConstructorArgument(ConstantStorage.ConnectionString);
 
             return kernel.TryGet<IUserService>();
         }

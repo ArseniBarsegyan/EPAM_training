@@ -204,7 +204,6 @@
     <Compile Include="Models\ManagerViewModel.cs" />
     <Compile Include="Models\OrderCreateModel.cs" />
     <Compile Include="Models\OrderListViewModel.cs" />
-    <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ConstantStorage.cs" />
@@ -304,7 +303,7 @@
       <Name>ManagerSystem.BLL</Name>
     </ProjectReference>
     <ProjectReference Include="..\ManagerSystem.DAL\ManagerSystem.DAL.csproj">
-      <Project>{E4546322-6A72-414A-B55C-CEBAAD711C38}</Project>
+      <Project>{e4546322-6a72-414a-b55c-cebaad711c38}</Project>
       <Name>ManagerSystem.DAL</Name>
     </ProjectReference>
   </ItemGroup>

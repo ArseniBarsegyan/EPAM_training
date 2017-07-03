@@ -34,31 +34,31 @@ namespace ManagerSystem.WebUI.Controllers
         public ActionResult Orders(string manager, string product, string date, decimal? fromValue
             , decimal? toValue, int? page)
         {
-            var pageSize = ConstantStorage.pageSize;
+            var pageSize = ConstantStorage.PageSize;
             int pageNumber = (page ?? 1);
             var orders = _orderService.GetAllOrderList();
 
             var managers = orders.Select(x => x.ManagerName).Distinct().ToList();
-            managers.Insert(0, ConstantStorage.AllRecordsInListValue);
+            managers.Insert(0, ConstantStorage.AllRecordsInDropDownListValue);
             var products = orders.Select(x => x.ProductName).Distinct().ToList();
-            products.Insert(0, ConstantStorage.AllRecordsInListValue);
+            products.Insert(0, ConstantStorage.AllRecordsInDropDownListValue);
             var dates = orders.Select(x => x.Date.ToString("d")).Distinct().ToList();
-            dates.Insert(0, ConstantStorage.AllRecordsInListValue);
+            dates.Insert(0, ConstantStorage.AllRecordsInDropDownListValue);
 
             var prices = orders.Select(x => x.Price).Distinct().ToList();
             prices.Insert(0, 0m);
 
-            if (!string.IsNullOrEmpty(manager) && !manager.Equals(ConstantStorage.AllRecordsInListValue))
+            if (!string.IsNullOrEmpty(manager) && !manager.Equals(ConstantStorage.AllRecordsInDropDownListValue))
             {
                 orders = orders.Where(x => x.ManagerName == manager);
             }
 
-            if (!string.IsNullOrEmpty(product) && !product.Equals(ConstantStorage.AllRecordsInListValue))
+            if (!string.IsNullOrEmpty(product) && !product.Equals(ConstantStorage.AllRecordsInDropDownListValue))
             {
                 orders = orders.Where(x => x.ProductName == product);
             }
 
-            if (!string.IsNullOrEmpty(date) && !date.Equals(ConstantStorage.AllRecordsInListValue))
+            if (!string.IsNullOrEmpty(date) && !date.Equals(ConstantStorage.AllRecordsInDropDownListValue))
             {
                 orders = orders.Where(x => x.Date.ToString("d") == date);
             }
@@ -81,7 +81,7 @@ namespace ManagerSystem.WebUI.Controllers
 
         public ActionResult OrdersSummary(IEnumerable<OrderDto> orderDtos, int? page)
         {
-            var pageSize = ConstantStorage.pageSize;
+            var pageSize = ConstantStorage.PageSize;
             int pageNumber = (page ?? 1);
 
             return PartialView(orderDtos.ToPagedList(pageNumber, pageSize));
