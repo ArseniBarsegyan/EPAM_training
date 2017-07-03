@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
+using ManagerSystem.WebUI.Models;
 using ManagerSystem.WebUI.Util;
 using PagedList;
 
@@ -39,39 +40,54 @@ namespace ManagerSystem.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ProductDto productDto)
+        public ActionResult Create(ProductCreateModel model)
         {
             if (ModelState.IsValid)
             {
+                var productDto = new ProductDto {Name = model.ProductName, Price = model.Price};
                 var operationDetails = _productService.Create(productDto);
                 if (operationDetails.Succedeed)
                     return RedirectToAction("Index", "Product");
                 ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
-            return View(productDto);
+            return View(model);
         }
 
         public ActionResult Edit(int id)
         {
-            var managerDto = _productService.GetProductById(id);
-            if (managerDto != null)
+            var productDto = _productService.GetProductById(id);
+
+            if (productDto != null)
             {
-                return View(managerDto);
+                var model = new ProductEditModel
+                {
+                    Id = productDto.Id,
+                    Name = productDto.Name,
+                    Price = productDto.Price
+                };
+                return View(model);
             }
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult Edit(ProductDto productDto)
+        public ActionResult Edit(ProductEditModel model)
         {
             if (ModelState.IsValid)
             {
+                var productDto = new ProductDto
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Price = model.Price
+                };
+
                 var operationDetails = _productService.Edit(productDto);
                 if (operationDetails.Succedeed)
                     return RedirectToAction("Index");
                 ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
-            return View(productDto);
+            return View(model);
         }
 
         public ActionResult Delete(int id)
