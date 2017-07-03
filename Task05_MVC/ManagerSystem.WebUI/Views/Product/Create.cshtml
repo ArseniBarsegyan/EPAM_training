@@ -1,5 +1,4 @@
-﻿@model ManagerSystem.BLL.DTO.ProductDto
-
+﻿@model ManagerSystem.WebUI.Models.ProductCreateModel
 @{
     ViewBag.Title = "Create product";
 }
@@ -11,7 +10,7 @@
 {
     <div class="form-group">
         <label>Product name</label>
-        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+        @Html.TextBoxFor(x => x.ProductName, new { @class = "form-control" })
     </div>
 
     <div class="form-group">
