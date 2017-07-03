@@ -1,11 +1,12 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 
 namespace ManagerSystem.WebUI.Util
 {
     public static class ConstantStorage
     {
-        public static int pageSize = Int32.Parse(ConfigurationManager.AppSettings["pageSize"]);
-        public static string AllRecordsInListValue = "All";
+        public static readonly int PageSize = int.Parse(ConfigurationManager.AppSettings["pageSize"]);
+        public const string AllRecordsInDropDownListValue = "All";
+        public const string ConnectionString = "DefaultConnection";
+        public const string LoginError = "Incorrect login or password";
     }
 }
