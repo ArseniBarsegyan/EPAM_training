@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
+using ManagerSystem.WebUI.Models;
 using ManagerSystem.WebUI.Util;
 using PagedList;
 
@@ -39,39 +40,51 @@ namespace ManagerSystem.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(ManagerDto managerDto)
+        public ActionResult Create(ManagerCreateModel model)
         {
             if (ModelState.IsValid)
             {
+                var managerDto = new ManagerDto {LastName = model.LastName};
                 var operationDetails = _managerService.Create(managerDto);
                 if (operationDetails.Succedeed)
                     return RedirectToAction("Index", "Manager");
                 ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
-            return View(managerDto);
+            return View(model);
         }
 
         public ActionResult Edit(int id)
         {
             var managerDto = _managerService.GetManagerById(id);
+            
             if (managerDto != null)
             {
-                return View(managerDto);
+                var model = new ManagerEditModel
+                {
+                    Id = managerDto.Id,
+                    LastName = managerDto.LastName
+                };
+                return View(model);
             }
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult Edit(ManagerDto managerDto)
+        public ActionResult Edit(ManagerEditModel model)
         {
             if (ModelState.IsValid)
             {
+                var managerDto = new ManagerDto
+                {
+                    Id = model.Id,
+                    LastName = model.LastName
+                };
                 var operationDetails = _managerService.Edit(managerDto);
                 if (operationDetails.Succedeed)
                     return RedirectToAction("Index");
                 ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
-            return View(managerDto);
+            return View(model);
         }
 
         public ActionResult Delete(int id)
