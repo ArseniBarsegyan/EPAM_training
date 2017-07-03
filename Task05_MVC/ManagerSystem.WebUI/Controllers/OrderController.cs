@@ -63,25 +63,45 @@ namespace ManagerSystem.WebUI.Controllers
 
         public ActionResult Edit(int id)
         {
-            var purchaseDto = _orderService.GetOrderDtoById(id);
-            if (purchaseDto != null)
+            var orderDto = _orderService.GetOrderDtoById(id);
+            if (orderDto != null)
             {
-                return View(purchaseDto);
+                var model = new OrderEditModel
+                {
+                    Id = orderDto.Id,
+                    ManagerName = orderDto.ManagerName,
+                    ProductName = orderDto.ProductName,
+                    Price = orderDto.Price,
+                    Date = orderDto.Date,
+                    ClientName = orderDto.ClientName
+                };
+
+                return View(model);
             }
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public ActionResult Edit(OrderDto orderDto)
+        public ActionResult Edit(OrderEditModel model)
         {
             if (ModelState.IsValid)
             {
+                var orderDto = new OrderDto
+                {
+                    Id = model.Id,
+                    ManagerName = model.ManagerName,
+                    ProductName = model.ProductName,
+                    Price = model.Price,
+                    Date = model.Date,
+                    ClientName = model.ClientName
+                };
+
                 var operationDetails = _orderService.Edit(orderDto);
                 if (operationDetails.Succedeed)
                     return RedirectToAction("Index");
                 ModelState.AddModelError(operationDetails.Property, operationDetails.Message);
             }
-            return View(orderDto);
+            return View(model);
         }
 
         public ActionResult Delete(int id)
