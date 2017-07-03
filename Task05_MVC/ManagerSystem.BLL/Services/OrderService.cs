@@ -5,6 +5,7 @@ using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Interfaces;
 using AutoMapper;
 using ManagerSystem.BLL.Infrastructure;
+using ManagerSystem.BLL.Util;
 using ManagerSystem.DAL.Entities;
 using ManagerSystem.DAL.Interfaces;
 
@@ -81,7 +82,7 @@ namespace ManagerSystem.BLL.Services
             order.Manager = manager;
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "successfull create", "");
+            return new OperationDetails(true, ConstantStorage.OrderCreated, string.Empty);
         }
 
         public OperationDetails Edit(OrderDto orderDto)
@@ -116,7 +117,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.OrderRepository.Update(order);
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "successfull update", "");
+            return new OperationDetails(true, ConstantStorage.OrderUpdated, string.Empty);
         }
 
         public OperationDetails Delete(int id)
@@ -124,7 +125,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.OrderRepository.Delete(id);
             UnitOfWork.Save(); ;
 
-            return new OperationDetails(true, "successfull delete", "");
+            return new OperationDetails(true, ConstantStorage.OrderDeleted, string.Empty);
         }
 
         private void InitializeMapper()

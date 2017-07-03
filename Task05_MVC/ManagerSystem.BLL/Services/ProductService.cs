@@ -2,6 +2,7 @@
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;
+using ManagerSystem.BLL.Util;
 using ManagerSystem.DAL.Entities;
 using ManagerSystem.DAL.Interfaces;
 
@@ -55,7 +56,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.ProductRepository.Create(product);
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "product create successful", "");
+            return new OperationDetails(true, ConstantStorage.ProductCreated, string.Empty);
         }
 
         public OperationDetails Edit(ProductDto productDto)
@@ -66,7 +67,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.ProductRepository.Update(product);
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "product update successful", "");
+            return new OperationDetails(true, ConstantStorage.ProductUpdated, string.Empty);
         }
 
         public OperationDetails Delete(int id)
@@ -74,7 +75,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.ProductRepository.Delete(id);
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "product delete successful", "");
+            return new OperationDetails(true, ConstantStorage.ProductDeleted, string.Empty);
         }
     }
 }

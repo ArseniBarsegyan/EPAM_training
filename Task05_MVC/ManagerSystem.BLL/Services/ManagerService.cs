@@ -2,6 +2,7 @@
 using ManagerSystem.BLL.DTO;
 using ManagerSystem.BLL.Infrastructure;
 using ManagerSystem.BLL.Interfaces;
+using ManagerSystem.BLL.Util;
 using ManagerSystem.DAL.Entities;
 using ManagerSystem.DAL.Interfaces;
 
@@ -49,7 +50,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.ManagerRepository.Create(manager);
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "manager create successful", "");
+            return new OperationDetails(true, ConstantStorage.ManagerCreated, string.Empty);
         }
 
         public OperationDetails Edit(ManagerDto managerDto)
@@ -59,7 +60,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.ManagerRepository.Update(manager);
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "manager update successful", "");
+            return new OperationDetails(true, ConstantStorage.ManagerUpdated, string.Empty);
         }
 
         public OperationDetails Delete(int id)
@@ -67,7 +68,7 @@ namespace ManagerSystem.BLL.Services
             UnitOfWork.ManagerRepository.Delete(id);
             UnitOfWork.Save();
 
-            return new OperationDetails(true, "manager delete successful", "");
+            return new OperationDetails(true, ConstantStorage.ManagerDeleted, string.Empty);
         }
     }
 }
