@@ -6,9 +6,11 @@ namespace ManagerSystem.WebUI.Models
     public class OrderCreateModel
     {
         [Required]
+        [RegularExpression(@"[A-Za-z\s]+", ErrorMessage = "Name can't contain numbers")]
         public string ClientName { get; set; }
 
         [Required]
+        [RegularExpression(@"[A-Za-z\s]+", ErrorMessage = "Name can't contain numbers")]
         public string ManagerName { get; set; }
 
         [Required]
