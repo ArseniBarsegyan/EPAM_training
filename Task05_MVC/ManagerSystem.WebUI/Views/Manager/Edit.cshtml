@@ -1,4 +1,4 @@
-﻿@model ManagerSystem.BLL.DTO.ManagerDto
+﻿@model ManagerSystem.WebUI.Models.ManagerEditModel
 
 @{
     ViewBag.Title = "Edit";
@@ -6,6 +6,7 @@
 
 <h2>Edit manager</h2>
 
+@Html.ValidationSummary(false)
 @using (Html.BeginForm())
 {
     @Html.HiddenFor(x => x.Id)
