@@ -70,6 +70,7 @@
     <Compile Include="Services\OrderService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\UserService.cs" />
+    <Compile Include="Util\ConstantStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ManagerSystem.DAL\ManagerSystem.DAL.csproj">
